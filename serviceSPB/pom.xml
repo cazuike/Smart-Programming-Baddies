@@ -104,6 +104,28 @@
 					</execution>
 				</executions>
 			</plugin>
+        <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-pmd-plugin</artifactId>
+             <!-- maybe include <excludeTestSourceDirectory>true</excludeTestSourceDirectory> -->
+            <version>3.18.0</version>
+            <configuration>
+                <printFailingErrors>true</printFailingErrors>
+                <rulesets>
+                 <!-- rulesets codestyle.xml, bestpractices.xml, errorprone.xml, quickstart.xml -->
+                    <ruleset>rulesets/java/quickstart.xml</ruleset>
+                </rulesets>
+                <linkXRef>false</linkXRef>
+                <failOnViolation>false</failOnViolation>
+            </configuration>
+            <executions>
+                <execution>
+                    <goals>
+                        <goal>check</goal>
+                    </goals>
+                </execution>
+            </executions>
+        </plugin>
 		</plugins>
 	</build>
 </project>
