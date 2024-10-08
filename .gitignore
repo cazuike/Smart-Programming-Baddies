@@ -1,4 +1,4 @@
-/target/
+serviceSPB/target/
 *.class
 *.log
 
