@@ -1,0 +1,20 @@
+/target/
+*.class
+*.log
+
+# ide stuff
+/.idea/
+/*.iml
+.vscode/
+/.classpath
+/.project
+/.settings/
+
+.DS_Store
+Thumbs.db
+.mvn/
+!.mvn/wrapper/maven-wrapper.jar
+
+*.jar
+*.war
+*.ear
