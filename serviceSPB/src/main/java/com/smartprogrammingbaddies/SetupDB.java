@@ -47,7 +47,10 @@ public class SetupDB {
     public void enrollClient(String apiKey) {
         try {
             DatabaseReference ref = FirebaseDatabase.getInstance().getReference("clients");
+            /* TODO - fill out clientData, no new clients are added currently */
             Map<String, Object> clientData = new HashMap<>();
+            clientData.put("api-key",apiKey);
+
             ApiFuture<Void> future = ref.child(apiKey).setValueAsync(clientData);
             future.get();
 
