@@ -1,6 +1,7 @@
 package com.smartprogrammingbaddies;
 
 import com.google.api.core.ApiFuture;
+import com.google.cloud.firestore.DocumentSnapshot;
 import org.springframework.context.annotation.Configuration;
 import java.io.FileInputStream;
 import com.google.auth.oauth2.GoogleCredentials;
@@ -14,6 +15,8 @@ import java.util.HashMap;
 import java.util.Map;
 import org.springframework.context.annotation.Configuration;
 import java.io.FileInputStream;
+import java.util.concurrent.CompletableFuture;
+
 import com.google.auth.oauth2.GoogleCredentials;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
@@ -44,9 +47,7 @@ public class SetupDB {
     public void enrollClient(String apiKey) {
         try {
             DatabaseReference ref = FirebaseDatabase.getInstance().getReference("clients");
-
             Map<String, Object> clientData = new HashMap<>();
-
             ApiFuture<Void> future = ref.child(apiKey).setValueAsync(clientData);
             future.get();
 
@@ -57,6 +58,31 @@ public class SetupDB {
             System.err.println("Error enrolling client.");
             e.printStackTrace();
         }
+    }
+
+    public CompletableFuture<Boolean> verifyClient(String apiKey) {
+        CompletableFuture<Boolean> future = new CompletableFuture<>();
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference("clients").child(apiKey);
+
+        ref.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    System.out.println("Client with API Key " + apiKey + " exists.");
+                    future.complete(true);
+                } else {
+                    System.out.println("No client found with API Key: " + apiKey);
+                    future.complete(false);
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                System.err.println("error:" + databaseError.getMessage());
+            }
+        });
+
+        return future;
     }
 }
 

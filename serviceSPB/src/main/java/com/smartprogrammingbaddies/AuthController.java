@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
 
 @RestController
 public class AuthController {
@@ -25,5 +26,16 @@ public class AuthController {
         } catch (Exception e) {
             return new ResponseEntity<>("Failed to generate API key", HttpStatus.INTERNAL_SERVER_ERROR);
         }
+    }
+
+    @GetMapping("/verifyApiKey")
+    public CompletableFuture<ResponseEntity<String>> verifyApiKey(@RequestParam("apiKey") String apiKey) {
+        return setupDB.verifyClient(apiKey).thenApply(verified -> {
+            if (verified) {
+                return new ResponseEntity<>("Successfully verified API key", HttpStatus.OK);
+            } else {
+                return new ResponseEntity<>("API key not found in DB.", HttpStatus.NOT_FOUND);
+            }
+        });
     }
 }
