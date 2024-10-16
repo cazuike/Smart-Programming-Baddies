@@ -1,6 +1,10 @@
 package com.smartprogrammingbaddies;
 
+import com.google.api.core.ApiFuture;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -10,6 +14,7 @@ import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 
 @RestController
+@Service
 public class AuthController {
 
     @Autowired
@@ -29,7 +34,7 @@ public class AuthController {
     }
 
     @GetMapping("/verifyApiKey")
-    public CompletableFuture<ResponseEntity<String>> verifyApiKey(@RequestParam("apiKey") String apiKey) {
+    public CompletableFuture<ResponseEntity<?>> verifyApiKey(@RequestParam("apiKey") String apiKey) {
         return setupDB.verifyClient(apiKey).thenApply(verified -> {
             if (verified) {
                 return new ResponseEntity<>("Successfully verified API key", HttpStatus.OK);
@@ -37,5 +42,18 @@ public class AuthController {
                 return new ResponseEntity<>("API key not found in DB.", HttpStatus.NOT_FOUND);
             }
         });
+    }
+
+    @DeleteMapping("/removeApiKey")
+    public ResponseEntity<?> removeApiKey(@RequestParam("apiKey") String apiKey) {
+        try {
+            DatabaseReference ref = FirebaseDatabase.getInstance().getReference("clients/" + apiKey);
+            ApiFuture<Void> future = ref.removeValueAsync();
+            future.get();
+
+            return new ResponseEntity<>("Successfully removed API Key", HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>("Unable to remove API key", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 }
