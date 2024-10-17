@@ -11,7 +11,7 @@ public class Volunteer implements Serializable {
 
   /**
    * Constructs a new Volunteer with the specified name, role, date of sign-up, and schedule.
-   * 
+   *
    * @param name the name of the volunteer
    * @param role the volunteer role
    * @param dateSignUp the date that they signed up as a volunteer
@@ -75,7 +75,7 @@ public class Volunteer implements Serializable {
    * @param newSchedule the new schedule for the volunteer, as a Map of dates and times
    */
   public void updateSchedule(Map<String, String> newSchedule) {
-    this.schedule = newSchedule;    
+    this.schedule = newSchedule;
   }
 
   /**
@@ -96,7 +96,7 @@ public class Volunteer implements Serializable {
     return "Volunteer: " + name + "\n"
            + "Role: " + role + "\n"
            + "Date Signed: " + dateSignUp + "\n"
-           + "Schedule: \n" + scheduleString.toString();  
+           + "Schedule: \n" + scheduleString.toString();
   }
 
   private String name;
