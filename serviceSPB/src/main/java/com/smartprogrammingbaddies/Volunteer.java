@@ -3,7 +3,6 @@ package com.smartprogrammingbaddies;
 import java.io.Serializable;
 import java.util.Map;
 
-
 /**
  * The Volunteer class represents a volunteer, including their name, role,
  * date of sign-up, and volunteering schedule.
