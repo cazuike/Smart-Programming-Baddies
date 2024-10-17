@@ -59,6 +59,7 @@ public class VolunteerUnitTests {
     testVolunteer.updateSchedule(testVolunteerNewSchedule);
     assertEquals(testVolunteerNewSchedule, testVolunteer.getSchedule());
   }
+
   @Test
   public void toStringTest() {
     String expectedString = "Volunteer: John Doe\n"
