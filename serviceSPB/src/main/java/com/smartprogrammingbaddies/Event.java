@@ -4,13 +4,14 @@ import java.io.Serializable;
 import java.util.Map;
 
 /**
-* The Event class represents an event organized by a StorageCenter, including its name, description, 
-* date, time, location, and the list of volunteers.
+* The Event class represents an event organized by a StorageCenter, 
+* including its name, description, date
+* time, location, and the list of volunteers.
 */
 public class Event implements Serializable {
 
   /**
-   * Constructs an Event with appropriate details
+   * Constructs an Event with appropriate details.
    *
    * @param name the name of the event
    * @param description a description of the event
@@ -20,7 +21,8 @@ public class Event implements Serializable {
    * @param organizer the StorageCenter organizing the event
    * @param listOfVolunteers a list of volunteers participating in the event (key is volunteer name)
    */
-  public Event(String name, String description, String date, String time, String location, StorageCenter organizer, Map<String, Volunteer> listOfVolunteers){
+  public Event(String name, String description, String date, String time, String location, 
+               StorageCenter organizer, Map<String, Volunteer> listOfVolunteers) {
     this.name = name;
     this.description = description;
     this.date = date;
@@ -130,9 +132,9 @@ public class Event implements Serializable {
   }
 
   /**
-   * Gets the list of volunteers participating in the event.
+   * Gets the list of volunteers in the event.
    *
-   * @return a map of volunteers where the key is the volunteer's name and the value is the Volunteer object
+   * @return a map of volunteers, the key is the volunteer's name and the value is Volunteer
    */
   public Map<String, Volunteer> getListOfVolunteers() {
     return listOfVolunteers;
@@ -143,7 +145,7 @@ public class Event implements Serializable {
    *
    * @param volunteer the Volunteer object to add
    */
-  public void addVolunteer(Volunteer volunteer){
+  public void addVolunteer(Volunteer volunteer) {
     listOfVolunteers.put(volunteer.getName(), volunteer);
   }
 
@@ -164,7 +166,7 @@ public class Event implements Serializable {
   public int getVolunteerCount() {
     return this.listOfVolunteers.size();
   }
-  
+
   /**
    * Returns a string representation of the event, including its name, description, date, time,
    * location, organizer, and the list of volunteer names.
@@ -184,7 +186,7 @@ public class Event implements Serializable {
     if (!listOfVolunteers.isEmpty()) {
       eventDetails.append("Volunteer Names: \n");
       for (String volunteerName : listOfVolunteers.keySet()) {
-          eventDetails.append("- ").append(volunteerName).append("\n");
+        eventDetails.append("- ").append(volunteerName).append("\n");
       }
     } else {
       eventDetails.append("No volunteers signed up yet.\n");
