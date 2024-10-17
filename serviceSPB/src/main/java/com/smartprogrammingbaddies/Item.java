@@ -17,7 +17,8 @@ public class Item {
    * @param storageCenter the storage center where the item is stored
    * @param lifeSpan      the life span of the item
    */
-  public Item(String name, ItemType type, int quantity, StorageCenter storageCenter, Date lifeSpan) {
+  public Item(String name, ItemType type, int quantity,
+      StorageCenter storageCenter, Date lifeSpan) {
     this.name = name;
     this.type = type;
     this.quantity = quantity;
@@ -117,11 +118,10 @@ public class Item {
 
   @Override
   public String toString() {
-    return "Item:" +
-        "name='" + name + ",\'" +
-        ", type=" + type + ",\'" +
-        ", quantity=" + quantity + ",\'" +
-        ", storageCenter=" + storageCenter;
+    return "Item:" + "name='" + name + ", "
+        + "type=" + type + ", "
+        + "quantity=" + quantity + ", "
+        + "storageCenter=" + storageCenter;
   }
 
 
@@ -133,6 +133,7 @@ public class Item {
     TOILETRIES,
     CLOTHES
   }
+
   private int quantity;
   private ItemType type;
   private String name;
