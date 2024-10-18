@@ -11,7 +11,7 @@ public class Organization implements Serializable {
 
   /**
    * Constructs a new Organization with the specific name, type, schedule, and adate addded.
-   * 
+
    * @param orgName the name of the organization.
    * @param orgType the type of the organization.
    * @param schedule the schedule of the organization.
@@ -27,7 +27,7 @@ public class Organization implements Serializable {
 
   /**
    * Returns the name of the organization.
-   * 
+
    * @return the organization's name.
    */
   public String getOrgName() {
@@ -36,7 +36,7 @@ public class Organization implements Serializable {
 
   /**
    * Returns the type of the organization.
-   * 
+
    * @return the organization's type.
    */
   public String getOrgType() {
@@ -44,7 +44,7 @@ public class Organization implements Serializable {
   }
   /**
    * Returns the schedule of the organization.
-   * 
+
    * @return the organization's schedule.
    */
 
@@ -54,7 +54,7 @@ public class Organization implements Serializable {
 
   /**
    * Returns the date the org was added to the system.
-   * 
+
    * @return the date the org was added.
    */
   public String getDateAdded() {
@@ -63,7 +63,7 @@ public class Organization implements Serializable {
 
   /**
    * Updates the schedule of the organization.
-   * 
+
    * @param newSchedule the new schedule to change the current one.
    */
   public void updateSchedule(Map<String, String> newSchedule) {

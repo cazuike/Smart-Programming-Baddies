@@ -11,13 +11,15 @@ public class Donations implements Serializable {
 
   /**
    * Constructs a new Donations item with the specific name, type, donator, lifespan and location.
+
    * @param donationName the name of the donation.
    * @param donationType the type of the donation.
    * @param donator the donator of the donation.
    * @param lifeSpan the lifespan of the donation.
    * @param location the location of the donation.
    */
-  public Donations(String donationName, String donationType, String donator, String lifeSpan, String location) {
+  public Donations(String donationName, String donationType, 
+      String donator, String lifeSpan, String location) {
     this.donationName = donationName;
     this.donationType = donationType;
     this.donator = donator;
@@ -26,44 +28,50 @@ public class Donations implements Serializable {
   }
   /**
    * Returns the name of the donation.
-   * 
+
    * @return the donation's name.
    */
+
   public String getDonationName() {
     return donationName;
   }
 
   /**
    * Returns the type of the donation.
-   * 
+
    * @return the donation's type.
    */
+
   public String getDonationType() {
     return donationType;
   }
 
   /**
    * Returns the name of the donator.
-   * 
+
    * @return donation's donator.
    */
+
   public String getDonator() {
     return donator;
   }
 
   /**
    * Returns the lifespan of the donation if it has any.
+
    * @return the donation's lifespan.
    */
+
   public String getLifeSpan() {
     return lifeSpan;
   }
 
   /**
    * Returns the location of the donation.
-   * 
+
    * @return donation's location.
    */
+
   public String getLocation() {
     return location;
   }
@@ -74,6 +82,7 @@ public class Donations implements Serializable {
    *
    * @return a string representation of the donation's details
    */
+
   @Override
   public String toString() {
     return "Donation Name: " + donationName + "\n"

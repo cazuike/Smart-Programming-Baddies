@@ -1,9 +1,11 @@
 package com.smartprogrammingbaddies;
 
-import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import java.util.HashMap;
 import java.util.Map;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 /**
  * Unit tests for the Organization class.
@@ -13,7 +15,7 @@ public class OrganizationsUnitTest {
   /**
    * The Organization set up to be tested.
    */
-  @Test
+  @BeforeEach
   public void setUpOrganizationForTesting() {
     Map<String, String> schedule = new HashMap<>();
     schedule.put("10-17-2024", "10:00 AM");
@@ -22,6 +24,7 @@ public class OrganizationsUnitTest {
   /**
    * Tests the getOrgName() method to verify the organization name is correct.
    */
+
   @Test
   public void getOrgNameTest() {
     String expectedName = "UpperBestSide";
@@ -30,6 +33,7 @@ public class OrganizationsUnitTest {
   /**
    * Tests the getOrgType() method to verify the organization type is correct.
    */
+
   @Test
   public void getOrgTypeTest() {
     String expectedType = "For Profit";
@@ -38,6 +42,7 @@ public class OrganizationsUnitTest {
   /**
    * Tests the getSchedule() method to verify the organization schedule is correct.
    */
+
   @Test
   public void getScheduleTest() {
     Map<String, String> expectedSchedule = new HashMap<>();
@@ -47,6 +52,7 @@ public class OrganizationsUnitTest {
   /**
    * Tests the getDateAdded() method to verify the organization date added is correct.
    */
+
   @Test
   public void getDateAddedTest() {
     String expectedDateAdded = "10-17-2024";
