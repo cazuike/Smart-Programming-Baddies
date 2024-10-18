@@ -80,7 +80,7 @@ public class VolunteerController {
           return new ResponseEntity<>("Unable to verify volunteer ID.", HttpStatus.NOT_FOUND);
         }
         DatabaseReference ref;
-        String refString = "clients/" + apiKey + "/volunteers" + volunteerId;
+        String refString = "clients/" + apiKey + "/volunteers/" + volunteerId;
         ref = FirebaseDatabase.getInstance().getReference(refString);
         ApiFuture<Void> future = ref.removeValueAsync();
         future.get();
@@ -93,7 +93,7 @@ public class VolunteerController {
   }
 
   /**
-   * Removes a volunteer from the database.
+   * Update schedule of volunteer.
    *
    * @param apiKey A {@code String} representing the API key.
    * @param volunteerId A {@code String} representing the volunteer ID.
@@ -113,10 +113,10 @@ public class VolunteerController {
           return new ResponseEntity<>("Unable to verify volunteer ID.", HttpStatus.NOT_FOUND);
         }
         DatabaseReference ref;
-        String refString = "clients/" + apiKey + "/volunteers" + volunteerId;
+        String refString = "clients/" + apiKey + "/volunteers/" + volunteerId;
         ref = FirebaseDatabase.getInstance().getReference(refString);
         updateField(ref, "schedule", schedule);
-        return new ResponseEntity<>("Updated Schedule", HttpStatus.OK);
+        return new ResponseEntity<>("Updated Schedule.", HttpStatus.OK);
       }
       return new ResponseEntity<>("Unable to verify api key.", HttpStatus.NOT_FOUND);
     } catch (Exception e) {
@@ -125,7 +125,7 @@ public class VolunteerController {
   }
 
   /**
-   * Removes a volunteer from the database.
+   * Update role of volunteer.
    *
    * @param apiKey A {@code String} representing the API key.
    * @param volunteerId A {@code String} representing the volunteer ID.
@@ -145,10 +145,10 @@ public class VolunteerController {
           return new ResponseEntity<>("Unable to verify volunteer ID.", HttpStatus.NOT_FOUND);
         }
         DatabaseReference ref;
-        String refString = "clients/" + apiKey + "/volunteers" + volunteerId;
+        String refString = "clients/" + apiKey + "/volunteers/" + volunteerId;
         ref = FirebaseDatabase.getInstance().getReference(refString);
         updateField(ref, "role", role);
-        return new ResponseEntity<>("Updated Schedule", HttpStatus.OK);
+        return new ResponseEntity<>("Updated Role.", HttpStatus.OK);
       }
       return new ResponseEntity<>("Unable to verify api key.", HttpStatus.NOT_FOUND);
     } catch (Exception e) {
@@ -157,7 +157,7 @@ public class VolunteerController {
   }
 
   /**
-   * Removes a volunteer from the database.
+   * Update name of volunteer.
    *
    * @param apiKey A {@code String} representing the API key.
    * @param volunteerId A {@code String} representing the volunteer ID.
@@ -177,10 +177,10 @@ public class VolunteerController {
           return new ResponseEntity<>("Unable to verify volunteer ID.", HttpStatus.NOT_FOUND);
         }
         DatabaseReference ref;
-        String refString = "clients/" + apiKey + "/volunteers" + volunteerId;
+        String refString = "clients/" + apiKey + "/volunteers/" + volunteerId;
         ref = FirebaseDatabase.getInstance().getReference(refString);
         updateField(ref, "name", name);
-        return new ResponseEntity<>("Updated Schedule", HttpStatus.OK);
+        return new ResponseEntity<>("Updated Name.", HttpStatus.OK);
       }
       return new ResponseEntity<>("Unable to verify api key.", HttpStatus.NOT_FOUND);
     } catch (Exception e) {
@@ -208,7 +208,7 @@ public class VolunteerController {
           return new ResponseEntity<>("Unable to verify volunteer ID.", HttpStatus.NOT_FOUND);
         }
         DatabaseReference ref;
-        String refString = "clients/" + apiKey + "/volunteers" + volunteerId;
+        String refString = "clients/" + apiKey + "/volunteers/" + volunteerId;
         ref = FirebaseDatabase.getInstance().getReference(refString);
         String volunteerData = getVolunteerInfo(ref).get();
         return new ResponseEntity<>(volunteerData, HttpStatus.OK);
@@ -237,7 +237,7 @@ public class VolunteerController {
    * @param field A {@code String} representing the API key.
    * @param newValue A {@code Object} representing the changed value.
    */
-  public void updateField(DatabaseReference dbRef, String field, Object newValue) throws Exception {
+  private void updateField(DatabaseReference dbRef, String field, Object newValue) throws Exception {
     CompletableFuture<Void> future = new CompletableFuture<>();
 
     dbRef.child(field).setValue(newValue, (error, ref) -> {
@@ -293,7 +293,7 @@ public class VolunteerController {
    * @return A {@code CompletableFuture<String>} A string containing
    *         information about the volunteer.
    */
-  public CompletableFuture<String> getVolunteerInfo(DatabaseReference ref) {
+  private CompletableFuture<String> getVolunteerInfo(DatabaseReference ref) {
     CompletableFuture<String> future = new CompletableFuture<>();
 
     ref.addListenerForSingleValueEvent(new ValueEventListener() {

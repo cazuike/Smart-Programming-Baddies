@@ -78,10 +78,8 @@ public class SetupDatabase {
       @Override
       public void onDataChange(DataSnapshot dataSnapshot) {
         if (dataSnapshot.exists()) {
-          System.out.println("Client with API Key " + apiKey + " exists.");
           future.complete(true);
         } else {
-          System.out.println("No client found with API Key: " + apiKey);
           future.complete(false);
         }
       }
