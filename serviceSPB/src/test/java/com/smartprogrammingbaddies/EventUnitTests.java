@@ -142,7 +142,7 @@ public class EventUnitTests {
   }
 
   /**
-   * Tests the getListOfVolunteers() method to verify the number of volunteers is correct.
+   * Tests the getListOfVolunteers() method to verify the list of volunteers is correct.
    */
   @Test
   public void getListOfVolunteersTest() {
