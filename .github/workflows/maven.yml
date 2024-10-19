@@ -32,10 +32,9 @@ jobs:
       run: |
         echo "${{ secrets.FIREBASE_SERVICE_KEY }}" > "${HOME}/fb.json"
 
-    - name: quick test
-      run: ls -la $HOME/fb.json
-          cat $HOME/fb.json
-
+    - name: echo fb
+      run: |
+        echo "${{ secrets.FIREBASE_SERVICE_KEY }}"
 
     - name: Build with Maven
       run: mvn -B package --file serviceSPB/pom.xml
