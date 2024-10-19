@@ -1,6 +1,5 @@
 package com.smartprogrammingbaddies;
 
-import com.google.gson.Gson;
 import com.google.api.core.ApiFuture;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
