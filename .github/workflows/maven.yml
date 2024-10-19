@@ -28,13 +28,7 @@ jobs:
         distribution: 'temurin'
         cache: maven
     - name: Build with Maven
-      run: mvn -B package --file serviceSPB/pom.xml
-      
-  # - name: Run Unit Tests
-  #   run: (cd serviceSPB && mvn test)
+      run: (cd serviceSPB && mvn spring-boot:run)
 
     - name: Run Linter
       run: (cd serviceSPB && mvn checkstyle:check)
-
-  # - name: Run Static Bug Check
-  #  run: (cd serviceSPB && mvn pmd:check)
