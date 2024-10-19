@@ -7,16 +7,16 @@ Please install the following to have this run locally:
   3. Visual Studio Code: I used Visual Studio Code to implement the test cases and and run all command until deployment inclusive: https://code.visualstudio.com/download
 
 
-All the endpoints are listed on the RouteController.java file, you can see all of their descriptions and what they are expected to do. 
+All the endpoints are listed on the RouteController.java file, you can see all of their descriptions and what they are expected to do.
 
 ## Running Our Test
-Once all the above requirements have been met, you can run our test with the following commands: 
-To check whether an endpoint is working correctly, please feel free to edit the tests on the RouteControllerTests.java file. 
+Once all the above requirements have been met, you can run our test with the following commands:
+To check whether an endpoint is working correctly, please feel free to edit the tests on the RouteControllerTests.java file.
 When satisified run: **mvn test** or **mvn test**. To check for style **mvn checkstyle:check**
 
-All tests on this file are expected to test whether the endpoints succeed or fail. Upon testing you'll find that no test are failing, this is due to code working as expected. 
+All tests on this file are expected to test whether the endpoints succeed or fail. Upon testing you'll find that no test are failing, this is due to code working as expected.
 
-Once you run the command you'll see a report with all tests and their status on the command line interface or which ever one you decided to use. 
+Once you run the command you'll see a report with all tests and their status on the command line interface or which ever one you decided to use.
 
 # Endpoints 🛜
 
@@ -92,7 +92,53 @@ Success (200): A message indicating the volunteer was successfully removed.
 Error (404): A message indicating an invalid API key.
 Error (500): A message indicating an internal error occurred during the removal process.
 
+## Event Controller
+**1. Create Event**
+Creates a new event in the system, associating the event with the client identified by the provided API key.
 
+URL: /createEvent
+Method: POST
+Query Parameters:
+- apiKey (required): A valid API key provided by the client.
+- name (required): The name of the event being created.
+- description (required): The description of the event.
+- date (required): The date of the event.
+- time (required): The time of the event.
+- location (required): The location of the event.
+- organizer (required): The organizer of the event.
+
+Response:
+- Success (200): A message containing the created event's ID.
+- Error (404): A message indicating an invalid API key.
+- Error (500): A message indicating an internal error occurred during event creation.
+
+**2. Retrieve Event**
+Retrieves information of a specified event given by the event ID and the associated API key.
+
+URL: /retrieveEvent
+Method: GET
+Query Parameters:
+- apiKey (required): A valid API key provided by the client.
+- eventId (required): The unique ID of the event to be retrieved.
+
+Response:
+- Success (200): A message containing the event information.
+- Error (404): A message indicating an invalid API key.
+- Error (500): A message indicating an internal error occurred during event retrieval.
+
+**3. Remove Event**
+Removes an event from database based on the provided event ID and the associated API key.
+
+URL: /removeEvent
+Method: DELETE
+Query Parameters:
+- apiKey (required): A valid API key provided by the client.
+- eventId (required): The unique ID of the event to be removed.
+
+Response:
+- Success (200): A message indicating the event was successfully removed.
+- Error (404): A message indicating an invalid API key.
+- Error (500): A message indicating an internal error occurred during the removal process.
 
 # Tools Utilized 🔬
 - Firebase DB
