@@ -9,6 +9,15 @@ Please install the following to have this run locally:
 
 All the endpoints are listed in our *Controller.java file, you can see all of their descriptions and what they are expected to do.
 
+**<h3>IN ORDER TO RUN OUR PROGRAM, THE .JSON FILE IS NEEDED!</h3>**
+
+The **spbservice-40a86-firebase-adminsdk-s1wtc-bcadcaece9.json** file that is used for compilation and that contains the secret keys needs to be under serviceSPB/src/main/java/com/smartprogrammingbaddies/
+**<h3>PLEASE CONTACT US TO RECIEVE THIS FILE IN ORDER TO COMPILE!</h3>**
+bag2158@columbia.edu
+eam2316@columbia.edu
+ca2970@columbia.edu
+jam2509@columbia.edu
+
 ## Running Our Test
 Once all the above requirements have been met, you can run our test with the following commands:
 To check whether an endpoint is working correctly, please feel free to edit the tests on the RouteControllerTests.java file.
@@ -18,7 +27,6 @@ All tests on this file are expected to test whether the endpoints succeed or fai
 
 Once you run the command you'll see a report with all tests and their status on the command line interface or which ever one you decided to use.
 
-**Note that you need our sensitive firebase_DB JSON in order to properly perform local tests, however it is not needed for cloud testing. If interested, please contact us.**
 
 # Endpoints 🛜
 
