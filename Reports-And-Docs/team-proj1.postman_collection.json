@@ -1,0 +1,356 @@
+{
+	"info": {
+		"_postman_id": "eb1972aa-625d-49bd-ad94-8ef60d5b4013",
+		"name": "team-proj1",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "39128392"
+	},
+	"item": [
+		{
+			"name": "List Location of Storage",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/listLocations?apiKey=test-service-key",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"listLocations"
+					],
+					"query": [
+						{
+							"key": "apiKey",
+							"value": "test-service-key"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Retrieve Info About Volunteer",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/retrieveVolunteer?apiKey=test-service-key&volunteerId=4ad01d00-5f78-4a39-a533-ebf15438c642",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"retrieveVolunteer"
+					],
+					"query": [
+						{
+							"key": "apiKey",
+							"value": "test-service-key"
+						},
+						{
+							"key": "volunteerId",
+							"value": "4ad01d00-5f78-4a39-a533-ebf15438c642"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Add Donation with New Location (ONLY WORKS ONCE)",
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": []
+				},
+				"url": {
+					"raw": "http://localhost:8080/addDonation?location=Siberia&apiKey=test-service-key&donator=Orsk&donationType=Accessories&donationName=Goggles",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"addDonation"
+					],
+					"query": [
+						{
+							"key": "location",
+							"value": "Siberia"
+						},
+						{
+							"key": "apiKey",
+							"value": "test-service-key"
+						},
+						{
+							"key": "donator",
+							"value": "Orsk"
+						},
+						{
+							"key": "donationType",
+							"value": "Accessories"
+						},
+						{
+							"key": "donationName",
+							"value": "Goggles"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Add Donation with Old Location",
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": []
+				},
+				"url": {
+					"raw": "http://localhost:8080/addDonation?location=Mirage&apiKey=test-service-key&donator=Darren&donationType=Apparel&donationName=WinterBoots",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"addDonation"
+					],
+					"query": [
+						{
+							"key": "location",
+							"value": "Mirage"
+						},
+						{
+							"key": "apiKey",
+							"value": "test-service-key"
+						},
+						{
+							"key": "donator",
+							"value": "Darren"
+						},
+						{
+							"key": "donationType",
+							"value": "Apparel"
+						},
+						{
+							"key": "donationName",
+							"value": "WinterBoots"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Add Location",
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": []
+				},
+				"url": {
+					"raw": "http://localhost:8080/registerLocation?name=Calaca&apiKey=test-service-key",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"registerLocation"
+					],
+					"query": [
+						{
+							"key": "name",
+							"value": "Calaca"
+						},
+						{
+							"key": "apiKey",
+							"value": "test-service-key"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Add Location, already exists",
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": []
+				},
+				"url": {
+					"raw": "http://localhost:8080/registerLocation?name=Calaca&apiKey=test-service-key",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"registerLocation"
+					],
+					"query": [
+						{
+							"key": "name",
+							"value": "Calaca"
+						},
+						{
+							"key": "apiKey",
+							"value": "test-service-key"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update Name of Volunteer",
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/updateName?name=Johnny Test&apiKey=test-service-key&volunteerId=4ad01d00-5f78-4a39-a533-ebf15438c642",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"updateName"
+					],
+					"query": [
+						{
+							"key": "name",
+							"value": "Johnny Test"
+						},
+						{
+							"key": "apiKey",
+							"value": "test-service-key"
+						},
+						{
+							"key": "volunteerId",
+							"value": "4ad01d00-5f78-4a39-a533-ebf15438c642"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "update role of volunteer",
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/updateName?name=Johnny Test&apiKey=test-service-key&volunteerId=4ad01d00-5f78-4a39-a533-ebf15438c64",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"updateName"
+					],
+					"query": [
+						{
+							"key": "name",
+							"value": "Johnny Test"
+						},
+						{
+							"key": "apiKey",
+							"value": "test-service-key"
+						},
+						{
+							"key": "volunteerId",
+							"value": "4ad01d00-5f78-4a39-a533-ebf15438c64"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "verify api-key",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/verifyApiKey?apiKey=test-service-key",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"verifyApiKey"
+					],
+					"query": [
+						{
+							"key": "apiKey",
+							"value": "test-service-key"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "index",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080"
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Remove Volunteer (this volunteer already removed)",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/removeVolunteer?volunteerId=d16d52b5-a7e1-423a-81eb-964f57c2d43d&apiKey=ec536c0c-b9a8-416f-b2a8-5af361fb8b80",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"removeVolunteer"
+					],
+					"query": [
+						{
+							"key": "volunteerId",
+							"value": "d16d52b5-a7e1-423a-81eb-964f57c2d43d"
+						},
+						{
+							"key": "apiKey",
+							"value": "ec536c0c-b9a8-416f-b2a8-5af361fb8b80"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
