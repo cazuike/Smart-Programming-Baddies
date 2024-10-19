@@ -9,6 +9,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.HashMap;
@@ -26,18 +27,23 @@ public class SetupDatabase {
    * Sets up the Firebase database.
    */
   public SetupDatabase() throws IOException {
-    String file = "src/main/java/com/smartprogrammingbaddies/"
-            + "spbservice-40a86-firebase-adminsdk-s1wtc-bcadcaece9.json";
-    FileInputStream service;
-    service = new FileInputStream(file);
+    String fbService = System.getenv("HOME") + "/fb.json";
+    File serviceFile = new File(fbService);
+
+    if (!serviceFile.exists()) {
+      fbService = "src/main/java/com/smartprogrammingbaddies/"
+              + "spbservice-40a86-firebase-adminsdk-s1wtc-bcadcaece9.json";
+    }
+
+    FileInputStream service = new FileInputStream(fbService);
     try {
       FirebaseOptions options = new FirebaseOptions.Builder()
-          .setCredentials(GoogleCredentials.fromStream(service))
-          .setDatabaseUrl("https://spbservice-40a86-default-rtdb.firebaseio.com/")
-          .build();
+              .setCredentials(GoogleCredentials.fromStream(service))
+              .setDatabaseUrl("https://spbservice-40a86-default-rtdb.firebaseio.com/")
+              .build();
       FirebaseApp.initializeApp(options);
     } catch (Exception e) {
-      System.err.println("error setting up firebase");
+      System.err.println("Error setting up Firebase");
       e.printStackTrace();
     } finally {
       service.close();
