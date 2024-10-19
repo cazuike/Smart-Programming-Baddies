@@ -237,7 +237,8 @@ public class VolunteerController {
    * @param field A {@code String} representing the API key.
    * @param newValue A {@code Object} representing the changed value.
    */
-  private void updateField(DatabaseReference dbRef, String field, Object newValue) throws Exception {
+  private void updateField(DatabaseReference dbRef, String field,
+                           Object newValue) throws Exception {
     CompletableFuture<Void> future = new CompletableFuture<>();
 
     dbRef.child(field).setValue(newValue, (error, ref) -> {
@@ -300,8 +301,7 @@ public class VolunteerController {
       @Override
       public void onDataChange(DataSnapshot dataSnapshot) {
         try {
-          Volunteer volunteer = dataSnapshot.getValue(Volunteer.class);
-          future.complete(volunteer.toString());
+          future.complete(dataSnapshot.getValue().toString());
         } catch (Exception e) {
           System.err.println("Encountered deserialization error.");
         }
