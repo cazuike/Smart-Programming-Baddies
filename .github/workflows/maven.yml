@@ -30,10 +30,25 @@ jobs:
 
     - name: Set up Firebase
       run: |
-        echo "${{ secrets.FIREBASE_SERVICE_KEY }}" > "${HOME}/fb.json"
+        cd serviceSPB/src/main/java/com/smartprogrammingbaddies
+        cat <<EOL >> ./database.json
+        {
+          "type": ${{ secrets.DB_TYPE }} ,
+          "project_id": ${{ secrets.DB_PROJECT_ID }},
+          "private_key_id": ${{ secrets.DB_PRIVATE_KEY_ID }},
+          "private_key": ${{ secrets.DB_PRIVATE_KEY }},
+          "client_email": ${{ secrets.DB_CLIENT_EMAIL }},
+          "client_id": ${{ secrets.DB_CLIENT_ID }},
+          "auth_uri": ${{ secrets.DB_AUTH_URI }},
+          "token_uri": ${{ secrets.DB_TOKEN_URI }},
+          "auth_provider_x509_cert_url": ${{ secrets.DB_AUTH_PROVIDER }},
+          "client_x509_cert_url": ${{ secrets.DB_CLIENT_CERT }},
+          "universe_domain": ${{ secrets.DB_UNIVERSE_DOMAIN }}
+        }
+        EOL
 
     - name: Build with Maven
-      run: (cd serviceSPB && mvn -e spring-boot:run)
+      run: mvn -B package --file serviceSPB/pom.xml
 
     - name: Run Linter
       run: (cd serviceSPB && mvn checkstyle:check)
