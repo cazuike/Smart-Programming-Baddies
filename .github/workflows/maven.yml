@@ -31,8 +31,8 @@ jobs:
     - name: Set up Firebase
       run: |
         cd serviceSPB/src/main/java/com/smartprogrammingbaddies
-        echo 
-        "{
+        cat <<EOL >> ./database.json
+        {
           "type": ${{ secrets.DB_TYPE }} ,
           "project_id": ${{ secrets.DB_PROJECT_ID }},
           "private_key_id": ${{ secrets.DB_PRIVATE_KEY_ID }},
@@ -43,8 +43,9 @@ jobs:
           "token_uri": ${{ secrets.DB_TOKEN_URI }},
           "auth_provider_x509_cert_url": ${{ secrets.DB_AUTH_PROVIDER }},
           "client_x509_cert_url": ${{ secrets.DB_CLIENT_CERT }},
-            "universe_domain": ${{ secrets.DB_UNIVERSE_DOMAIN }},
-        }" >> "database.json"
+          "universe_domain": ${{ secrets.DB_UNIVERSE_DOMAIN }}
+        }
+        EOL
 
     - name: Build with Maven
       run: (cd serviceSPB && mvn -e spring-boot:run)
