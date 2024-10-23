@@ -36,6 +36,3 @@ jobs:
 
     - name: Run Linter
       run: (cd serviceSPB && mvn checkstyle:check)
-
-  # - name: Run Static Bug Check
-  #  run: (cd serviceSPB && mvn pmd:check)
