@@ -43,7 +43,11 @@ jobs:
           "auth_provider_x509_cert_url": ${{ secrets.DB_AUTH_PROVIDER }},
           "client_x509_cert_url": ${{ secrets.DB_CLIENT_CERT }},
             "universe_domain": ${{ secrets.DB_UNIVERSE_DOMAIN }},
+<<<<<<< HEAD
         }" > "${HOME}/serviceSPB/src/main/java/com/smartprogrammingbaddies/database.json"
+=======
+        }"  > "${HOME}/serviceSPB/src/main/java/com/smartprogrammingbaddies/database.json"
+>>>>>>> 3b8bbd0ec8c010052f4c64b006ad785aa3363c1c
 
     - name: Build with Maven
       run: (cd serviceSPB && mvn -e spring-boot:run)
