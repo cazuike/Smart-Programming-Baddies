@@ -9,7 +9,9 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import java.io.File;
 import java.io.FileInputStream;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
@@ -24,20 +26,28 @@ public class SetupDatabase {
   /**
    * Sets up the Firebase database.
    */
-  public SetupDatabase() {
+  public SetupDatabase() throws IOException {
+    String fbService = System.getenv("HOME") + "/fb.json";
+    File serviceFile = new File(fbService);
+
+    if (!serviceFile.exists()) {
+      System.out.println("test");
+      fbService = "src/main/java/com/smartprogrammingbaddies/"
+              + "spbservice-40a86-firebase-adminsdk-s1wtc-bcadcaece9.json";
+    }
+
+    FileInputStream service = new FileInputStream(fbService);
     try {
-      String file = "src/main/java/com/smartprogrammingbaddies/"
-          + "spbservice-40a86-firebase-adminsdk-s1wtc-bcadcaece9.json";
-      FileInputStream serviceAccount;
-      serviceAccount = new FileInputStream(file);
       FirebaseOptions options = new FirebaseOptions.Builder()
-          .setCredentials(GoogleCredentials.fromStream(serviceAccount))
-          .setDatabaseUrl("https://spbservice-40a86-default-rtdb.firebaseio.com/")
-          .build();
+              .setCredentials(GoogleCredentials.fromStream(service))
+              .setDatabaseUrl("https://spbservice-40a86-default-rtdb.firebaseio.com/")
+              .build();
       FirebaseApp.initializeApp(options);
     } catch (Exception e) {
-      System.err.println("error setting up firebase");
+      System.err.println("Error setting up Firebase");
       e.printStackTrace();
+    } finally {
+      service.close();
     }
   }
 
@@ -78,10 +88,8 @@ public class SetupDatabase {
       @Override
       public void onDataChange(DataSnapshot dataSnapshot) {
         if (dataSnapshot.exists()) {
-          System.out.println("Client with API Key " + apiKey + " exists.");
           future.complete(true);
         } else {
-          System.out.println("No client found with API Key: " + apiKey);
           future.complete(false);
         }
       }
