@@ -31,6 +31,7 @@ public class SetupDatabase {
     File serviceFile = new File(fbService);
 
     if (!serviceFile.exists()) {
+      System.out.println("test");
       fbService = "src/main/java/com/smartprogrammingbaddies/"
               + "database.json";
     }
