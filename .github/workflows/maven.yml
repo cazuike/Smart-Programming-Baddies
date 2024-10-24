@@ -27,7 +27,7 @@ jobs:
         java-version: '17'
         distribution: 'temurin'
         cache: maven
-
+        
     - name: Set up Firebase
       run: |
         cd serviceSPB/src/main/java/com/smartprogrammingbaddies
@@ -49,6 +49,9 @@ jobs:
 
     - name: Build with Maven
       run: mvn -B package --file serviceSPB/pom.xml
+
+    - name: Run Unit Tests
+      run: (cd serviceSPB && mvn test)
 
     - name: Run Linter
       run: (cd serviceSPB && mvn checkstyle:check)
