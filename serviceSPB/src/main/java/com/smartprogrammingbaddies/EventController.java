@@ -90,8 +90,8 @@ public class EventController {
         DatabaseReference ref;
         String refString = "clients/" + apiKey + "/events/" + eventId;
         ref = FirebaseDatabase.getInstance().getReference(refString);
-        CompletableFuture<String> future = getEventInfo(ref);
-        String eventInfo = future.get();
+        CompletableFuture<Event> future = getEventInfo(ref);
+        String eventInfo = future.get().toString();
         return new ResponseEntity<>(eventInfo, HttpStatus.OK);
       }
       return new ResponseEntity<>("Invalid API key", HttpStatus.NOT_FOUND);
@@ -177,14 +177,14 @@ public class EventController {
    * @return A {@code CompletableFuture<String>} A string containing
    *         information about the event specified.
    */
-  private CompletableFuture<String> getEventInfo(DatabaseReference ref) {
-    CompletableFuture<String> future = new CompletableFuture<>();
+  private CompletableFuture<Event> getEventInfo(DatabaseReference ref) {
+    CompletableFuture<Event> future = new CompletableFuture<>();
 
     ref.addListenerForSingleValueEvent(new ValueEventListener() {
       @Override
       public void onDataChange(DataSnapshot dataSnapshot) {
         try {
-          future.complete(dataSnapshot.getValue().toString());
+          future.complete(extractEvent(dataSnapshot.getValue().toString()));
         } catch (Exception e) {
           handleException(e);
         }
@@ -197,4 +197,56 @@ public class EventController {
     });
     return future;
   }
+
+  /**
+   * Convert string into Event Class
+   *
+   * @param input A string input containing raw class information
+   * @return A {@code Event} An event class object containing
+   * info about the event specified.
+   */
+  public static Event extractEvent(String input) {
+    System.out.println("test" + input);
+    // TODO: configurate to work with a non null list of volunteers.
+    String parsedInput = input.replace("{", "").replace("}", "");
+    String[] pairs = parsedInput.split(", ");
+
+    String name = null, description = null, date = null, time = null, location = null;
+    StorageCenter organizer = null;
+    Map<String, Volunteer> listOfVolunteers = new HashMap<>();
+
+    for (String pair : pairs) {
+      String[] keyValue = pair.split("=");
+      String key = keyValue[0].trim();
+      String value = keyValue.length > 1 ? keyValue[1].trim() : null;
+
+      switch (key) {
+        case "name":
+          name = value;
+          break;
+        case "description":
+          description = value;
+          break;
+        case "date":
+          date = value;
+          break;
+        case "time":
+          time = value;
+          break;
+        case "location":
+          location = value;
+          break;
+        case "organizer":
+          String organizerName = value.replace("name=", "").trim();
+          organizer = new StorageCenter(organizerName);
+          break;
+        case "volunteerCount":
+          int volunteerCount = Integer.parseInt(value);
+          break;
+      }
+    }
+
+    return new Event(name, description, date, time, location, organizer, listOfVolunteers);
+  }
 }
+

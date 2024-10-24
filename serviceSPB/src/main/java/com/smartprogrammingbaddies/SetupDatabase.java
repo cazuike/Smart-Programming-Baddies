@@ -31,9 +31,8 @@ public class SetupDatabase {
     File serviceFile = new File(fbService);
 
     if (!serviceFile.exists()) {
-      System.out.println("test");
       fbService = "src/main/java/com/smartprogrammingbaddies/"
-              + "spbservice-40a86-firebase-adminsdk-s1wtc-bcadcaece9.json";
+              + "database.json";
     }
 
     FileInputStream service = new FileInputStream(fbService);
