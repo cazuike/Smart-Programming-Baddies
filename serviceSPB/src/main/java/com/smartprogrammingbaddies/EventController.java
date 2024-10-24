@@ -73,12 +73,12 @@ public class EventController {
   }
 
   /**
-   * Enrolls a event into the database.
+   * Retrieves an event for a database.
    *
    * @param apiKey A {@code String} representing the API key.
    * @param eventId A {@code String} representing the event's ID.
    *
-   * @return A {@code ResponseEntity} A message if the Event was successfully deleted
+   * @return A {@code ResponseEntity} A message if the Event was successfully rertrieved
      and a HTTP 200 response or, HTTP 404 reponse if API Key was not found.
    */
   @GetMapping("/retrieveEvent")
@@ -101,7 +101,7 @@ public class EventController {
   }
 
   /**
-   * Enrolls a event into the database.
+   * Removes an event from the database.
    *
    * @param apiKey A {@code String} representing the API key.
    * @param eventId A {@code String} representing the event's ID.
@@ -111,22 +111,57 @@ public class EventController {
    */
   @DeleteMapping("/removeEvent")
   public ResponseEntity<?> removeEvent(@RequestParam("apiKey") String apiKey,
-      @RequestParam("eventId") String eventId) {
+                                      @RequestParam("eventId") String eventId) {
     try {
       boolean validApiKey = auth.verifyApiKey(apiKey).get().getStatusCode() == HttpStatus.OK;
-      if (validApiKey) {
-        DatabaseReference ref;
-        String refString = "clients/" + apiKey + "/events/" + eventId;
-        ref = FirebaseDatabase.getInstance().getReference(refString);
-        ApiFuture<Void> future = ref.removeValueAsync();
-        future.get();
-        return new ResponseEntity<>("Deleted Event with ID: "
-        + eventId, HttpStatus.OK);
+      if (!validApiKey) {
+        return new ResponseEntity<>("Invalid API key.", HttpStatus.UNAUTHORIZED);
       }
-      return new ResponseEntity<>("Invalid API key", HttpStatus.NOT_FOUND);
+      boolean validEvent = verifyEvent(eventId, apiKey).get();
+      if (!validEvent) {
+        return new ResponseEntity<>("Event not found with ID: " + eventId, HttpStatus.NOT_FOUND);
+      }
+      // Build the Firebase reference to the event
+      String refString = "clients/" + apiKey + "/events/" + eventId;
+      DatabaseReference ref = FirebaseDatabase.getInstance().getReference(refString);
+      ApiFuture<Void> future = ref.removeValueAsync();
+      future.get(); // Blocks until the deletion is complete or throws an error
+      return new ResponseEntity<>("Deleted Event with ID: " + eventId, HttpStatus.OK);
+    
     } catch (Exception e) {
-      return handleException(e);
+      return new ResponseEntity<>("Error removing event: " 
+      + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
     }
+  }
+
+  /**
+   * Verifies that the event exists in our database.
+
+   * @param eventId A {@code String} representing the API key.
+   * @param apiKey A {@code String} representing the event ID.
+   * @return A {@code CompletableFuture<Boolean>} True if exists, otherwise false.
+   */
+
+  public CompletableFuture<Boolean> verifyEvent(String eventId, String apiKey) {
+    CompletableFuture<Boolean> futureResult = new CompletableFuture<>();
+
+    String refString = "clients/" + apiKey + "/events/" + eventId;
+    DatabaseReference ref = FirebaseDatabase.getInstance().getReference(refString);
+
+    ref.addListenerForSingleValueEvent(new ValueEventListener() {
+        @Override
+        public void onDataChange(DataSnapshot snapshot) {
+            futureResult.complete(snapshot.exists());
+        }
+
+        @Override
+        public void onCancelled(DatabaseError error) {
+            futureResult.completeExceptionally(new Exception("Error verifying event: "
+                + error.getMessage()));
+        }
+    });
+
+    return futureResult;
   }
 
   private ResponseEntity<?> handleException(Exception e) {
