@@ -171,6 +171,7 @@ public class EventController {
    * info about the event specified.
    */
   public static Event extractEvent(String input) {
+    System.out.println("test" + input);
     // TODO: configurate to work with a non null list of volunteers.
     String parsedInput = input.replace("{", "").replace("}", "");
     String[] pairs = parsedInput.split(", ");

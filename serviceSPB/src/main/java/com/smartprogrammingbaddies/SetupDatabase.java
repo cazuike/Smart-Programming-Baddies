@@ -27,8 +27,7 @@ public class SetupDatabase {
    * Sets up the Firebase database.
    */
   public SetupDatabase() throws IOException {
-    String fbService = "src/main/java/com/smartprogrammingbaddies/"
-            + "spbservice-40a86-firebase-adminsdk-s1wtc-bcadcaece9.json";
+    String fbService = System.getenv("HOME") + "/fb.json";
     File serviceFile = new File(fbService);
 
     if (!serviceFile.exists()) {
