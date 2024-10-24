@@ -1,6 +1,9 @@
 package com.smartprogrammingbaddies;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.api.core.ApiFuture;
+import com.google.cloud.datastore.DatastoreOptions;
+import com.google.cloud.datastore.Datastore;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -16,8 +19,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import com.google.cloud.datastore.Entity;
+import com.google.cloud.datastore.Key;
 
 /**
  * This class contains the EventController class.
@@ -99,7 +106,39 @@ public class EventController {
       return handleException(e);
     }
   }
-
+  
+  @PatchMapping("/addVolunteer")
+  public ResponseEntity<?> addVolunteer(@RequestParam("apiKey") String apiKey,
+                                        @RequestParam("eventId") String eventId,
+                                        @RequestParam("volunteerName") String volunteerName,
+                                        @RequestParam("volunteerRole") String volunteerRole,
+                                        @RequestBody Map<String, String> schedule) {
+      try {
+          // Verify the API Key
+          boolean validApiKey = auth.verifyApiKey(apiKey).get().getStatusCode() == HttpStatus.OK;
+          if (!validApiKey) {
+              return new ResponseEntity<>("Invalid API key", HttpStatus.NOT_FOUND);
+          }
+          DatabaseReference eventRef = FirebaseDatabase.getInstance().getReference("clients/" + apiKey + "/events/" + eventId);
+          CompletableFuture<String> future = getEventInfo(eventRef);
+          String eventInfo = future.get();
+          System.out.println(eventInfo);
+          if (eventInfo != null) {
+            ObjectMapper objectMapper = new ObjectMapper();
+            Event event = objectMapper.readValue(eventInfo, Event.class);
+            System.out.println("Hi" + event.toString());
+            Volunteer volunteer = new Volunteer(volunteerName, volunteerRole, String.valueOf(System.currentTimeMillis() / 1000), schedule);              
+            event.addVolunteer(volunteer);
+            eventRef.setValueAsync(event);
+            return new ResponseEntity<>("Volunteer added to event", HttpStatus.OK);
+          } else {
+              return new ResponseEntity<>("Event not found", HttpStatus.NOT_FOUND);
+          }
+      } catch (Exception e) {
+          return handleException(e);
+      }
+  }
+  
   /**
    * Enrolls a event into the database.
    *
