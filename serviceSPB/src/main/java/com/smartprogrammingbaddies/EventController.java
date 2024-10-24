@@ -73,12 +73,12 @@ public class EventController {
   }
 
   /**
-   * Enrolls a event into the database.
+   * Retrieves an event for a database.
    *
    * @param apiKey A {@code String} representing the API key.
    * @param eventId A {@code String} representing the event's ID.
    *
-   * @return A {@code ResponseEntity} A message if the Event was successfully deleted
+   * @return A {@code ResponseEntity} A message if the Event was successfully rertrieved
      and a HTTP 200 response or, HTTP 404 reponse if API Key was not found.
    */
   @GetMapping("/retrieveEvent")
@@ -101,7 +101,7 @@ public class EventController {
   }
 
   /**
-   * Enrolls a event into the database.
+   * Removes an event from the database.
    *
    * @param apiKey A {@code String} representing the API key.
    * @param eventId A {@code String} representing the event's ID.
