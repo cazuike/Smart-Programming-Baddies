@@ -73,12 +73,12 @@ public class EventController {
   }
 
   /**
-   * Enrolls a event into the database.
+   * Retrieves an event for a database.
    *
    * @param apiKey A {@code String} representing the API key.
    * @param eventId A {@code String} representing the event's ID.
    *
-   * @return A {@code ResponseEntity} A message if the Event was successfully deleted
+   * @return A {@code ResponseEntity} A message if the Event was successfully rertrieved
      and a HTTP 200 response or, HTTP 404 reponse if API Key was not found.
    */
   @GetMapping("/retrieveEvent")
@@ -90,8 +90,8 @@ public class EventController {
         DatabaseReference ref;
         String refString = "clients/" + apiKey + "/events/" + eventId;
         ref = FirebaseDatabase.getInstance().getReference(refString);
-        CompletableFuture<String> future = getEventInfo(ref);
-        String eventInfo = future.get();
+        CompletableFuture<Event> future = getEventInfo(ref);
+        String eventInfo = future.get().toString();
         return new ResponseEntity<>(eventInfo, HttpStatus.OK);
       }
       return new ResponseEntity<>("Invalid API key", HttpStatus.NOT_FOUND);
@@ -101,7 +101,7 @@ public class EventController {
   }
 
   /**
-   * Enrolls a event into the database.
+   * Removes an event from the database.
    *
    * @param apiKey A {@code String} representing the API key.
    * @param eventId A {@code String} representing the event's ID.
@@ -111,22 +111,57 @@ public class EventController {
    */
   @DeleteMapping("/removeEvent")
   public ResponseEntity<?> removeEvent(@RequestParam("apiKey") String apiKey,
-      @RequestParam("eventId") String eventId) {
+                                      @RequestParam("eventId") String eventId) {
     try {
       boolean validApiKey = auth.verifyApiKey(apiKey).get().getStatusCode() == HttpStatus.OK;
-      if (validApiKey) {
-        DatabaseReference ref;
-        String refString = "clients/" + apiKey + "/events/" + eventId;
-        ref = FirebaseDatabase.getInstance().getReference(refString);
-        ApiFuture<Void> future = ref.removeValueAsync();
-        future.get();
-        return new ResponseEntity<>("Deleted Event with ID: "
-        + eventId, HttpStatus.OK);
+      if (!validApiKey) {
+        return new ResponseEntity<>("Invalid API key.", HttpStatus.UNAUTHORIZED);
       }
-      return new ResponseEntity<>("Invalid API key", HttpStatus.NOT_FOUND);
+      boolean validEvent = verifyEvent(eventId, apiKey).get();
+      if (!validEvent) {
+        return new ResponseEntity<>("Event not found with ID: " + eventId, HttpStatus.NOT_FOUND);
+      }
+      // Build the Firebase reference to the event
+      String refString = "clients/" + apiKey + "/events/" + eventId;
+      DatabaseReference ref = FirebaseDatabase.getInstance().getReference(refString);
+      ApiFuture<Void> future = ref.removeValueAsync();
+      future.get(); // Blocks until the deletion is complete or throws an error
+      return new ResponseEntity<>("Deleted Event with ID: " + eventId, HttpStatus.OK);
+    
     } catch (Exception e) {
-      return handleException(e);
+      return new ResponseEntity<>("Error removing event: " 
+      + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
     }
+  }
+
+  /**
+   * Verifies that the event exists in our database.
+
+   * @param eventId A {@code String} representing the API key.
+   * @param apiKey A {@code String} representing the event ID.
+   * @return A {@code CompletableFuture<Boolean>} True if exists, otherwise false.
+   */
+
+  public CompletableFuture<Boolean> verifyEvent(String eventId, String apiKey) {
+    CompletableFuture<Boolean> futureResult = new CompletableFuture<>();
+
+    String refString = "clients/" + apiKey + "/events/" + eventId;
+    DatabaseReference ref = FirebaseDatabase.getInstance().getReference(refString);
+
+    ref.addListenerForSingleValueEvent(new ValueEventListener() {
+        @Override
+        public void onDataChange(DataSnapshot snapshot) {
+            futureResult.complete(snapshot.exists());
+        }
+
+        @Override
+        public void onCancelled(DatabaseError error) {
+            futureResult.completeExceptionally(new Exception("Error verifying event: "
+                + error.getMessage()));
+        }
+    });
+
+    return futureResult;
   }
 
   private ResponseEntity<?> handleException(Exception e) {
@@ -142,14 +177,14 @@ public class EventController {
    * @return A {@code CompletableFuture<String>} A string containing
    *         information about the event specified.
    */
-  private CompletableFuture<String> getEventInfo(DatabaseReference ref) {
-    CompletableFuture<String> future = new CompletableFuture<>();
+  private CompletableFuture<Event> getEventInfo(DatabaseReference ref) {
+    CompletableFuture<Event> future = new CompletableFuture<>();
 
     ref.addListenerForSingleValueEvent(new ValueEventListener() {
       @Override
       public void onDataChange(DataSnapshot dataSnapshot) {
         try {
-          future.complete(dataSnapshot.getValue().toString());
+          future.complete(extractEvent(dataSnapshot.getValue().toString()));
         } catch (Exception e) {
           handleException(e);
         }
@@ -161,6 +196,57 @@ public class EventController {
       }
     });
     return future;
+  }
+
+  /**
+   * Convert string into Event Class
+   *
+   * @param input A string input containing raw class information
+   * @return A {@code Event} An event class object containing
+   * info about the event specified.
+   */
+  public static Event extractEvent(String input) {
+    System.out.println("test" + input);
+    // TODO: configurate to work with a non null list of volunteers.
+    String parsedInput = input.replace("{", "").replace("}", "");
+    String[] pairs = parsedInput.split(", ");
+
+    String name = null, description = null, date = null, time = null, location = null;
+    StorageCenter organizer = null;
+    Map<String, Volunteer> listOfVolunteers = new HashMap<>();
+
+    for (String pair : pairs) {
+      String[] keyValue = pair.split("=");
+      String key = keyValue[0].trim();
+      String value = keyValue.length > 1 ? keyValue[1].trim() : null;
+
+      switch (key) {
+        case "name":
+          name = value;
+          break;
+        case "description":
+          description = value;
+          break;
+        case "date":
+          date = value;
+          break;
+        case "time":
+          time = value;
+          break;
+        case "location":
+          location = value;
+          break;
+        case "organizer":
+          String organizerName = value.replace("name=", "").trim();
+          organizer = new StorageCenter(organizerName);
+          break;
+        case "volunteerCount":
+          int volunteerCount = Integer.parseInt(value);
+          break;
+      }
+    }
+
+    return new Event(name, description, date, time, location, organizer, listOfVolunteers);
   }
 }
 
