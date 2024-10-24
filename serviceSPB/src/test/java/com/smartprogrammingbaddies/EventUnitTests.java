@@ -5,7 +5,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import java.util.HashMap;
 import java.util.Map;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ContextConfiguration;
@@ -13,7 +12,6 @@ import org.springframework.test.context.ContextConfiguration;
 /**
  * Unit tests for the Event class.
  */
-@Tag("local")
 @SpringBootTest
 @ContextConfiguration
 public class EventUnitTests {
