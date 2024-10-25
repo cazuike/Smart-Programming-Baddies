@@ -27,7 +27,7 @@ jobs:
         java-version: '17'
         distribution: 'temurin'
         cache: maven
-        
+
     - name: Set up Firebase
       run: |
         cd serviceSPB/src/main/java/com/smartprogrammingbaddies

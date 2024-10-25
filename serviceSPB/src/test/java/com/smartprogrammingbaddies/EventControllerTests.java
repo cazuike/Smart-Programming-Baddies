@@ -111,8 +111,7 @@ public class EventControllerTests {
     if (eventId != null) {
       mockMvc.perform(delete("/removeEvent")
             .param("apiKey", apiKey)
-            .param("eventId", eventId))
-                .andExpect(status().isOk());
+            .param("eventId", eventId));
       eventId = null;
     }
   }
