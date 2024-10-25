@@ -9,7 +9,6 @@
 	</parent>
   <groupId>com.smartprogrammingbaddies</groupId>
   <artifactId>serviceSPB</artifactId>
-  <packaging>jar</packaging>
   <version>1.0-SNAPSHOT</version>
   <name>food-pantry-api</name>
   <url>http://maven.apache.org</url>
@@ -100,29 +99,6 @@
 					<source>17</source>
 					<target>17</target>
 				</configuration>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-assembly-plugin</artifactId>
-				<version>3.6.0</version>
-				<configuration>
-					<descriptorRefs>
-						<descriptorRef>jar-with-dependencies</descriptorRef>
-					</descriptorRefs>
-					<archive>
-						<manifest>
-							<mainClass>dev.coms4156.project.individualproject</mainClass>
-						</manifest>
-					</archive>
-				</configuration>
-				<executions>
-					<execution>
-						<phase>package</phase>
-						<goals>
-							<goal>single</goal>
-						</goals>
-					</execution>
-				</executions>
 			</plugin>
         <plugin>
             <groupId>org.apache.maven.plugins</groupId>
