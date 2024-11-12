@@ -2,6 +2,8 @@ package com.smartprogrammingbaddies;
 
 import java.io.Serializable;
 import java.util.Map;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
  * The Volunteer class represents a volunteer, including their name, role,
@@ -17,7 +19,9 @@ public class Volunteer implements Serializable {
    * @param dateSignUp the date that they signed up as a volunteer
    * @param schedule the volunteering schedule
    */
-  public Volunteer(String name, String role, String dateSignUp, Map<String, String> schedule) {
+
+  @JsonCreator
+  public Volunteer(@JsonProperty("name") String name,  @JsonProperty("role") String role, @JsonProperty("dateSignUp") String dateSignUp, @JsonProperty("schedule") Map<String, String> schedule) {
     this.name = name;
     this.role = role;
     this.dateSignUp = dateSignUp;
@@ -67,6 +71,15 @@ public class Volunteer implements Serializable {
    */
   public void updateRole(String newRole) {
     this.role = newRole;
+  }
+
+  /**
+   * Updates the name of the volunteer.
+   *
+   * @param newName the new role for the volunteer
+   */
+  public void updateName(String newName) {
+    this.name = newName;
   }
 
   /**

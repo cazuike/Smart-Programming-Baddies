@@ -6,10 +6,10 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 /**
-* Class contains all the startup logic for the application.
-*
-* @param args A {@code String[]} of any potential runtime arguments
-*/
+ * Class contains all the startup logic for the application.
+ *
+ * @param {@code String[]} of any potential runtime arguments
+ */
 @SpringBootApplication
 public class App implements CommandLineRunner {
 
@@ -23,8 +23,8 @@ public class App implements CommandLineRunner {
   }
 
   /**
-    * This contains all the overheading teardown logic.
-    */
+   * This contains all the overheading teardown logic.
+   */
   @PreDestroy
   public void onTermination() {
     System.out.println("Je suis fini!");

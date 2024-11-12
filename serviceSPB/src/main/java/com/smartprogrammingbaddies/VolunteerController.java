@@ -1,11 +1,19 @@
 package com.smartprogrammingbaddies;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.google.api.core.ApiFuture;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
@@ -19,6 +27,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.sql.DataSource;
+
 /**
  * This class contains the VolunteerController class.
  */
@@ -28,6 +38,12 @@ public class VolunteerController {
   @Autowired
   private AuthController auth;
 
+  private final DataSource dataSource;
+
+  @Autowired
+  public VolunteerController(DataSource dataSource) {
+    this.dataSource = dataSource;
+  }
   /**
    * Enrolls a volunteer into the database.
    *
@@ -40,19 +56,28 @@ public class VolunteerController {
   public ResponseEntity<?> enrollVolunteer(@RequestParam("apiKey") String apiKey,
       @RequestParam("name") String name,
       @RequestParam("role") String role,
-       @RequestBody Map<String, String> schedule
+                                           @RequestBody Map<String, String> schedule
   ) {
     try {
-      boolean validApiKey = auth.verifyApiKey(apiKey).get().getStatusCode() == HttpStatus.OK;
+      boolean validApiKey = auth.verifyApiKey(apiKey).getStatusCode() == HttpStatus.OK;
       if (validApiKey) {
-        DatabaseReference ref;
-        String refString = "clients/" + apiKey + "/volunteers";
-        ref = FirebaseDatabase.getInstance().getReference(refString);
         String volunteerId = UUID.randomUUID().toString();
         Volunteer volunteer = new Volunteer(name, role,
                 "" + System.currentTimeMillis() / 1000, schedule);
-        ApiFuture<Void> future = ref.child(volunteerId).setValueAsync(volunteer);
-        future.get();
+          ObjectMapper objectMapper = new ObjectMapper();
+          String volunteerJson = objectMapper.writeValueAsString(volunteer);
+
+          String insertQuery = "INSERT INTO volunteers (clientID, volunteerID, volunteer_data) VALUES (?, ?, ?)";
+
+          try (Connection connection = dataSource.getConnection();
+               PreparedStatement statement = connection.prepareStatement(insertQuery)) {
+
+              statement.setString(1, apiKey);
+              statement.setString(2, volunteerId);
+              statement.setString(3, volunteerJson);
+
+              statement.executeUpdate();
+          }
         return new ResponseEntity<>("Enrolled Volunteer ID:" + volunteerId, HttpStatus.OK);
       }
       return new ResponseEntity<>("Invalid API key", HttpStatus.NOT_FOUND);
@@ -73,20 +98,30 @@ public class VolunteerController {
   public ResponseEntity<?> removeVolunteer(@RequestParam("apiKey") String apiKey,
                                             @RequestParam("volunteerId") String volunteerId) {
     try {
-      boolean validApiKey = auth.verifyApiKey(apiKey).get().getStatusCode() == HttpStatus.OK;
+      boolean validApiKey = auth.verifyApiKey(apiKey).getStatusCode() == HttpStatus.OK;
       if (validApiKey) {
-        boolean validVolunteer = verifyVolunteer(volunteerId, apiKey).get();
-        if (!validVolunteer) {
-          return new ResponseEntity<>("Unable to verify volunteer ID.", HttpStatus.NOT_FOUND);
+        String deleteQuery = "DELETE FROM volunteers WHERE volunteerID = ? AND clientID = ?";
+
+        try (Connection connection = dataSource.getConnection();
+             PreparedStatement statement = connection.prepareStatement(deleteQuery)) {
+
+          statement.setString(1, volunteerId);
+          statement.setString(2, apiKey);
+
+          int rowsDeleted = statement.executeUpdate();
+          if (rowsDeleted > 0) {
+            return new ResponseEntity<>("Deleted Volunteer ID" + volunteerId, HttpStatus.NOT_FOUND);
+          } else {
+            return new ResponseEntity<>("Volunteer not found", HttpStatus.NOT_FOUND);
+          }
+        } catch (SQLException e) {
+          e.printStackTrace();
+          return new ResponseEntity<>("Failed to delete Volunteer.", HttpStatus.NOT_FOUND);
         }
-        DatabaseReference ref;
-        String refString = "clients/" + apiKey + "/volunteers/" + volunteerId;
-        ref = FirebaseDatabase.getInstance().getReference(refString);
-        ApiFuture<Void> future = ref.removeValueAsync();
-        future.get();
-        return new ResponseEntity<>("Deleted Volunteer ID" + volunteerId, HttpStatus.OK);
       }
-      return new ResponseEntity<>("Unable to verify api key.", HttpStatus.NOT_FOUND);
+      else{
+          return new ResponseEntity<>("Invalid API key.", HttpStatus.NOT_FOUND);
+      }
     } catch (Exception e) {
       return handleException(e);
     }
@@ -103,22 +138,55 @@ public class VolunteerController {
   @PatchMapping("/updateSchedule")
   public ResponseEntity<?> updateSchedule(@RequestParam("apiKey") String apiKey,
                                            @RequestParam("volunteerId") String volunteerId,
-                                          @RequestBody Map<String, String> schedule
+                                          @RequestBody Map<String, String> newSchedule
                                           ) {
     try {
-      boolean validApiKey = auth.verifyApiKey(apiKey).get().getStatusCode() == HttpStatus.OK;
-      if (validApiKey) {
-        boolean validVolunteer = verifyVolunteer(volunteerId, apiKey).get();
-        if (!validVolunteer) {
-          return new ResponseEntity<>("Unable to verify volunteer ID.", HttpStatus.NOT_FOUND);
-        }
-        DatabaseReference ref;
-        String refString = "clients/" + apiKey + "/volunteers/" + volunteerId;
-        ref = FirebaseDatabase.getInstance().getReference(refString);
-        updateField(ref, "schedule", schedule);
-        return new ResponseEntity<>("Updated Schedule.", HttpStatus.OK);
+      boolean validApiKey = auth.verifyApiKey(apiKey).getStatusCode() == HttpStatus.OK;
+      if (!validApiKey) {
+        return new ResponseEntity<>("Invalid API key.", HttpStatus.NOT_FOUND);
       }
-      return new ResponseEntity<>("Unable to verify api key.", HttpStatus.NOT_FOUND);
+
+      String selectQuery = "SELECT volunteer_data FROM volunteers WHERE volunteerID = ?";
+      String volunteerDataJson;
+
+      try (Connection connection = dataSource.getConnection();
+           PreparedStatement selectStatement = connection.prepareStatement(selectQuery)) {
+
+        selectStatement.setString(1, volunteerId);
+        ResultSet resultSet = selectStatement.executeQuery();
+
+        if (resultSet.next()) {
+          volunteerDataJson = resultSet.getString("volunteer_data");
+        } else {
+          return new ResponseEntity<>("Volunteer not found.", HttpStatus.NOT_FOUND);
+        }
+      }
+
+      ObjectMapper objectMapper = new ObjectMapper();
+      Volunteer volunteer = objectMapper.readValue(volunteerDataJson, Volunteer.class);
+
+      volunteer.updateSchedule(newSchedule);
+
+      String updatedVolunteerDataJson = objectMapper.writeValueAsString(volunteer);
+
+
+      String updateQuery = "UPDATE volunteers SET volunteer_data = ? WHERE volunteerID = ?";
+
+      try (Connection connection = dataSource.getConnection();
+           PreparedStatement updateStatement = connection.prepareStatement(updateQuery)) {
+
+        updateStatement.setString(1, updatedVolunteerDataJson);
+        updateStatement.setString(2, volunteerId);
+
+        int rowsUpdated = updateStatement.executeUpdate();
+
+        if (rowsUpdated > 0) {
+          return new ResponseEntity<>("Volunteer schedule updated successfully.", HttpStatus.OK);
+        } else {
+          return new ResponseEntity<>("Failed to update volunteer schedule.", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+      }
+
     } catch (Exception e) {
       return handleException(e);
     }
@@ -133,24 +201,59 @@ public class VolunteerController {
   and a HTTP 200 response or, HTTP 404 reponse if API Key was not found.
    */
   @PatchMapping("/updateRole")
-  public ResponseEntity<?> updateRole(@RequestParam("apiKey") String apiKey,
-                                          @RequestParam("volunteerId") String volunteerId,
-                                      @RequestParam("role") String role
+  public ResponseEntity<?> updateRole(
+          @RequestParam("apiKey") String apiKey,
+          @RequestParam("volunteerId") String volunteerId,
+          @RequestParam("role") String newRole
   ) {
     try {
-      boolean validApiKey = auth.verifyApiKey(apiKey).get().getStatusCode() == HttpStatus.OK;
-      if (validApiKey) {
-        boolean validVolunteer = verifyVolunteer(volunteerId, apiKey).get();
-        if (!validVolunteer) {
-          return new ResponseEntity<>("Unable to verify volunteer ID.", HttpStatus.NOT_FOUND);
-        }
-        DatabaseReference ref;
-        String refString = "clients/" + apiKey + "/volunteers/" + volunteerId;
-        ref = FirebaseDatabase.getInstance().getReference(refString);
-        updateField(ref, "role", role);
-        return new ResponseEntity<>("Updated Role.", HttpStatus.OK);
+      boolean validApiKey = auth.verifyApiKey(apiKey).getStatusCode() == HttpStatus.OK;
+      if (!validApiKey) {
+        return new ResponseEntity<>("Invalid API key.", HttpStatus.NOT_FOUND);
       }
-      return new ResponseEntity<>("Unable to verify api key.", HttpStatus.NOT_FOUND);
+
+      // Step 2: Retrieve JSON data from the database for the specified volunteer
+      String selectQuery = "SELECT volunteer_data FROM volunteers WHERE volunteerID = ?";
+      String volunteerDataJson;
+
+      try (Connection connection = dataSource.getConnection();
+           PreparedStatement selectStatement = connection.prepareStatement(selectQuery)) {
+
+        selectStatement.setString(1, volunteerId);
+        ResultSet resultSet = selectStatement.executeQuery();
+
+        if (resultSet.next()) {
+          volunteerDataJson = resultSet.getString("volunteer_data");
+        } else {
+          return new ResponseEntity<>("Volunteer not found.", HttpStatus.NOT_FOUND);
+        }
+      }
+
+      ObjectMapper objectMapper = new ObjectMapper();
+      Volunteer volunteer = objectMapper.readValue(volunteerDataJson, Volunteer.class);
+
+      volunteer.updateRole(newRole);
+
+      String updatedVolunteerDataJson = objectMapper.writeValueAsString(volunteer);
+
+
+      String updateQuery = "UPDATE volunteers SET volunteer_data = ? WHERE volunteerID = ?";
+
+      try (Connection connection = dataSource.getConnection();
+           PreparedStatement updateStatement = connection.prepareStatement(updateQuery)) {
+
+        updateStatement.setString(1, updatedVolunteerDataJson);
+        updateStatement.setString(2, volunteerId);
+
+        int rowsUpdated = updateStatement.executeUpdate();
+
+        if (rowsUpdated > 0) {
+          return new ResponseEntity<>("Volunteer role updated successfully.", HttpStatus.OK);
+        } else {
+          return new ResponseEntity<>("Failed to update volunteer role.", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+      }
+
     } catch (Exception e) {
       return handleException(e);
     }
@@ -165,55 +268,101 @@ public class VolunteerController {
   and a HTTP 200 response or, HTTP 404 reponse if API Key was not found.
    */
   @PatchMapping("/updateName")
-  public ResponseEntity<?> updateName(@RequestParam("apiKey") String apiKey,
-                                      @RequestParam("volunteerId") String volunteerId,
-                                      @RequestParam("name") String name
+  public ResponseEntity<?> updateName(
+          @RequestParam("apiKey") String apiKey,
+          @RequestParam("volunteerId") String volunteerId,
+          @RequestParam("name") String newName
   ) {
     try {
-      boolean validApiKey = auth.verifyApiKey(apiKey).get().getStatusCode() == HttpStatus.OK;
-      if (validApiKey) {
-        boolean validVolunteer = verifyVolunteer(volunteerId, apiKey).get();
-        if (!validVolunteer) {
-          return new ResponseEntity<>("Unable to verify volunteer ID.", HttpStatus.NOT_FOUND);
-        }
-        DatabaseReference ref;
-        String refString = "clients/" + apiKey + "/volunteers/" + volunteerId;
-        ref = FirebaseDatabase.getInstance().getReference(refString);
-        updateField(ref, "name", name);
-        return new ResponseEntity<>("Updated Name.", HttpStatus.OK);
+      boolean validApiKey = auth.verifyApiKey(apiKey).getStatusCode() == HttpStatus.OK;
+      if (!validApiKey) {
+        return new ResponseEntity<>("Invalid API key.", HttpStatus.NOT_FOUND);
       }
-      return new ResponseEntity<>("Unable to verify api key.", HttpStatus.NOT_FOUND);
+
+      String selectQuery = "SELECT volunteer_data FROM volunteers WHERE volunteerID = ?";
+      String volunteerDataJson;
+
+      try (Connection connection = dataSource.getConnection();
+           PreparedStatement selectStatement = connection.prepareStatement(selectQuery)) {
+
+        selectStatement.setString(1, volunteerId);
+        ResultSet resultSet = selectStatement.executeQuery();
+
+        if (resultSet.next()) {
+          volunteerDataJson = resultSet.getString("volunteer_data");
+        } else {
+          return new ResponseEntity<>("Volunteer not found.", HttpStatus.NOT_FOUND);
+        }
+      }
+
+      ObjectMapper objectMapper = new ObjectMapper();
+      Volunteer volunteer = objectMapper.readValue(volunteerDataJson, Volunteer.class);
+
+      volunteer.updateName(newName);
+
+      String updatedVolunteerDataJson = objectMapper.writeValueAsString(volunteer);
+
+
+      String updateQuery = "UPDATE volunteers SET volunteer_data = ? WHERE volunteerID = ?";
+
+      try (Connection connection = dataSource.getConnection();
+           PreparedStatement updateStatement = connection.prepareStatement(updateQuery)) {
+
+        updateStatement.setString(1, updatedVolunteerDataJson);
+        updateStatement.setString(2, volunteerId);
+
+        int rowsUpdated = updateStatement.executeUpdate();
+
+        if (rowsUpdated > 0) {
+          return new ResponseEntity<>("Volunteer role updated successfully.", HttpStatus.OK);
+        } else {
+          return new ResponseEntity<>("Failed to update volunteer role.", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+      }
+
     } catch (Exception e) {
       return handleException(e);
     }
   }
 
   /**
-   * Retrieve info about volunteer.
+   * Update schedule of volunteer.
    *
    * @param apiKey A {@code String} representing the API key.
    * @param volunteerId A {@code String} representing the volunteer ID.
-   * @return A {@code ResponseEntity} A string containing the volunteer info
+   * @return A {@code ResponseEntity} A message if Volunteer was successfully removed
   and a HTTP 200 response or, HTTP 404 response if API Key was not found.
    */
-  @GetMapping("/retrieveVolunteer")
-  public ResponseEntity<?> idVolunteer(@RequestParam("apiKey") String apiKey,
-                                      @RequestParam("volunteerId") String volunteerId
+  @GetMapping("/getVolunteerInfo")
+  public ResponseEntity<?> getVolunteerInfo(@RequestParam("apiKey") String apiKey,
+                                          @RequestParam("volunteerId") String volunteerId
   ) {
     try {
-      boolean validApiKey = auth.verifyApiKey(apiKey).get().getStatusCode() == HttpStatus.OK;
-      if (validApiKey) {
-        boolean validVolunteer = verifyVolunteer(volunteerId, apiKey).get();
-        if (!validVolunteer) {
-          return new ResponseEntity<>("Unable to verify volunteer ID.", HttpStatus.NOT_FOUND);
-        }
-        DatabaseReference ref;
-        String refString = "clients/" + apiKey + "/volunteers/" + volunteerId;
-        ref = FirebaseDatabase.getInstance().getReference(refString);
-        String volunteerData = getVolunteerInfo(ref).get();
-        return new ResponseEntity<>(volunteerData, HttpStatus.OK);
+      boolean validApiKey = auth.verifyApiKey(apiKey).getStatusCode() == HttpStatus.OK;
+      if (!validApiKey) {
+        return new ResponseEntity<>("Invalid API key.", HttpStatus.NOT_FOUND);
       }
-      return new ResponseEntity<>("Unable to verify api key.", HttpStatus.NOT_FOUND);
+
+      String selectQuery = "SELECT volunteer_data FROM volunteers WHERE volunteerID = ?";
+      String volunteerDataJson;
+
+      try (Connection connection = dataSource.getConnection();
+           PreparedStatement selectStatement = connection.prepareStatement(selectQuery)) {
+
+        selectStatement.setString(1, volunteerId);
+        ResultSet resultSet = selectStatement.executeQuery();
+
+        if (resultSet.next()) {
+          volunteerDataJson = resultSet.getString("volunteer_data");
+        } else {
+          return new ResponseEntity<>("Volunteer not found.", HttpStatus.NOT_FOUND);
+        }
+      }
+
+      ObjectMapper objectMapper = new ObjectMapper();
+      Volunteer volunteer = objectMapper.readValue(volunteerDataJson, Volunteer.class);
+      return new ResponseEntity<>(volunteer.toString(), HttpStatus.OK);
+
     } catch (Exception e) {
       return handleException(e);
     }
@@ -230,89 +379,5 @@ public class VolunteerController {
     return new ResponseEntity<>("An Error has occurred", HttpStatus.INTERNAL_SERVER_ERROR);
   }
 
-  /**
-   * Update field of volunteer.
-   *
-   * @param dbRef A {@code DatabaseReference} reference to a volunteer node.
-   * @param field A {@code String} representing the API key.
-   * @param newValue A {@code Object} representing the changed value.
-   */
-  private void updateField(DatabaseReference dbRef, String field,
-                           Object newValue) throws Exception {
-    CompletableFuture<Void> future = new CompletableFuture<>();
-
-    dbRef.child(field).setValue(newValue, (error, ref) -> {
-      if (error != null) {
-        future.completeExceptionally(new RuntimeException("Update failed: ", error.toException()));
-      } else {
-        future.complete(null);
-      }
-    });
-
-    try {
-      future.get();
-    } catch (Exception e) {
-      throw new Exception("Update failed: ", e);
-    }
-  }
-
-  /**
-   * Verify if volunteer exists in our database.
-   *
-   * @param apiKey A {@code String} representing the API key.
-   * @param volunteerId A {@code String} representing the volunteer ID.
-   * @return A {@code CompletableFuture<Boolean>} True if exists, otherwise false.
-   */
-  private CompletableFuture<Boolean> verifyVolunteer(String volunteerId, String apiKey) {
-    CompletableFuture<Boolean> future = new CompletableFuture<>();
-    DatabaseReference ref = FirebaseDatabase.getInstance().getReference("clients/"
-            + apiKey + "/volunteers").child(volunteerId);
-
-    ref.addListenerForSingleValueEvent(new ValueEventListener() {
-      @Override
-      public void onDataChange(DataSnapshot dataSnapshot) {
-        if (dataSnapshot.exists()) {
-          future.complete(true);
-        } else {
-          future.complete(false);
-        }
-      }
-
-      @Override
-      public void onCancelled(DatabaseError databaseError) {
-        System.err.println("error:" + databaseError.getMessage());
-      }
-    });
-    return future;
-  }
-
-  /**
-   * Deserialize JSON data from remote database into Volunteer.class,
-   * return info in readable format.
-   *
-   * @param ref A {@code DatabaseReference} representing node in database where info is stored.
-   * @return A {@code CompletableFuture<String>} A string containing
-   *         information about the volunteer.
-   */
-  private CompletableFuture<String> getVolunteerInfo(DatabaseReference ref) {
-    CompletableFuture<String> future = new CompletableFuture<>();
-
-    ref.addListenerForSingleValueEvent(new ValueEventListener() {
-      @Override
-      public void onDataChange(DataSnapshot dataSnapshot) {
-        try {
-          future.complete(dataSnapshot.getValue().toString());
-        } catch (Exception e) {
-          System.err.println("Encountered deserialization error.");
-        }
-      }
-
-      @Override
-      public void onCancelled(DatabaseError databaseError) {
-        System.err.println("error:" + databaseError.getMessage());
-      }
-    });
-    return future;
-  }
 }
 
