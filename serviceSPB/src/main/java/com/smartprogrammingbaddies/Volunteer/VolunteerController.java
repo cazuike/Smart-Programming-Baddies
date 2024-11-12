@@ -1,4 +1,4 @@
-package com.smartprogrammingbaddies;
+package com.smartprogrammingbaddies.Volunteer;
 
 import com.google.api.core.ApiFuture;
 import com.google.firebase.database.DataSnapshot;
@@ -6,6 +6,8 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.smartprogrammingbaddies.AuthController;
+
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
@@ -49,9 +51,8 @@ public class VolunteerController {
         String refString = "clients/" + apiKey + "/volunteers";
         ref = FirebaseDatabase.getInstance().getReference(refString);
         String volunteerId = UUID.randomUUID().toString();
-        Volunteer volunteer = new Volunteer(name, role,
-                "" + System.currentTimeMillis() / 1000, schedule);
-        ApiFuture<Void> future = ref.child(volunteerId).setValueAsync(volunteer);
+
+        ApiFuture<Void> future = ref.child(volunteerId).setValueAsync(null);
         future.get();
         return new ResponseEntity<>("Enrolled Volunteer ID:" + volunteerId, HttpStatus.OK);
       }

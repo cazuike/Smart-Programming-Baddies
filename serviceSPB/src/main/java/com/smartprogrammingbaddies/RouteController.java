@@ -56,7 +56,7 @@ public class RouteController {
         DatabaseReference ref;
         String refString = "clients/" + apiKey + "/locations";
         ref = FirebaseDatabase.getInstance().getReference(refString);
-        ApiFuture<Void> future = ref.child(location).setValueAsync(new StorageCenter(location));
+        ApiFuture<Void> future = ref.child(location).setValueAsync(null);
         future.get();
         return new ResponseEntity<>("Registered new storage center at " + location, HttpStatus.OK);
       }
