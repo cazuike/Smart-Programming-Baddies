@@ -1,16 +1,29 @@
-package com.smartprogrammingbaddies;
+package com.smartprogrammingbaddies.StorageCenter;
 
-import java.io.Serial;
 import java.io.Serializable;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.HashSet;
+import java.util.Set;
+import com.smartprogrammingbaddies.Item.Item;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 
 /**
  * The StorageCenter class is used to store and manage goods such
  * as foods, toiletries, or clothes. It provides methods to add,
  * remove, and list items in the storage.
  */
+@Entity
 public class StorageCenter implements Serializable {
+
+  @Id
+  @GeneratedValue(strategy = GenerationType.AUTO)
+  private int id;
+  @OneToMany
+  private Set<Item> items;
+  private String name;
   /**
    * Constructs a new StorageCenter where donated items can be tracked.
    * The storage center will contain a list of Item objects. Initially,
@@ -19,7 +32,7 @@ public class StorageCenter implements Serializable {
    * @param name the name of the storage center
    */
   public StorageCenter(String name) {
-    this.items = new HashMap<String, Item>();
+    this.items = new HashSet<Item>();
     this.name = name;
   }
 
@@ -31,7 +44,7 @@ public class StorageCenter implements Serializable {
    * @param itemList the list of items to be added to the storage\
    * @param name the name of the storage center
    */
-  public StorageCenter(Map<String, Item> itemList, String name) {
+  public StorageCenter(Set<Item> itemList, String name) {
     this.items = itemList;
     this.name = name;
   }
@@ -42,7 +55,7 @@ public class StorageCenter implements Serializable {
    * @param item the item to be added
    */
   public void addItem(String name, Item item) {
-    items.put(name, item);
+    items.add(item);
   }
 
   /**
@@ -52,7 +65,8 @@ public class StorageCenter implements Serializable {
    * @return true if the item was successfully removed, false otherwise
    */
   public boolean removeItem(String name, Item item) {
-    return items.remove(name, item);
+    items.remove(item);
+    return true;
   }
 
   /**
@@ -60,7 +74,7 @@ public class StorageCenter implements Serializable {
    *
    * @return a list of all items in the storage
    */
-  public Map<String, Item> getItems() {
+  public Set<Item> getItems() {
     return items;
   }
 
@@ -69,7 +83,7 @@ public class StorageCenter implements Serializable {
    *
    * @param itemList the list of items to be set
    */
-  public void setItems(Map<String, Item> itemList) {
+  public void setItems(Set<Item> itemList) {
     items = itemList;
   }
 
@@ -99,15 +113,10 @@ public class StorageCenter implements Serializable {
   public String printItems() {
     StringBuilder result = new StringBuilder();
     result.append("Storage Center Name: ").append(name).append("\n");
-    for (Map.Entry<String, Item> entry : items.entrySet()) {
-      Item value = entry.getValue();
-      result.append(value.toString());
+    for (Item entry : items) {
+      Item value = entry;
+      result.append(value);
     }
     return result.toString();
   }
-
-  @Serial
-  private static final long serialVersionUID = 234567L;
-  private Map<String, Item> items;
-  private String name;
 }

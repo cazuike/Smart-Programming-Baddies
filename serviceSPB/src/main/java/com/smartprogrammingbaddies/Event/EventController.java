@@ -1,15 +1,29 @@
-package com.smartprogrammingbaddies;
+package com.smartprogrammingbaddies.Event;
 
 import com.google.api.core.ApiFuture;
+import com.google.cloud.firestore.Firestore;
+import com.google.cloud.firestore.QueryDocumentSnapshot;
+import com.google.cloud.firestore.QuerySnapshot;
+import com.google.firebase.cloud.FirestoreClient;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.smartprogrammingbaddies.AuthController;
+import com.smartprogrammingbaddies.Organization.Organization;
+import com.smartprogrammingbaddies.StorageCenter.StorageCenter;
+
+import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
+
+import org.checkerframework.checker.units.qual.A;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -29,6 +43,8 @@ public class EventController {
 
   @Autowired
   private AuthController auth;
+  @Autowired
+  EventRepository eventRepository;
 
   /**
    * Enrolls a event into the database.
@@ -47,30 +63,21 @@ public class EventController {
    *         found.
    */
   @PostMapping("/createEvent")
-  public ResponseEntity<?> createEvent(@RequestParam("apiKey") String apiKey,
-      @RequestParam("name") String name,
-      @RequestParam("description") String description,
-      @RequestParam("date") String date,
-      @RequestParam("time") String time,
-      @RequestParam("location") String location,
-      @RequestParam("organizer") String organizer) {
+  public ResponseEntity<?> createEvent(
+    @RequestParam("name") String name,
+    @RequestParam("description") String description,
+    @RequestParam("date") String date,
+    @RequestParam("time") String time,
+    @RequestParam("location") String location,
+    @RequestParam("storageId") String storageId,
+    @RequestParam("organizerId") String organizerId) {
     try {
-      boolean validApiKey = auth.verifyApiKey(apiKey).get().getStatusCode() == HttpStatus.OK;
-      if (validApiKey) {
-        DatabaseReference ref;
-        String refString = "clients/" + apiKey + "/events";
-        ref = FirebaseDatabase.getInstance().getReference(refString);
-        String eventId = UUID.randomUUID().toString();
-        StorageCenter storageCenter = new StorageCenter(organizer);
-        Event event;
-        event = new Event(name, description, date, time, location, storageCenter, new HashMap<>());
-        Map<String, Object> clientData = new HashMap<>();
-        clientData.put("event", event);
-        ApiFuture<Void> future = ref.child(eventId).setValueAsync(clientData);
-        future.get();
-        return new ResponseEntity<>("Event ID: " + eventId, HttpStatus.OK);
-      }
-      return new ResponseEntity<>("Invalid API key", HttpStatus.NOT_FOUND);
+      Date eventDate = new Date();
+      Date eventTime = new Date();
+      Event event = new Event(name, description, eventDate, eventTime, location, null, null, new HashSet<>());
+      Event savedEvent = eventRepository.save(event);
+      String message = "Event with ID: " + savedEvent.getDatabaseId() + " was created successfully";
+      return new ResponseEntity<>(message, HttpStatus.OK);
     } catch (Exception e) {
       return handleException(e);
     }
@@ -93,12 +100,13 @@ public class EventController {
     try {
       boolean validApiKey = auth.verifyApiKey(apiKey).get().getStatusCode() == HttpStatus.OK;
       if (validApiKey) {
-        DatabaseReference ref;
-        String refString = "clients/" + apiKey + "/events/" + eventId;
-        ref = FirebaseDatabase.getInstance().getReference(refString);
-        CompletableFuture<Event> future = getEventInfo(ref);
-        String eventInfo = future.get().toString();
-        return new ResponseEntity<>(eventInfo, HttpStatus.OK);
+        Firestore db = FirestoreClient.getFirestore();
+        ApiFuture<QuerySnapshot> query = db.collection("clients").get();
+        QuerySnapshot querySnapshot = query.get();
+        List<QueryDocumentSnapshot> documents = querySnapshot.getDocuments();
+        for (QueryDocumentSnapshot document : documents) {
+          System.out.println(document.getId() + " => " + document.toObject(Event.class));
+        }
       }
       return new ResponseEntity<>("Invalid API key", HttpStatus.NOT_FOUND);
     } catch (Exception e) {
@@ -187,9 +195,7 @@ public class EventController {
       return new ResponseEntity<>("Deleted Event with ID: " + eventId, HttpStatus.OK);
 
     } catch (Exception e) {
-      return new ResponseEntity<>("Error removing event: "
-          + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
-    }
+      return new ResponseEntity<>("Error removing event: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
   }
 
   /**
@@ -285,10 +291,6 @@ public class EventController {
     String time = null; 
     String location = null;
     StorageCenter organizer = null;
-    Map<String, Volunteer> listOfVolunteers = new HashMap<>();
-    if (!listOfVolunteersString.isEmpty()) {
-      listOfVolunteers = extractVolunteers(listOfVolunteersString);
-    }
     for (String pair : pairs) {
       String[] keyValue = pair.split("=");
       String key = keyValue[0].trim();
@@ -319,9 +321,10 @@ public class EventController {
           break;
       }
     }
-
     return new Event(name, description, date, time, location, organizer, listOfVolunteers);
   }
+    return null;
+}
 
   /**
    * Convert string into Map of Volunteers.
