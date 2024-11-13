@@ -9,7 +9,6 @@ import org.junit.jupiter.api.Test;
 
 /**
  * Unit tests for the Organization class.
- 
  */
 public class OrganizationsUnitTest {
   /**

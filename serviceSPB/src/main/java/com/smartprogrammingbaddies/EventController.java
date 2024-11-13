@@ -185,7 +185,6 @@ public class EventController {
       ApiFuture<Void> future = ref.removeValueAsync();
       future.get(); // Blocks until the deletion is complete or throws an error
       return new ResponseEntity<>("Deleted Event with ID: " + eventId, HttpStatus.OK);
-
     } catch (Exception e) {
       return new ResponseEntity<>("Error removing event: "
           + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
