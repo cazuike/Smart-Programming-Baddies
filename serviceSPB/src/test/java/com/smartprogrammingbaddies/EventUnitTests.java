@@ -7,9 +7,10 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ContextConfiguration;
-import com.smartprogrammingbaddies.Event.Event;
-import com.smartprogrammingbaddies.StorageCenter.StorageCenter;
-import com.smartprogrammingbaddies.Volunteer.Volunteer;
+
+import com.smartprogrammingbaddies.event.Event;
+import com.smartprogrammingbaddies.storagecenter.StorageCenter;
+import com.smartprogrammingbaddies.volunteer.Volunteer;
 
 /**
  * Unit tests for the Event class.
@@ -23,7 +24,7 @@ public class EventUnitTests {
    */
   @BeforeEach
   public void setupEventForTesting() {
-    testOrganizer = new StorageCenter("Food Pantry");
+    // testOrganizer = new StorageCenter("Food Pantry");
   }
 
   /**
