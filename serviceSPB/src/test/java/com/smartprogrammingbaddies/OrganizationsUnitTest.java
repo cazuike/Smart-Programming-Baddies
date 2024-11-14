@@ -7,9 +7,13 @@ import java.util.Map;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import com.smartprogrammingbaddies.organization.Organization;
+
+
+
 /**
  * Unit tests for the Organization class.
- 
+
  */
 public class OrganizationsUnitTest {
   /**
@@ -19,7 +23,6 @@ public class OrganizationsUnitTest {
   public void setUpOrganizationForTesting() {
     Map<String, String> schedule = new HashMap<>();
     schedule.put("10-17-2024", "10:00 AM");
-    testOrganization = new Organization("UpperBestSide", "For Profit", schedule, "10-17-2024");
   }
   /**
    * Tests the getOrgName() method to verify the organization name is correct.
