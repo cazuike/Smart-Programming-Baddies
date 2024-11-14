@@ -1,4 +1,4 @@
-package com.smartprogrammingbaddies.Organization;
+package com.smartprogrammingbaddies.organization;
 
 import java.io.Serializable;
 import java.util.Set;

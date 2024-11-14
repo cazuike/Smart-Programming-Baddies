@@ -1,4 +1,4 @@
-package com.smartprogrammingbaddies.Volunteer;
+package com.smartprogrammingbaddies.volunteer;
 
 import java.io.Serializable;
 import java.util.Set;
@@ -11,7 +11,6 @@ import jakarta.persistence.Id;
  * The Volunteer class represents a volunteer, including their name, role,
  * date of sign-up, and volunteering schedule.
  */
-
 @Entity
 public class Volunteer implements Serializable {
   @Id
