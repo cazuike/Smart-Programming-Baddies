@@ -1,11 +1,25 @@
 package com.smartprogrammingbaddies.organization;
 
 import java.io.Serializable;
+import java.sql.Date;
 import java.util.Set;
+
+import org.springframework.boot.autoconfigure.integration.IntegrationProperties.RSocket.Client;
+
+import com.smartprogrammingbaddies.StorageCenter.StorageCenter;
+import com.smartprogrammingbaddies.event.Event;
+
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
+import jakarta.persistence.Temporal;
+import jakarta.persistence.TemporalType;
 
 /**
  * The Organization class represents an organization, including their name, their type,
@@ -15,11 +29,20 @@ import jakarta.persistence.Id;
 public class Organization implements Serializable {
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
+  @Column(name= "id")
   private int id;
   private String orgName;
   private String orgType;
-  private String dateAdded;
+  @Temporal(TemporalType.DATE)
+  private Date dateAdded;
   private Set<String> schedule;
+  // @OneToMany
+  // private Client client;
+  // ASK ABOUT THIS ONE
+  @OneToOne
+  private StorageCenter storage;
+  @OneToMany(mappedBy = "organizer", cascade = CascadeType.ALL, orphanRemoval = true)
+  private Set<Event> event;
 
   /**
    * Constructs a new Organization with the specific name, type, schedule, and adate addded.
@@ -30,7 +53,7 @@ public class Organization implements Serializable {
    * @param dateAdded the date the organization was added to the system.
    */
   public Organization(String orgName, String orgType,
-      Set<String> schedule, String dateAdded) {
+      Set<String> schedule, Date dateAdded) {
     this.orgName = orgName;
     this.orgType = orgType;
     this.schedule = schedule;
@@ -69,7 +92,7 @@ public class Organization implements Serializable {
 
    * @return the date the org was added.
    */
-  public String getDateAdded() {
+  public Date getDateAdded() {
     return dateAdded;
   }
 
