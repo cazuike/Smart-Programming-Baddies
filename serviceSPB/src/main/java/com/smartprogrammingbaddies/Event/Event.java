@@ -1,7 +1,7 @@
 package com.smartprogrammingbaddies.event;
 
 import com.smartprogrammingbaddies.organization.Organization;
-import com.smartprogrammingbaddies.storagecenter.StorageCenter;
+import com.smartprogrammingbaddies.storageCenter.StorageCenter;
 import com.smartprogrammingbaddies.volunteer.Volunteer;
 
 import jakarta.persistence.Column;

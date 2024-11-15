@@ -1,4 +1,4 @@
-package com.smartprogrammingbaddies.storagecenter;
+package com.smartprogrammingbaddies.storageCenter;
 
 import org.springframework.data.repository.CrudRepository;
 

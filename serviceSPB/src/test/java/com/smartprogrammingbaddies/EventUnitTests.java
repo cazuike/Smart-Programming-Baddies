@@ -9,7 +9,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ContextConfiguration;
 
 import com.smartprogrammingbaddies.event.Event;
-import com.smartprogrammingbaddies.storagecenter.StorageCenter;
+import com.smartprogrammingbaddies.storageCenter.StorageCenter;
 import com.smartprogrammingbaddies.volunteer.Volunteer;
 
 /**

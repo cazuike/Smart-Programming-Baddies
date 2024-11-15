@@ -1,6 +1,6 @@
 package com.smartprogrammingbaddies.item;
 
-import com.smartprogrammingbaddies.storagecenter.StorageCenter;
+import com.smartprogrammingbaddies.storageCenter.StorageCenter;
 import jakarta.persistence.Column;
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;

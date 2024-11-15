@@ -1,8 +1,11 @@
 package com.smartprogrammingbaddies.event;
 
 import com.smartprogrammingbaddies.volunteer.Volunteer;
+import com.smartprogrammingbaddies.event.EventRepository;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -75,55 +78,6 @@ public class EventController {
     return new ResponseEntity<>(event, HttpStatus.OK);
   }
 
-  /**
-   * Adds a volunteer to an existing event in the database.
-   *
-   * @param apiKey          A {@code String} representing the API key to authenticate the request.
-   * @param eventId         A {@code String} representing the unique identifier of the event.
-   * @param volunteerName   A {@code String} representing the name of the volunteer being added.
-   * @param volunteerRole   A {@code String} representing the role of the volunteer in the event.
-   * @param schedule        A {@code Map<String, String>} containing the volunteer's schedule; the 
-   *                        key is the date and the value is the time.
-   * @return                A {@code ResponseEntity<?>} with a message indicating if the volunteer
-   *                        was added, along with the HTTP status code. 
-   *                        - Returns HTTP 200 (OK) if the volunteer was added successfully.
-   *                        - Returns HTTP 404 (Not Found) if the API key is invalid or 
-   *                        the event was not found.
-   */
-  @PatchMapping("/addVolunteer")
-  public ResponseEntity<?> addVolunteer(@RequestParam("apiKey") String apiKey,
-      @RequestParam("eventId") String eventId,
-      @RequestParam("volunteerName") String volunteerName,
-      @RequestParam("volunteerRole") String volunteerRole,
-      @RequestBody Map<String, String> schedule) {
-    try {
-      // Verify the API Key
-      boolean validApiKey = auth.verifyApiKey(apiKey).get().getStatusCode() == HttpStatus.OK;
-      if (!validApiKey) {
-        return new ResponseEntity<>("Invalid API key", HttpStatus.NOT_FOUND);
-      }
-      DatabaseReference ref;
-      String refString = "clients/" + apiKey + "/events/" + eventId;
-      ref = FirebaseDatabase.getInstance().getReference(refString);
-      CompletableFuture<Event> future = getEventInfo(ref);
-      Event event = future.get();
-      if (event != null) {
-        // Create the Volunteer object
-        Volunteer volunteer = new Volunteer(volunteerName, volunteerRole,
-            String.valueOf(System.currentTimeMillis() / 1000), schedule);
-
-        // Add the volunteer to the event
-        event.addVolunteer(volunteer);
-        // Save the updated event back to Firebase
-        ref.setValueAsync(event);
-        return new ResponseEntity<>("Volunteer added to event", HttpStatus.OK);
-      } else {
-        return new ResponseEntity<>("Event not found", HttpStatus.NOT_FOUND);
-      }
-    } catch (Exception e) {
-      return handleException(e);
-    }
-  }
 
   /**
    * Removes an event from the database.

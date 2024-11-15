@@ -1,4 +1,4 @@
-package com.smartprogrammingbaddies.storagecenter;
+package com.smartprogrammingbaddies.storageCenter;
 
 import com.smartprogrammingbaddies.item.Item;
 import com.smartprogrammingbaddies.utils.TimeSlot;

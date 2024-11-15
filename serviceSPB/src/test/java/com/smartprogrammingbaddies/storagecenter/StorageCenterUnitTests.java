@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 import com.smartprogrammingbaddies.item.Item;
+import com.smartprogrammingbaddies.storageCenter.StorageCenter;
 import com.smartprogrammingbaddies.utils.TimeSlot;
 import java.time.DayOfWeek;
 import java.time.LocalTime;
