@@ -6,13 +6,17 @@ import java.util.HashMap;
 import java.util.Map;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import com.smartprogrammingbaddies.Organization.Organization;
+
+import com.smartprogrammingbaddies.organization.Organization;
 
 
 
 /**
  * Unit tests for the Organization class.
+<<<<<<< HEAD
+=======
 
+>>>>>>> ce4fb12d6f666952af023449a17131b05e1fc4a6
  */
 public class OrganizationsUnitTest {
   /**
