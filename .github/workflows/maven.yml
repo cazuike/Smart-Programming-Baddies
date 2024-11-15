@@ -66,3 +66,6 @@ jobs:
 
     - name: Run Linter
       run: (cd serviceSPB && mvn checkstyle:check)
+
+    - name: Run PMD
+      run: (cd serviceSPB && mvn pmd:check)

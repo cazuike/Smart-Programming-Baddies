@@ -1,29 +1,8 @@
-package com.smartprogrammingbaddies.Event;
+package com.smartprogrammingbaddies.event;
 
-import com.google.api.core.ApiFuture;
-import com.google.cloud.firestore.Firestore;
-import com.google.cloud.firestore.QueryDocumentSnapshot;
-import com.google.cloud.firestore.QuerySnapshot;
-import com.google.firebase.cloud.FirestoreClient;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
-import com.smartprogrammingbaddies.AuthController;
-import com.smartprogrammingbaddies.Organization.Organization;
-import com.smartprogrammingbaddies.StorageCenter.StorageCenter;
-
+import com.smartprogrammingbaddies.volunteer.Volunteer;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.UUID;
-import java.util.concurrent.CompletableFuture;
-
-import org.checkerframework.checker.units.qual.A;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -40,15 +19,13 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 public class EventController {
-
-  @Autowired
-  private AuthController auth;
   @Autowired
   EventRepository eventRepository;
 
   /**
    * Enrolls a event into the database.
    *
+<<<<<<< HEAD
    * @param apiKey      A {@code String} representing the API key.
    * @param name        A {@code String} representing the Event's name.
    * @param description A {@code String} representing the event's description.
@@ -61,20 +38,31 @@ public class EventController {
    *         created
    *         and a HTTP 200 response or, HTTP 404 reponse if API Key was not
    *         found.
+=======
+   * @param name A {@code String} representing the Event's name.
+   * @param description A {@code String} representing the event's description.
+   * @param date A {@code String} representing the event's date in Java Date Format.
+   * @param time A {@code Date} representing the event's time in Java Time Format.
+   * @param location A {@code Date} representing the event's location.
+   *
+   * @return A {@code ResponseEntity} A message if the Event was successfully created
+     and a HTTP 200 response or, HTTP 500 reponse if an error occurred.
+>>>>>>> 219f35933226fa78571a8336c362e9a30e70e272
    */
   @PostMapping("/createEvent")
   public ResponseEntity<?> createEvent(
-    @RequestParam("name") String name,
-    @RequestParam("description") String description,
-    @RequestParam("date") String date,
-    @RequestParam("time") String time,
-    @RequestParam("location") String location,
-    @RequestParam("storageId") String storageId,
-    @RequestParam("organizerId") String organizerId) {
+      @RequestParam("name") String name,
+      @RequestParam("description") String description,
+      @RequestParam("date") String date,
+      @RequestParam("time") String time,
+      @RequestParam("location") String location) {
     try {
       Date eventDate = new Date();
       Date eventTime = new Date();
-      Event event = new Event(name, description, eventDate, eventTime, location, null, null, new HashSet<>());
+      HashSet<Volunteer> volunteers = new HashSet<>();
+      /*TODO: Add the storageCenter and Organization reference once they are created*/
+      Event event;
+      event = new Event(name, description, eventDate, eventTime, location, null, null, volunteers);
       Event savedEvent = eventRepository.save(event);
       String message = "Event with ID: " + savedEvent.getDatabaseId() + " was created successfully";
       return new ResponseEntity<>(message, HttpStatus.OK);
@@ -86,7 +74,10 @@ public class EventController {
   /**
    * Retrieves an event for a database.
    *
+<<<<<<< HEAD
    * @param apiKey  A {@code String} representing the API key.
+=======
+>>>>>>> 219f35933226fa78571a8336c362e9a30e70e272
    * @param eventId A {@code String} representing the event's ID.
    *
    * @return A {@code ResponseEntity} A message if the Event was successfully
@@ -95,23 +86,12 @@ public class EventController {
    *         found.
    */
   @GetMapping("/retrieveEvent")
-  public ResponseEntity<?> retrieveEvent(@RequestParam("apiKey") String apiKey,
-      @RequestParam("eventId") String eventId) {
-    try {
-      boolean validApiKey = auth.verifyApiKey(apiKey).get().getStatusCode() == HttpStatus.OK;
-      if (validApiKey) {
-        Firestore db = FirestoreClient.getFirestore();
-        ApiFuture<QuerySnapshot> query = db.collection("clients").get();
-        QuerySnapshot querySnapshot = query.get();
-        List<QueryDocumentSnapshot> documents = querySnapshot.getDocuments();
-        for (QueryDocumentSnapshot document : documents) {
-          System.out.println(document.getId() + " => " + document.toObject(Event.class));
-        }
-      }
-      return new ResponseEntity<>("Invalid API key", HttpStatus.NOT_FOUND);
-    } catch (Exception e) {
-      return handleException(e);
+  public ResponseEntity<?> retrieveEvent(@RequestParam("eventId") String eventId) {
+    Event event = eventRepository.findById(Integer.parseInt(eventId)).orElse(null);
+    if (event == null) {
+      return new ResponseEntity<>("Event not found with ID: " + eventId, HttpStatus.NOT_FOUND);
     }
+    return new ResponseEntity<>(event, HttpStatus.OK);
   }
 
   /**
@@ -167,7 +147,10 @@ public class EventController {
   /**
    * Removes an event from the database.
    *
+<<<<<<< HEAD
    * @param apiKey  A {@code String} representing the API key.
+=======
+>>>>>>> 219f35933226fa78571a8336c362e9a30e70e272
    * @param eventId A {@code String} representing the event's ID.
    *
    * @return A {@code ResponseEntity} A message if the Event was successfully
@@ -176,13 +159,20 @@ public class EventController {
    *         found.
    */
   @DeleteMapping("/removeEvent")
+<<<<<<< HEAD
   public CompletableFuture<Boolean> removeEvent(@RequestParam("apiKey") String apiKey,
       @RequestParam("eventId") String eventId) {
+=======
+  public ResponseEntity<?> removeEvent(@RequestParam("eventId") String eventId) {
+>>>>>>> 219f35933226fa78571a8336c362e9a30e70e272
     try {
-      boolean validApiKey = auth.verifyApiKey(apiKey).get().getStatusCode() == HttpStatus.OK;
-      if (!validApiKey) {
-        return new ResponseEntity<>("Invalid API key.", HttpStatus.UNAUTHORIZED);
+      eventRepository.deleteById(Integer.parseInt(eventId));
+      boolean deleted = !eventRepository.existsById(Integer.parseInt(eventId));
+      if (!deleted) {
+        String message = "Event with ID: " + eventId + " was not deleted";
+        return new ResponseEntity<>(message, HttpStatus.NOT_FOUND);
       }
+<<<<<<< HEAD
       boolean validEvent = verifyEvent(eventId, apiKey).get();
       if (!validEvent) {
         return new ResponseEntity<>("Event not found with ID: " + eventId, HttpStatus.NOT_FOUND);
@@ -227,10 +217,22 @@ public class EventController {
     return futureResult;
   }
 
+=======
+      String message = "Event with ID: " + eventId + " was deleted successfully";
+      return new ResponseEntity<>(message, HttpStatus.OK);
+    } catch (NumberFormatException e) {
+      return new ResponseEntity<>("Invalid Event ID", HttpStatus.BAD_REQUEST);
+    } catch (Exception e) {
+      return handleException(e);
+    }
+  }
+
+>>>>>>> 219f35933226fa78571a8336c362e9a30e70e272
   private ResponseEntity<?> handleException(Exception e) {
     System.out.println(e.toString());
     return new ResponseEntity<>("An Error has occurred", HttpStatus.INTERNAL_SERVER_ERROR);
   }
+<<<<<<< HEAD
 
   /**
    * Deserialize JSON data from remote database into a String,
@@ -381,3 +383,8 @@ public class EventController {
   }
 
 }
+=======
+}
+
+
+>>>>>>> 219f35933226fa78571a8336c362e9a30e70e272
