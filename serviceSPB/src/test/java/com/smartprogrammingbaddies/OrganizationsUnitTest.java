@@ -13,7 +13,10 @@ import com.smartprogrammingbaddies.organization.Organization;
 
 /**
  * Unit tests for the Organization class.
+<<<<<<< HEAD
+=======
 
+>>>>>>> ce4fb12d6f666952af023449a17131b05e1fc4a6
  */
 public class OrganizationsUnitTest {
   /**
