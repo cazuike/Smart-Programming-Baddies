@@ -2,6 +2,8 @@ package com.smartprogrammingbaddies;
 
 import com.google.api.core.ApiFuture;
 import com.google.auth.oauth2.GoogleCredentials;
+import com.google.cloud.firestore.Firestore;
+import com.google.cloud.firestore.v1.FirestoreClient;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
 import com.google.firebase.database.DataSnapshot;
@@ -42,6 +44,7 @@ public class SetupDatabase {
               .setDatabaseUrl("https://spbservice-40a86-default-rtdb.firebaseio.com/")
               .build();
       FirebaseApp.initializeApp(options);
+      // Firestore db = FirestoreClient.getFirestore();
     } catch (Exception e) {
       System.err.println("Error setting up Firebase");
       e.printStackTrace();

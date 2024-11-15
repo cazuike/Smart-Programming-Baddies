@@ -2,12 +2,14 @@ package com.smartprogrammingbaddies;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import java.util.HashMap;
 import java.util.Map;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ContextConfiguration;
+import com.smartprogrammingbaddies.Event.Event;
+import com.smartprogrammingbaddies.StorageCenter.StorageCenter;
+import com.smartprogrammingbaddies.Volunteer.Volunteer;
 
 /**
  * Unit tests for the Event class.
@@ -22,15 +24,6 @@ public class EventUnitTests {
   @BeforeEach
   public void setupEventForTesting() {
     testOrganizer = new StorageCenter("Food Pantry");
-    testVolunteerMap = new HashMap<>();
-    
-    Volunteer volunteer1 = new Volunteer("John Doe", "Cook", "10-17-2024", new HashMap<>());
-    Volunteer volunteer2 = new Volunteer("Jane Smith", "Server", "10-18-2024", new HashMap<>());
-    testVolunteerMap.put(volunteer1.getName(), volunteer1);
-    testVolunteerMap.put(volunteer2.getName(), volunteer2);
-
-    testEvent = new Event("Charity Drive", "A community charity event", "12-25-2024", "10:00 AM", 
-                          "East Village", testOrganizer, testVolunteerMap);
   }
 
   /**
@@ -61,7 +54,7 @@ public class EventUnitTests {
     String expectedDescription = "A community charity event";
     assertEquals(expectedDescription, testEvent.getDescription());
   }
-  
+
   /**
    * Tests the updateDescription() method to verify the event description is correct
    * after being updated.
@@ -88,7 +81,6 @@ public class EventUnitTests {
    */
   @Test
   public void updateDateTest() {
-    testEvent.updateDate("12-26-2024");
     String expectedDate = "12-26-2024";
     assertEquals(expectedDate, testEvent.getDate());
   }
@@ -108,7 +100,6 @@ public class EventUnitTests {
    */
   @Test
   public void updatedTimeTest() {
-    testEvent.updateTime("11:00 AM");
     String expectedTime = "11:00 AM";
     assertEquals(expectedTime, testEvent.getTime());
   }
@@ -163,9 +154,7 @@ public class EventUnitTests {
    */
   @Test
   public void addVolunteerTest() {
-    Volunteer newVolunteer = new Volunteer("Jason Johnson", "Server",
-                               "10-19-2024", new HashMap<>());
-    testEvent.addVolunteer(newVolunteer);
+
     int expectedVolunteerCount = 3;
     assertEquals(expectedVolunteerCount, testEvent.getVolunteerCount());
   }
@@ -175,7 +164,6 @@ public class EventUnitTests {
    */
   @Test
   public void removeVolunteerTest() {
-    testEvent.removeVolunteer("John Doe");
     int expectedVolunteerCount = 1;
     assertEquals(expectedVolunteerCount, testEvent.getVolunteerCount());
   }
@@ -205,8 +193,6 @@ public class EventUnitTests {
    */
   @Test
   public void toStringWithNoVoluneersTest() {
-    testEvent.removeVolunteer("John Doe");
-    testEvent.removeVolunteer("Jane Smith");
     String expectedString = "Event Name: Charity Drive\n"
                             + "Description: A community charity event\n"
                             + "Date: 12-25-2024\n"

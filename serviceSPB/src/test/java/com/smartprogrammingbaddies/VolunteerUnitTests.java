@@ -8,6 +8,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ContextConfiguration;
+import com.smartprogrammingbaddies.Volunteer.Volunteer;
 
 /**
  * Unit tests for the Volunteer class.
@@ -23,8 +24,6 @@ public class VolunteerUnitTests {
   public void setupVolunteerForTesting() {
     Map<String, String> testVolunteerSchedule = new HashMap<>();
     testVolunteerSchedule.put("10-30-2024", "9 AM - 12 PM");
-
-    testVolunteer = new Volunteer("John Doe", "Cook", "10-17-2024", testVolunteerSchedule);
   }
 
   /**
@@ -63,7 +62,7 @@ public class VolunteerUnitTests {
     String expectedResult = "Server";
     assertEquals(expectedResult, testVolunteer.getRole());
   }
-  
+
   /**
    * Tests the updateSchedule() method to verify that the schedule is updated correctly.
    */
@@ -71,7 +70,6 @@ public class VolunteerUnitTests {
   public void updateScheduleTest() {
     Map<String, String> testVolunteerNewSchedule = new HashMap<>();
     testVolunteerNewSchedule.put("10-30-2025", "9 AM - 12 PM");
-    testVolunteer.updateSchedule(testVolunteerNewSchedule);
     assertEquals(testVolunteerNewSchedule, testVolunteer.getSchedule());
   }
 

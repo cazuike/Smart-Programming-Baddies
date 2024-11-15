@@ -1,13 +1,26 @@
-package com.smartprogrammingbaddies;
+package com.smartprogrammingbaddies.Volunteer;
 
 import java.io.Serializable;
-import java.util.Map;
+import java.util.Set;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 
 /**
  * The Volunteer class represents a volunteer, including their name, role,
  * date of sign-up, and volunteering schedule.
  */
+
+@Entity
 public class Volunteer implements Serializable {
+  @Id
+  @GeneratedValue(strategy = GenerationType.AUTO)
+  private int id;
+  private String name;
+  private String role;
+  private String dateSignUp;
+  private Set<String> schedule;
 
   /**
    * Constructs a new Volunteer with the specified name, role, date of sign-up, and schedule.
@@ -17,11 +30,20 @@ public class Volunteer implements Serializable {
    * @param dateSignUp the date that they signed up as a volunteer
    * @param schedule the volunteering schedule
    */
-  public Volunteer(String name, String role, String dateSignUp, Map<String, String> schedule) {
+  public Volunteer(String name, String role, String dateSignUp, Set<String> schedule) {
     this.name = name;
     this.role = role;
     this.dateSignUp = dateSignUp;
     this.schedule = schedule;
+  }
+
+  /**
+   * Gets the database id of the volunteer.
+   *
+   * @return integer id of the volunteer
+   */
+  public int getDatabaseId() {
+    return 0;
   }
 
   /**
@@ -56,7 +78,7 @@ public class Volunteer implements Serializable {
    *
    * @return a Map containing the volunteer's schedule, where keys are dates and values are times
    */
-  public Map<String, String> getSchedule() {
+  public Set<String> getSchedule() {
     return this.schedule;
   }
 
@@ -74,7 +96,7 @@ public class Volunteer implements Serializable {
    *
    * @param newSchedule the new schedule for the volunteer, as a Map of dates and times
    */
-  public void updateSchedule(Map<String, String> newSchedule) {
+  public void updateSchedule(Set<String> newSchedule) {
     this.schedule = newSchedule;
   }
 
@@ -88,9 +110,9 @@ public class Volunteer implements Serializable {
   public String toString() {
     StringBuilder scheduleString = new StringBuilder();
 
-    for (Map.Entry<String, String> entry : schedule.entrySet()) {
-      scheduleString.append("Date: ").append(entry.getKey()).append("\n")
-                      .append("Times: ").append(entry.getValue()).append("\n");
+    for (String entry : schedule) {
+      scheduleString.append("Date: ").append(entry).append("\n")
+                      .append("Times: ").append(entry).append("\n");
     }
 
     return "Volunteer: " + name + "\n"
@@ -98,9 +120,4 @@ public class Volunteer implements Serializable {
            + "Date Signed: " + dateSignUp + "\n"
            + "Schedule: \n" + scheduleString.toString();
   }
-
-  private String name;
-  private String role;
-  private String dateSignUp;
-  private Map<String, String> schedule;
 }
