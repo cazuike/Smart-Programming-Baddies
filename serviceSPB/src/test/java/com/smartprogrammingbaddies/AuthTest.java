@@ -9,8 +9,11 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
+
+import javax.sql.DataSource;
 
 /**
  * This class contains unit tests for Auth Controller.
@@ -18,11 +21,15 @@ import org.springframework.test.web.servlet.MvcResult;
  * <p> Unit tests involve setting up an environment for testing and conducting the
  * necessary tests to ensure functionality. </p>
  */
+@ActiveProfiles("test")
 @SpringBootTest
 @AutoConfigureMockMvc
 public class AuthTest {
   @Autowired
   private MockMvc mockMvc;
+
+  @Autowired
+  private DataSource dataSource;
   private static String apiKey;
   private static final String prefix = "Be sure to save this unique API key: ";
 
@@ -55,19 +62,4 @@ public class AuthTest {
             .andExpect(status().isOk());
     apiKey = null;
   }
-
-  /**
-   * Clean up the test environment after each test is ran.
-   * Ensures database is left in same state as before tests.
-   */
-  @AfterEach
-  public void cleanup() throws Exception {
-    if (apiKey != null) {
-      mockMvc.perform(delete("/removeApiKey")
-                      .param("apiKey", apiKey))
-              .andExpect(status().isOk());
-      apiKey = null;
-    }
-  }
-
 }

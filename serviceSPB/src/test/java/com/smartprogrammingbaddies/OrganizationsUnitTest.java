@@ -2,64 +2,67 @@ package com.smartprogrammingbaddies;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.HashSet;
+import java.util.Set;
+
+import com.smartprogrammingbaddies.Organization.Organization;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import com.smartprogrammingbaddies.Organization.Organization;
-
-
 
 /**
  * Unit tests for the Organization class.
-
  */
 public class OrganizationsUnitTest {
-  /**
-   * The Organization set up to be tested.
-   */
-  @BeforeEach
-  public void setUpOrganizationForTesting() {
-    Map<String, String> schedule = new HashMap<>();
-    schedule.put("10-17-2024", "10:00 AM");
-  }
-  /**
-   * Tests the getOrgName() method to verify the organization name is correct.
-   */
+    /**
+     * The Organization set up to be tested.
+     */
+    public static Organization testOrganization;
 
-  @Test
-  public void getOrgNameTest() {
-    String expectedName = "UpperBestSide";
-    assertEquals(expectedName, testOrganization.getOrgName());
-  }
-  /**
-   * Tests the getOrgType() method to verify the organization type is correct.
-   */
+    /**
+     * Sets up the Organization instance and schedule before each test.
+     */
+    @BeforeEach
+    public void setUpOrganizationForTesting() {
+        Set<String> schedule = new HashSet<>();
+        schedule.add("10-17-2024 10:00 AM");
 
-  @Test
-  public void getOrgTypeTest() {
-    String expectedType = "For Profit";
-    assertEquals(expectedType, testOrganization.getOrgType());
-  }
-  /**
-   * Tests the getSchedule() method to verify the organization schedule is correct.
-   */
+        testOrganization = new Organization("UpperBestSide", "For Profit", schedule, "10-17-2024");
+    }
 
-  @Test
-  public void getScheduleTest() {
-    Map<String, String> expectedSchedule = new HashMap<>();
-    expectedSchedule.put("10-17-2024", "10:00 AM");
-    assertEquals(expectedSchedule, testOrganization.getSchedule());
-  }
-  /**
-   * Tests the getDateAdded() method to verify the organization date added is correct.
-   */
+    /**
+     * Tests the getOrgName() method to verify the organization name is correct.
+     */
+    @Test
+    public void getOrgNameTest() {
+        String expectedName = "UpperBestSide";
+        assertEquals(expectedName, testOrganization.getOrgName());
+    }
 
-  @Test
-  public void getDateAddedTest() {
-    String expectedDateAdded = "10-17-2024";
-    assertEquals(expectedDateAdded, testOrganization.getDateAdded());
-  }
+    /**
+     * Tests the getOrgType() method to verify the organization type is correct.
+     */
+    @Test
+    public void getOrgTypeTest() {
+        String expectedType = "For Profit";
+        assertEquals(expectedType, testOrganization.getOrgType());
+    }
 
-  public static Organization testOrganization;
+    /**
+     * Tests the getSchedule() method to verify the organization schedule is correct.
+     */
+    @Test
+    public void getScheduleTest() {
+        Set<String> expectedSchedule = new HashSet<>();
+        expectedSchedule.add("10-17-2024 10:00 AM");
+        assertEquals(expectedSchedule, testOrganization.getSchedule());
+    }
+
+    /**
+     * Tests the getDateAdded() method to verify the organization date added is correct.
+     */
+    @Test
+    public void getDateAddedTest() {
+        String expectedDateAdded = "10-17-2024";
+        assertEquals(expectedDateAdded, testOrganization.getDateAdded());
+    }
 }

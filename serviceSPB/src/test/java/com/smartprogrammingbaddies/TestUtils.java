@@ -8,6 +8,11 @@ public class TestUtils {
   public static String apiKey = "test-service-key";
 
   public static String extract(String p, String s) {
-    return s.substring(s.indexOf(p) + p.length()).trim();
+    int startIndex = s.indexOf(p);
+    if (startIndex == -1) {
+      throw new IllegalArgumentException("Prefix not found in the input string.");
+    }
+    return s.substring(startIndex + p.length()).trim();
   }
+
 }
