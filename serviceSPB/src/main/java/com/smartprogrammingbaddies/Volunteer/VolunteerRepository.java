@@ -2,7 +2,7 @@ package com.smartprogrammingbaddies.Volunteer;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
-import com.smartprogrammingbaddies.volunteer.Volunteer;
+import com.smartprogrammingbaddies.Volunteer.Volunteer;
 
 /**
  * Repository interface for managing Volunteer entities.

@@ -1,8 +1,8 @@
-package com.smartprogrammingbaddies.event;
+package com.smartprogrammingbaddies.Event;
 
 import com.smartprogrammingbaddies.Auth.AuthController;
-import com.smartprogrammingbaddies.volunteer.Volunteer;
-import com.smartprogrammingbaddies.event.EventRepository;
+import com.smartprogrammingbaddies.Volunteer.Volunteer;
+import com.smartprogrammingbaddies.Event.EventRepository;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Map;

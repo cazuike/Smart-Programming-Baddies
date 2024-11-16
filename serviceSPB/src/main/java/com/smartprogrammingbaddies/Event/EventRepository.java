@@ -1,4 +1,4 @@
-package com.smartprogrammingbaddies.event;
+package com.smartprogrammingbaddies.Event;
 
 import org.springframework.data.repository.CrudRepository;
 

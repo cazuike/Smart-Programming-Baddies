@@ -1,8 +1,8 @@
-package com.smartprogrammingbaddies.event;
+package com.smartprogrammingbaddies.Event;
 
 import com.smartprogrammingbaddies.organization.Organization;
 import com.smartprogrammingbaddies.storageCenter.StorageCenter;
-import com.smartprogrammingbaddies.volunteer.Volunteer;
+import com.smartprogrammingbaddies.Volunteer.Volunteer;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

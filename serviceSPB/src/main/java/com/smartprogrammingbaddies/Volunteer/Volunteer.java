@@ -1,4 +1,4 @@
-package com.smartprogrammingbaddies.volunteer;
+package com.smartprogrammingbaddies.Volunteer;
 
 import jakarta.persistence.*;
 import java.io.Serializable;

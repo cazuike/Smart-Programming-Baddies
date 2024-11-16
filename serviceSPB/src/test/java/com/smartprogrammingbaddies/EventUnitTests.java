@@ -7,10 +7,10 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import com.smartprogrammingbaddies.event.Event;
+import com.smartprogrammingbaddies.Event.Event;
 import com.smartprogrammingbaddies.organization.Organization;
 import com.smartprogrammingbaddies.storageCenter.StorageCenter;
-import com.smartprogrammingbaddies.volunteer.Volunteer;
+import com.smartprogrammingbaddies.Volunteer.Volunteer;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
