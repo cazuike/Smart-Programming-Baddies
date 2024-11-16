@@ -2,7 +2,8 @@ package com.smartprogrammingbaddies.Auth;
 
 import java.util.UUID;
 
-import com.smartprogrammingbaddies.SqlConnection;
+
+import com.smartprogrammingbaddies.utils.SqlConnection;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

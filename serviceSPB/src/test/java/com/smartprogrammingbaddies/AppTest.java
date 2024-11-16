@@ -6,11 +6,13 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ContextConfiguration;
 
 /**
  * This class contains unit tests for the App Class.
  */
 @SpringBootTest
+@ContextConfiguration(classes = {App.class})
 public class AppTest {
   /** The test app used for testing. */
   @Autowired

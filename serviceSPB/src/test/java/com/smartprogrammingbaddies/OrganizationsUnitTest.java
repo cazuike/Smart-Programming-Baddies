@@ -5,12 +5,13 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import java.util.HashSet;
 import java.util.Set;
 
-import com.smartprogrammingbaddies.Organization.Organization;
+import com.smartprogrammingbaddies.organization.Organization;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 /**
  * Unit tests for the Organization class.
+
  */
 public class OrganizationsUnitTest {
     /**

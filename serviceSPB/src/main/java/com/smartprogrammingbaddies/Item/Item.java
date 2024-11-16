@@ -1,11 +1,9 @@
-package com.smartprogrammingbaddies.Item;
+package com.smartprogrammingbaddies.item;
 
-import com.smartprogrammingbaddies.StorageCenter.StorageCenter;
+import com.smartprogrammingbaddies.storageCenter.StorageCenter;
 import jakarta.persistence.Column;
+import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Temporal;
@@ -17,41 +15,55 @@ import java.util.Date;
  */
 @Entity
 public class Item {
-
-  @Id
-  @GeneratedValue(strategy = GenerationType.AUTO)
-  private int id;
+  @EmbeddedId
+  private ItemId itemType;
   @Column(nullable = false)
   private int quantity;
-  @Column(nullable = false)
-  private String type;
-  @Column(nullable = false)
-  private String name;
   @ManyToOne
-  @JoinColumn(name = "storage_center_id")
+  @JoinColumn(name = "storage_center_id", nullable = false)
   private StorageCenter storageCenter;
   @Temporal(TemporalType.DATE)
   @Column(name = "expiration_date")
-  private Date ExpirationDate;
+  private Date expirationDate;
 
   /**
    * Constructs a new Item with the specified name, type, and quantity,
    * and sets the storage center where the item is stored and the life
    * span of the item.
    *
-   * @param name           the name of the item
-   * @param type           the type of the item
+   * @param itemType       the type of the item which includes the name and type
    * @param quantity       the quantity of the item
    * @param storageCenter  the storage center where the item is stored
-   * @param ExpirationDate the item's expiration date
+   * @param expirationDate the item's expiration date
    */
-  public Item(String name, int quantity, String type,
-      StorageCenter storageCenter, Date ExpirationDate) {
-    this.name = name;
+  public Item(ItemId itemType, int quantity,
+      StorageCenter storageCenter, Date expirationDate) {
+    if (quantity < 0) {
+      throw new IllegalArgumentException("Quantity must be greater than or equal to 0.");
+    }
+
+    if (expirationDate != null && expirationDate.before(new Date())) {
+      throw new IllegalArgumentException("Expiration date must be in the future.");
+    }
+
+    if (storageCenter == null) {
+      throw new IllegalArgumentException("Storage center must not be null.");
+    }
+
+    if (itemType == null) {
+      throw new IllegalArgumentException("Item type must not be null.");
+    }
+    this.itemType = itemType;
     this.quantity = quantity;
-    this.type = type;
     this.storageCenter = storageCenter;
-    this.ExpirationDate = ExpirationDate;
+    this.expirationDate = expirationDate;
+  }
+
+  /**
+   * Empty constructor needed for JPA.
+   */
+  public Item() {
+    // Empty constructor needed for JPA
   }
 
   /**
@@ -60,7 +72,7 @@ public class Item {
    * @return the String name of the item
    */
   public String getName() {
-    return name;
+    return itemType.getName();
   }
 
   /**
@@ -69,7 +81,27 @@ public class Item {
    * @param name the String new name of the item
    */
   public void setName(String name) {
-    this.name = name;
+    this.itemType.setName(name);
+  }
+
+  /**
+   * Gets the type of the item.
+   *
+   * @return the type of the item
+   */
+  public String getType() {
+    return itemType.getType();
+  }
+
+  /**
+   * Sets the type of the item.
+   *
+   * @param type the new type of the item
+   * @return if the type was successfully updated
+   */
+  public boolean setType(String type) {
+    this.itemType.setType(type);
+    return true;
   }
 
   /**
@@ -85,28 +117,17 @@ public class Item {
    * Sets the quantity of the item.
    *
    * @param quantity the int of the new quantity of the item
+   * @return if the quantity was successfully updated
    */
-  public void setQuantity(int quantity) {
+  public boolean setQuantity(int quantity) {
+    if (quantity < 0) {
+      return false;
+    }
     this.quantity = quantity;
+    return true;
   }
 
-  /**
-   * Gets the type of the item.
-   *
-   * @return the type of the item
-   */
-  public String getType() {
-    return type;
-  }
 
-  /**
-   * Sets the type of the item.
-   *
-   * @param type the new type of the item
-   */
-  public void setType(String type) {
-    this.type = type;
-  }
 
   /**
    * Gets the storage center where the item is stored.
@@ -132,32 +153,37 @@ public class Item {
    * @return the life span of the item
    */
   public Date getExpirationDate() {
-    return ExpirationDate;
+    return expirationDate;
   }
 
   /**
    * Sets the life span of the item.
    *
-   * @param ExpirationDate the new life span of the item
+   * @param expirationDate the item's new expiration date
    */
-  public void setExpirationDate(Date ExpirationDate) {
-    this.ExpirationDate = ExpirationDate;
+  public void setExpirationDate(Date expirationDate) {
+    this.expirationDate = expirationDate;
   }
 
+  /**
+  * Returns a string representation of the item.
+  *
+  * @return a string representation of the item
+  */
   @Override
   public String toString() {
     StringBuilder result = new StringBuilder();
-    result.append("Item ID:").append(id).append("\n");
-    result.append("Item Name: ").append(name).append("\n");
-    result.append("Item Type: ").append(type).append("\n");
-    result.append("Item Quantity: ").append(quantity).append("\n");
-    result.append("Item Storage Center: ").append(storageCenter.getName()).append("\n");
-    if (ExpirationDate != null) {
-      result.append("Item Expiration Date: ").append(ExpirationDate.toString()).append("\n");
-    }
-    else {
+    result.append("Item ID:").append("\n");
+    result.append(" Name: ").append(this.getName()).append("\n");
+    result.append(" Type: ").append(this.getType()).append("\n");
+    result.append("Quantity: ").append(quantity).append("\n");
+    result.append("Storage Center: ").append(storageCenter.getName()).append("\n");
+    if (expirationDate != null) {
+      result.append("Expiration Date: ").append(expirationDate.toString()).append("\n");
+    } else {
       result.append("Item Expiration Date: N/A\n");
     }
+
     return result.toString();
   }
 }

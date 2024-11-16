@@ -1,8 +1,9 @@
-package com.smartprogrammingbaddies.Event;
+package com.smartprogrammingbaddies.event;
 
-import com.smartprogrammingbaddies.Organization.Organization;
-import com.smartprogrammingbaddies.StorageCenter.StorageCenter;
-import com.smartprogrammingbaddies.Volunteer.Volunteer;
+import com.smartprogrammingbaddies.organization.Organization;
+import com.smartprogrammingbaddies.storageCenter.StorageCenter;
+import com.smartprogrammingbaddies.volunteer.Volunteer;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -14,7 +15,7 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
-  import java.util.Date;
+import java.util.Date;
 import java.util.Set;
 
 /**
@@ -26,7 +27,7 @@ import java.util.Set;
 public class Event {
 
   @Id
-  @GeneratedValue(strategy=GenerationType.AUTO)
+  @GeneratedValue(strategy = GenerationType.AUTO)
   @Column(name = "event_id")
   private int id;
   private String name;
@@ -53,7 +54,6 @@ public class Event {
    * @param date the date of the event
    * @param time the time of the event
    * @param location the location of where the event takes place
-   * @param isCancelled a boolean indicating if the event is cancelled
    * @param storage the StorageCenter where donation items are stored
    * @param organizer the Organization that is hosting the event
    * @param volunteers a list of volunteers participating in the event
@@ -77,7 +77,7 @@ public class Event {
   /**
    * Gets the database's primary key of the event.
    *
-   * @return  int value of the id of the event
+   * @return int value of the id of the event
    */
   public int getDatabaseId() {
     return id;
@@ -196,7 +196,7 @@ public class Event {
    *
    * @return the organizer of the event (Organization)
    */
-   public boolean updateOrganizer(Organization newOrganizer) {
+  public boolean updateOrganizer(Organization newOrganizer) {
     this.organizer = newOrganizer;
     return true;
   }
@@ -241,7 +241,7 @@ public class Event {
   /**
    * Removes a volunteer from the event based on their name.
    *
-   * @param volunteerName the name of the volunteer to remove
+   * @param volunteerId the name of the volunteer to remove
    */
   public void removeVolunteer(int volunteerId) {
     volunteers.remove(volunteerId);
