@@ -6,7 +6,7 @@ import java.util.Set;
 
 import org.springframework.boot.autoconfigure.integration.IntegrationProperties.RSocket.Client;
 
-import com.smartprogrammingbaddies.StorageCenter.StorageCenter;
+import com.smartprogrammingbaddies.storageCenter.StorageCenter;
 import com.smartprogrammingbaddies.event.Event;
 
 import jakarta.persistence.CascadeType;
