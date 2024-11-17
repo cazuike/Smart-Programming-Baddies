@@ -10,13 +10,14 @@ name: Java CI with Maven
 
 on:
   push:
-    branches: [ "main" ]
+    branches:
+      - main
   pull_request:
-    branches: [ "main" ]
+    branches:
+      - main
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
 
     steps:
@@ -34,6 +35,6 @@ jobs:
         run: mvn -B clean package --file serviceSPB/pom.xml -DskipTests
 
       - name: Run Unit Tests
-        run: (cd serviceSPB && mvn test -Dtest=AppTest,AuthTest,DonationsUnitTest,ItemUnitTests,ItemIdUnitTests,TransactionUnitTests,VolunteerUnitTests,OrganizationsUnitTest,EventUnitTests,DonationsUnitTest,StorageCenterUnitTests
-  )
-
+        run: |
+          cd serviceSPB
+          mvn test -Dtest=AppTest,AuthTest,DonationsUnitTest,ItemUnitTests,ItemIdUnitTests,TransactionUnitTests,VolunteerUnitTests,OrganizationsUnitTest,EventUnitTests,DonationsUnitTest,StorageCenterUnitTests

@@ -2,9 +2,6 @@ package com.smartprogrammingbaddies.volunteer;
 
 import com.smartprogrammingbaddies.auth.AuthController;
 import java.util.Map;
-import java.util.UUID;
-
-import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

@@ -44,7 +44,7 @@ public class EventController {
           @RequestParam("time") String time,
           @RequestParam("location") String location) {
     try {
-    if (auth.verifyApiKey(apiKey).getStatusCode() != HttpStatus.OK) {
+      if (auth.verifyApiKey(apiKey).getStatusCode() != HttpStatus.OK) {
         return new ResponseEntity<>("Invalid API key", HttpStatus.NOT_FOUND);
       }
       Date eventDate = new Date();
