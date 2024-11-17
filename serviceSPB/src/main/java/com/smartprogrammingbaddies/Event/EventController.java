@@ -1,7 +1,8 @@
-package com.smartprogrammingbaddies.event;
+package com.smartprogrammingbaddies.Event;
 
-import com.smartprogrammingbaddies.volunteer.Volunteer;
-import com.smartprogrammingbaddies.event.EventRepository;
+import com.smartprogrammingbaddies.Auth.AuthController;
+import com.smartprogrammingbaddies.Volunteer.Volunteer;
+import com.smartprogrammingbaddies.Event.EventRepository;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Map;
@@ -22,8 +23,11 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 public class EventController {
-  @Autowired
-  EventRepository eventRepository;
+    @Autowired
+    EventRepository eventRepository;
+
+    @Autowired
+    private AuthController auth;
 
   /**
    * Enrolls a event into the database.
@@ -37,14 +41,17 @@ public class EventController {
    * @return A {@code ResponseEntity} A message if the Event was successfully created
      and a HTTP 200 response or, HTTP 500 reponse if an error occurred.
    */
-  @PostMapping("/createEvent")
-  public ResponseEntity<?> createEvent(
-      @RequestParam("name") String name,
-      @RequestParam("description") String description,
-      @RequestParam("date") String date,
-      @RequestParam("time") String time,
-      @RequestParam("location") String location) {
-    try {
+    @PostMapping("/createEvent")
+    public ResponseEntity<?> createEvent(@RequestParam("apiKey") String apiKey,
+            @RequestParam("name") String name,
+            @RequestParam("description") String description,
+            @RequestParam("date") String date,
+            @RequestParam("time") String time,
+            @RequestParam("location") String location) {
+        try {
+          if(!(auth.verifyApiKey(apiKey).getStatusCode() == HttpStatus.OK)){
+              return new ResponseEntity<>("Invalid API key", HttpStatus.NOT_FOUND);
+          }
       Date eventDate = new Date();
       Date eventTime = new Date();
       HashSet<Volunteer> volunteers = new HashSet<>();
@@ -52,7 +59,7 @@ public class EventController {
       Event event;
       event = new Event(name, description, eventDate, eventTime, location, null, null, volunteers);
       Event savedEvent = eventRepository.save(event);
-      String message = "Event with ID: " + savedEvent.getDatabaseId() + " was created successfully";
+      String message = "Event was created successfully with ID: " + savedEvent.getDatabaseId();
       return new ResponseEntity<>(message, HttpStatus.OK);
     } catch (Exception e) {
       return handleException(e);
@@ -69,8 +76,12 @@ public class EventController {
    *         and a HTTP 200 response or, HTTP 404 reponse if API Key was not
    *         found.
    */
-  @GetMapping("/retrieveEvent")
-  public ResponseEntity<?> retrieveEvent(@RequestParam("eventId") String eventId) {
+    @GetMapping("/retrieveEvent")
+    public ResponseEntity<?> retrieveEvent(@RequestParam("apiKey") String apiKey,
+                                           @RequestParam("eventId") String eventId) {
+        if(!(auth.verifyApiKey(apiKey).getStatusCode() == HttpStatus.OK)){
+            return new ResponseEntity<>("Invalid API key", HttpStatus.NOT_FOUND);
+        }
     Event event = eventRepository.findById(Integer.parseInt(eventId)).orElse(null);
     if (event == null) {
       return new ResponseEntity<>("Event not found with ID: " + eventId, HttpStatus.NOT_FOUND);
@@ -89,9 +100,13 @@ public class EventController {
    *         and a HTTP 200 response or, HTTP 404 reponse if API Key was not
    *         found.
    */
-  @DeleteMapping("/removeEvent")
-  public ResponseEntity<?> removeEvent(@RequestParam("eventId") String eventId) {
-    try {
+    @DeleteMapping("/removeEvent")
+    public ResponseEntity<?> removeEvent(@RequestParam("apiKey") String apiKey,
+                                         @RequestParam("eventId") String eventId) {
+        try {
+            if(!(auth.verifyApiKey(apiKey).getStatusCode() == HttpStatus.OK)){
+                return new ResponseEntity<>("Invalid API key", HttpStatus.NOT_FOUND);
+            }
       eventRepository.deleteById(Integer.parseInt(eventId));
       boolean deleted = !eventRepository.existsById(Integer.parseInt(eventId));
       if (!deleted) {
@@ -107,8 +122,10 @@ public class EventController {
     }
   }
 
-  private ResponseEntity<?> handleException(Exception e) {
-    System.out.println(e.toString());
-    return new ResponseEntity<>("An Error has occurred", HttpStatus.INTERNAL_SERVER_ERROR);
-  }
+      private ResponseEntity<?> handleException(Exception e) {
+        System.out.println(e.toString());
+        return new ResponseEntity<>("An Error has occurred", HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
 }
+
