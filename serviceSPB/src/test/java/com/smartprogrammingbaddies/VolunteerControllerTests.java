@@ -1,6 +1,8 @@
 package com.smartprogrammingbaddies;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.smartprogrammingbaddies.auth.ApiKey;
@@ -29,6 +31,9 @@ public class VolunteerControllerTests {
   @Autowired
   private ApiKeyRepository apiKeyRepository;
 
+  /**
+   * Sets up the API key before each test.
+   */
   @BeforeEach
   public void setUp() {
     if (!apiKeyRepository.existsByApiKey(TestUtils.apiKey)) {
@@ -36,17 +41,18 @@ public class VolunteerControllerTests {
       apiKeyRepository.save(apiKeyEntity);
     }
   }
+
   @Test
-    public void enrollVolunteerTest() throws Exception {
+  public void enrollVolunteerTest() throws Exception {
     JSONObject testVolunteerSchedule = new JSONObject();
     testVolunteerSchedule.put("10-30-2024", "9 AM - 12 PM");
 
     MvcResult result = mockMvc.perform(patch("/enrollVolunteer")
-                        .param("apiKey", apiKey)
-                        .param("name", "John Doe")
-                        .param("role", "Tester")
-                        .content(testVolunteerSchedule.toString())
-                        .contentType("application/json"))
+                      .param("apiKey", apiKey)
+                      .param("name", "John Doe")
+                      .param("role", "Tester")
+                      .content(testVolunteerSchedule.toString())
+                      .contentType("application/json"))
                 .andExpect(status().isOk())
                 .andReturn();
 
@@ -60,10 +66,10 @@ public class VolunteerControllerTests {
       enrollVolunteerTest();
     }
     mockMvc.perform(patch("/updateName")
-                    .param("apiKey", apiKey)
-                    .param("name","Johnny")
-                    .param("volunteerId", volunteerId))
-            .andExpect(status().isOk());
+                  .param("apiKey", apiKey)
+                  .param("name", "Johnny")
+                  .param("volunteerId", volunteerId))
+          .andExpect(status().isOk());
   }
 
   @Test
@@ -72,10 +78,10 @@ public class VolunteerControllerTests {
       enrollVolunteerTest();
     }
     mockMvc.perform(patch("/updateRole")
-                    .param("apiKey", apiKey)
-                    .param("role","Not-a-Tester")
-                    .param("volunteerId", volunteerId))
-            .andExpect(status().isOk());
+                  .param("apiKey", apiKey)
+                  .param("role", "Not-a-Tester")
+                  .param("volunteerId", volunteerId))
+        .andExpect(status().isOk());
   }
 
   @Test
@@ -86,19 +92,19 @@ public class VolunteerControllerTests {
       enrollVolunteerTest();
     }
     mockMvc.perform(patch("/updateSchedule")
-                    .param("apiKey", apiKey)
-                    .param("volunteerId", volunteerId)
-                    .content(testVolunteerSchedule.toString())
-                    .contentType("application/json"))
-            .andExpect(status().isOk());
+                  .param("apiKey", apiKey)
+                  .param("volunteerId", volunteerId)
+                  .content(testVolunteerSchedule.toString())
+                  .contentType("application/json"))
+          .andExpect(status().isOk());
   }
 
   @Test
   public void confirmDeleteTest() throws Exception {
     mockMvc.perform(delete("/removeVolunteer")
-                    .param("apiKey", apiKey)
-                    .param("volunteerId", String.valueOf(999)))
-            .andExpect(status().isNotFound());
+                  .param("apiKey", apiKey)
+                  .param("volunteerId", String.valueOf(999)))
+          .andExpect(status().isNotFound());
   }
 
   @Test
@@ -107,10 +113,10 @@ public class VolunteerControllerTests {
       enrollVolunteerTest();
     }
     mockMvc.perform(get("/getVolunteerInfo")
-                    .param("apiKey", apiKey)
-                    .param("volunteerId", volunteerId))
-            .andExpect(status().isOk())
-            .andReturn();
+                  .param("apiKey", apiKey)
+                  .param("volunteerId", volunteerId))
+          .andExpect(status().isOk())
+          .andReturn();
   }
 }
 

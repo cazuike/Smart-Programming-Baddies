@@ -1,11 +1,11 @@
 package com.smartprogrammingbaddies.organization;
 
-import java.io.Serializable;
-import java.util.Set;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import java.io.Serializable;
+import java.util.Set;
 
 /**
  * The Organization class represents an organization, including their name, their type,

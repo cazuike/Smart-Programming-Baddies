@@ -3,7 +3,6 @@ package com.smartprogrammingbaddies.event;
 import com.smartprogrammingbaddies.organization.Organization;
 import com.smartprogrammingbaddies.storagecenter.StorageCenter;
 import com.smartprogrammingbaddies.volunteer.Volunteer;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -71,7 +70,11 @@ public class Event {
     this.volunteers = volunteers;
   }
 
+  /**
+   * Default constructor for JPA.
+   */
   public Event() {
+    // Default constructor for JPA
   }
 
   /**

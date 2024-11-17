@@ -1,6 +1,10 @@
 package com.smartprogrammingbaddies.volunteer;
 
-import jakarta.persistence.*;
+import jakarta.persistence.ElementCollection;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 import java.io.Serializable;
 import java.util.Map;
 
@@ -24,7 +28,9 @@ public class Volunteer implements Serializable {
   /**
    * Default constructor required for JPA and ObjectMapper.
    */
-  public Volunteer() {}
+  public Volunteer() {
+    // Default constructor for JPA and ObjectMapper
+  }
 
   /**
    * Constructs a new Volunteer with the specified name, role, date of sign-up, and schedule.
