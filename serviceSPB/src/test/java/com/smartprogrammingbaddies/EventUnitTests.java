@@ -3,9 +3,12 @@ package com.smartprogrammingbaddies;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.Map;
+
+import org.checkerframework.checker.units.qual.C;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 
 import com.smartprogrammingbaddies.event.Event;
@@ -15,8 +18,9 @@ import com.smartprogrammingbaddies.volunteer.Volunteer;
 /**
  * Unit tests for the Event class.
  */
+@ActiveProfiles("test")
 @SpringBootTest
-@ContextConfiguration
+@ContextConfiguration(classes = {Event.class, StorageCenter.class, Volunteer.class})
 public class EventUnitTests {
 
   /**

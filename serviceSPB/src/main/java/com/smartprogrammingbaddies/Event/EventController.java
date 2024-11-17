@@ -45,10 +45,10 @@ public class EventController {
       HashSet<Volunteer> volunteers = new HashSet<>();
       /*TODO: Add the storageCenter and Organization reference once they are created*/
       Event event;
-      event = new Event(name, description, eventDate, eventTime, location, null, null, volunteers);
-      Event savedEvent = eventRepository.save(event);
-      String message = "Event with ID: " + savedEvent.getDatabaseId() + " was created successfully";
-      return new ResponseEntity<>(message, HttpStatus.OK);
+      // event = new Event(name, description, eventDate, eventTime, location, null, null, volunteers);
+      // Event savedEvent = eventRepository.save(event);
+      // String message = "Event with ID: " + savedEvent.getDatabaseId() + " was created successfully";
+      return new ResponseEntity<>("Test", HttpStatus.OK);
     } catch (Exception e) {
       return handleException(e);
     }
