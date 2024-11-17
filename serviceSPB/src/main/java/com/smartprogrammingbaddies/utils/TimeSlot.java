@@ -60,4 +60,15 @@ public class TimeSlot {
     boolean endTimesEqual = endTime.equals(timeSlot.endTime);
     return startTimesEqual && endTimesEqual;
   }
+
+  /**
+   * Creates a string representation of timeslot
+   *
+   *  @return a string in the format
+   */
+  @Override
+  public String toString() {
+    return "startTime=" + (startTime != null ? startTime.toString() : "N/A") +
+            ", endTime=" + (endTime != null ? endTime.toString() : "N/A");
+  }
 }

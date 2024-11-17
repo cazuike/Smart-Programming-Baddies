@@ -2,15 +2,14 @@ package com.smartprogrammingbaddies;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import com.smartprogrammingbaddies.event.Event;
+import com.smartprogrammingbaddies.storageCenter.StorageCenter;
+import com.smartprogrammingbaddies.volunteer.Volunteer;
 import java.util.Map;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ContextConfiguration;
-
-import com.smartprogrammingbaddies.event.Event;
-import com.smartprogrammingbaddies.storageCenter.StorageCenter;
-import com.smartprogrammingbaddies.volunteer.Volunteer;
 
 /**
  * Unit tests for the Event class.

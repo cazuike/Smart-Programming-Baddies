@@ -2,8 +2,8 @@ package com.smartprogrammingbaddies.event;
 
 import com.smartprogrammingbaddies.organization.Organization;
 import com.smartprogrammingbaddies.storageCenter.StorageCenter;
+import com.smartprogrammingbaddies.utils.TimeSlot;
 import com.smartprogrammingbaddies.volunteer.Volunteer;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -25,7 +25,6 @@ import java.util.Set;
 */
 @Entity
 public class Event {
-
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
   @Column(name = "event_id")
@@ -34,8 +33,7 @@ public class Event {
   private String description;
   @Temporal(TemporalType.DATE)
   private Date date;
-  @Temporal(TemporalType.TIME)
-  private Date time;
+  private TimeSlot time;
   private String location;
   private boolean isCancelled;
   @OneToOne
@@ -58,7 +56,7 @@ public class Event {
    * @param organizer the Organization that is hosting the event
    * @param volunteers a list of volunteers participating in the event
    */
-  public Event(String name, String description, Date date, Date time, String location,
+  public Event(String name, String description, Date date, TimeSlot time, String location,
                StorageCenter storage, Organization organizer, Set<Volunteer> volunteers) {
     this.name = name;
     this.description = description;
@@ -71,7 +69,11 @@ public class Event {
     this.volunteers = volunteers;
   }
 
+  /**
+   * Empty constructor needed for JPA.
+   */
   public Event() {
+    // Empty constructor needed for JPA
   }
 
   /**
@@ -142,16 +144,16 @@ public class Event {
    *
    * @return the time of the event
    */
-  public Date getTime() {
+  public TimeSlot getTime() {
     return time;
   }
 
   /**
    * Updates the time of the event.
    *
-   * @param newTime the new time of the event
+   * @param newTime the new TimeSlot object
    */
-  public void updateTime(Date newTime) {
+  public void updateTime(TimeSlot newTime) {
     this.time = newTime;
   }
 
