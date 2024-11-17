@@ -30,6 +30,9 @@ public class EventControllerTests {
   @Autowired
   private ApiKeyRepository apiKeyRepository;
 
+  /**
+   * Sets up the API key before each test.
+   */
   @BeforeEach
   public void setUp() {
     if (!apiKeyRepository.existsByApiKey(TestUtils.apiKey)) {
@@ -37,6 +40,7 @@ public class EventControllerTests {
       apiKeyRepository.save(apiKeyEntity);
     }
   }
+
   @Test
   public void createEventTest() throws Exception {
     System.out.println("testzz" + apiKeyRepository.existsByApiKey(apiKey));

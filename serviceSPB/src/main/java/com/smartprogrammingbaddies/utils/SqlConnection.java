@@ -5,29 +5,32 @@ import com.smartprogrammingbaddies.auth.ApiKeyRepository;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import io.github.cdimascio.dotenv.Dotenv;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Configuration;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.Optional;
 import javax.sql.DataSource;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Configuration;
 
+/**
+ * This class contains the SqlConnection class.
+ */
 @Configuration
 public class SqlConnection {
   private static final Dotenv dotenv = Dotenv.load();
 
-    private static final String INSTANCE_CONNECTION_NAME =
+  private static final String INSTANCE_CONNECTION_NAME =
           dotenv.get("INSTANCE_CONNECTION_NAME");
-    private static final String DB_USER = dotenv.get("DB_USER");
-    private static final String DB_PASS = dotenv.get("DB_PASS");
-    private static final String DB_NAME = dotenv.get("DB_NAME");
+  private static final String DB_USER = dotenv.get("DB_USER");
+  private static final String DB_PASS = dotenv.get("DB_PASS");
+  private static final String DB_NAME = dotenv.get("DB_NAME");
 
   @Autowired
   private ApiKeyRepository apiKeyRepository;
 
-
+  /**
+   * Creates a connection to the SQL database.
+   *
+   * @return A {@code DataSource} object representing the SQL database connection.
+   */
   public static DataSource createSqlConnection() {
     HikariConfig config = new HikariConfig();
     config.setJdbcUrl(String.format("jdbc:mysql:///%s", DB_NAME));
@@ -42,6 +45,12 @@ public class SqlConnection {
     return new HikariDataSource(config);
   }
 
+  /**
+   * Enrolls a client into the database.
+   *
+   * @param apiKey A {@code String} representing the client's API key.
+   * @return A {@code boolean} indicating if the client was successfully enrolled.
+   */
   public boolean enrollClient(String apiKey) {
     try {
       if (!apiKeyRepository.existsByApiKey(apiKey)) {
@@ -57,6 +66,13 @@ public class SqlConnection {
     }
     return false;
   }
+
+  /**
+   * Verifies a client's API key is valid.
+   *
+   * @param apiKey A {@code String} representing the client's API key.
+   * @return A {@code boolean} indicating if the client's API key is valid.
+   */
   public boolean verifyClient(String apiKey) {
     try {
       boolean exists = apiKeyRepository.existsByApiKey(apiKey);
@@ -73,6 +89,12 @@ public class SqlConnection {
     }
   }
 
+  /**
+   * Removes a client's API key from the database.
+   *
+   * @param apiKey A {@code String} representing the client's API key.
+   * @return A {@code boolean} indicating if the client's API key was successfully removed.
+   */
   public boolean removeClient(String apiKey) {
     try {
       Optional<ApiKey> apiKeyEntry = apiKeyRepository.findByApiKey(apiKey);
