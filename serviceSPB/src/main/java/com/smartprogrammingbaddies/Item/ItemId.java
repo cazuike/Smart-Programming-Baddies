@@ -78,6 +78,10 @@ public class ItemId {
 
     ItemType itemType = ItemType.fromString(type);
 
+    if (itemType == null) {
+      throw new IllegalArgumentException("Type must be a listed item type.");
+    }
+
     this.type = itemType;
     this.name = name;
   }

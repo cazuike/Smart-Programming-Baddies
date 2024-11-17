@@ -1,6 +1,7 @@
 package com.smartprogrammingbaddies.storagecenter;
 
 import com.smartprogrammingbaddies.item.Item;
+import com.smartprogrammingbaddies.logger.Transaction;
 import com.smartprogrammingbaddies.utils.TimeSlot;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.CollectionTable;
@@ -42,6 +43,8 @@ public class StorageCenter implements Serializable {
   private Map<DayOfWeek, TimeSlot> operationHours = new EnumMap<>(DayOfWeek.class);
   @OneToMany(mappedBy = "storageCenter", cascade = CascadeType.ALL, orphanRemoval = true)
   private Set<Item> items;
+  @OneToMany(mappedBy = "storageCenter", cascade = CascadeType.ALL, orphanRemoval = true)
+  private Set<Transaction> transactions;
 
   /**
    * Constructs a new StorageCenter where donated items can be tracked.
@@ -180,6 +183,16 @@ public class StorageCenter implements Serializable {
     }
     return result.toString();
   }
+
+  /**
+   * Gets the transactions that have occurred in the storage center.
+   *
+   * @return the transactions that have occurred in the storage center
+   */
+  public Set<Transaction> getTransactions() {
+    return transactions;
+  }
+
 
   /**
    * Returns a string representation of the storage center, including its name,

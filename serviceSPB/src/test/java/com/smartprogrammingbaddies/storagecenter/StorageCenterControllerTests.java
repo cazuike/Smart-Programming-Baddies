@@ -11,6 +11,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.smartprogrammingbaddies.item.Item;
 import com.smartprogrammingbaddies.item.ItemId;
 import com.smartprogrammingbaddies.item.ItemRepository;
+import com.smartprogrammingbaddies.logger.Transaction;
+import com.smartprogrammingbaddies.logger.TransactionRepository;
 import java.text.ParseException;
 import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
@@ -38,10 +40,16 @@ public class StorageCenterControllerTests {
   private ItemRepository itemRepository;
 
   @MockBean
+  private TransactionRepository transactionRepository;
+
+  @MockBean
   private Item item;
 
   @MockBean
   private ItemId itemId;
+
+  @MockBean
+  private Transaction transaction;
 
   /**
    * Sets up the tests objects and mocked repository actions.

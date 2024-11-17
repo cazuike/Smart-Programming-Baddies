@@ -2,17 +2,15 @@ package com.smartprogrammingbaddies;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import com.smartprogrammingbaddies.organization.Organization;
 import java.util.HashMap;
 import java.util.Map;
-
-import org.checkerframework.checker.units.qual.C;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 
-import com.smartprogrammingbaddies.organization.Organization;
 
 
 

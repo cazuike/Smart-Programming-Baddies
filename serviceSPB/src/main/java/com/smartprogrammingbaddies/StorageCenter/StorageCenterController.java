@@ -3,6 +3,8 @@ package com.smartprogrammingbaddies.storagecenter;
 import com.smartprogrammingbaddies.item.Item;
 import com.smartprogrammingbaddies.item.ItemId;
 import com.smartprogrammingbaddies.item.ItemRepository;
+import com.smartprogrammingbaddies.logger.Transaction;
+import com.smartprogrammingbaddies.logger.TransactionRepository;
 import com.smartprogrammingbaddies.utils.TimeSlot;
 import java.text.ParseException;
 import java.time.DateTimeException;
@@ -30,6 +32,8 @@ public class StorageCenterController {
   StorageCenterRepository storageCenterRepository;
   @Autowired
   ItemRepository itemRepository;
+  @Autowired
+  TransactionRepository transactionRepository;
 
   /**
    * Enrolls a storage center into the database.
@@ -226,13 +230,17 @@ public class StorageCenterController {
         Item foundItem = item.get();
         foundItem.incrementQuantity(quantity);
         itemRepository.save(foundItem);
+        Transaction transaction = new Transaction(center, foundItem, quantity, "Check In");
+        transactionRepository.save(transaction);
         return ResponseEntity.ok("Item quantity updated successfully");
+
       }
 
       Item newItem = new Item(itemId, quantity, center, expirationDate);
       itemRepository.save(newItem);
-      String message = "Item added to storage center successfully";
-      return ResponseEntity.ok(message);
+      Transaction transaction = new Transaction(center, newItem, quantity, "Check In");
+      transactionRepository.save(transaction);
+      return ResponseEntity.ok("Item added to storage center successfully");
 
     } catch (NoSuchElementException e) {
       return handleNotFoundException("Storage Center", storageCenterId);
@@ -260,7 +268,7 @@ public class StorageCenterController {
         @RequestParam("name") String name,
         @RequestParam("quantity") int quantity) {
     try {
-      storageCenterRepository.findById(storageCenterId).orElseThrow();
+      StorageCenter center = storageCenterRepository.findById(storageCenterId).orElseThrow();
       ItemId itemId = new ItemId(type, name);
       Optional<Item> searchedItem = itemRepository.findById(itemId);
       if (searchedItem.isEmpty()) {
@@ -270,11 +278,18 @@ public class StorageCenterController {
 
       Item item = searchedItem.get();
       item.decrementQuantity(quantity);
+      Transaction transaction;
       if (item.getQuantity() == 0) {
         itemRepository.delete(item);
+        String action = "Removed from inventory";
+        transaction = new Transaction(center, item, quantity, action);
       } else {
         itemRepository.save(item);
+        String action = "Check Out";
+        transaction = new Transaction(center, item, quantity, action);
       }
+
+      transactionRepository.save(transaction);
       String message = "Items removed from storage center successfully";
       return ResponseEntity.ok(message);
 
@@ -300,6 +315,29 @@ public class StorageCenterController {
     try {
       StorageCenter storage = storageCenterRepository.findById(storageCenterId).orElseThrow();
       return ResponseEntity.ok(storage.printItems());
+
+    } catch (NoSuchElementException e) {
+      return handleNotFoundException("Storage Center", storageCenterId);
+    } catch (Exception e) {
+      return handleException(e);
+    }
+  }
+
+  /**
+   * Get the storage center's transactions.
+   *
+   * @param storageCenterId A {@code String} representing the storage center's ID.
+   * @return A {@code ResponseEntity} A message if the storage center was successfully
+   *     found and a HTTP 200 response or,
+   *     HTTP 500 reponse if an error occurred or,
+   *     404 response if the storage center ID is not found.
+   */
+  @GetMapping("/listTransactions")
+  public ResponseEntity<?> listTransactions(
+        @RequestParam("storageCenterId") int storageCenterId) {
+    try {
+      StorageCenter storage = storageCenterRepository.findById(storageCenterId).orElseThrow();
+      return ResponseEntity.ok(storage.getTransactions());
 
     } catch (NoSuchElementException e) {
       return handleNotFoundException("Storage Center", storageCenterId);
