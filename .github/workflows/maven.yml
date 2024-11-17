@@ -31,6 +31,17 @@ jobs:
           distribution: 'temurin'
           cache: maven
 
+      - name: Set up MySQL
+        run: |
+          cd serviceSPB
+          cat <<EOL >> .env
+          INSTANCE_CONNECTION_NAME=${{ secrets.INSTANCE_CONNECTION_NAME }}
+          DB_USER=${{ secrets.DB_USER }}
+          DB_PASS=${{ secrets.DB_PASS }}
+          DB_NAME=${{ secrets.DB_NAME }}
+          DB_DATA_SOURCE_URL=${{ secrets.DB_DATA_SOURCE_URL }}
+          EOL
+
       - name: Build with Maven
         run: mvn -B clean package --file serviceSPB/pom.xml -DskipTests
 
