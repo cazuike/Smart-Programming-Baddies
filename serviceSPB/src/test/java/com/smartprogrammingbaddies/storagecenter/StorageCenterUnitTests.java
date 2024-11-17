@@ -1,103 +1,166 @@
 package com.smartprogrammingbaddies.storagecenter;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import com.smartprogrammingbaddies.item.Item;
-import com.smartprogrammingbaddies.storageCenter.StorageCenter;
+import com.smartprogrammingbaddies.item.ItemId;
+import com.smartprogrammingbaddies.item.ItemId.ItemType;
 import com.smartprogrammingbaddies.utils.TimeSlot;
+import java.text.ParseException;
 import java.time.DayOfWeek;
 import java.time.LocalTime;
 import java.util.EnumMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.ContextConfiguration;
 
 /**
  * Unit tests for the StorageCenter class.
  */
-@SpringBootTest
-@ContextConfiguration(classes = {StorageCenter.class, TimeSlot.class, Item.class})
 public class StorageCenterUnitTests {
 
-  public static StorageCenter testCenter;
-  public static TimeSlot mondayTimeSlot;
-  public static TimeSlot fridayTimeSlot;
-  public static Map<DayOfWeek, TimeSlot> testHours;
-  public static Set<Item> testItems;
+  private StorageCenter testCenter;
+  private TimeSlot fridayTimeSlot;
+  private Map<DayOfWeek, TimeSlot> testHours;
+  private Set<Item> testItems;
+  private Item testItem;
 
   /**
-    * The StorageCenter set up to be tested.
+   * The StorageCenter set up to be tested.
+   *
+   * @throws ParseException if the date could not be parsed
    */
   @BeforeEach
-  public void setupStorageCenterForTesting() {
+  public void setupStorageCenterForTesting() throws ParseException {
     testCenter = new StorageCenter("CUFP", "Food Pantry");
     testHours = new EnumMap<>(DayOfWeek.class);
     LocalTime start = LocalTime.of(10, 0);
     LocalTime end = LocalTime.of(19, 0);
     fridayTimeSlot = new TimeSlot(start, end);
     testHours.put(DayOfWeek.FRIDAY, fridayTimeSlot);
+    testItems = new HashSet<>();
+    ItemId itemId = new ItemId(ItemType.FOOD, "Canned Beans");
+    testItem = new Item(itemId, 10, testCenter, "2022-12-31");
+    testItems.add(testItem);
   }
 
-  /** Name Tests */
+  /**
+   * Tests the constructor to verify the name and description are correct.
+   */
+  @Test
+  public void constructorTest() {
+    StorageCenter testCenter = new StorageCenter("CUFP", "Food Pantry");
+    assertEquals("CUFP", testCenter.getName());
+    assertEquals("Food Pantry", testCenter.getDescription());
+  }
+
+  /**
+   * Tests the constructor to verify it throws IllegalArgumentException on invalid input.
+   */
+  @Test
+  public void constructorFailTest() {
+    assertThrows(IllegalArgumentException.class, () -> {
+      new StorageCenter("", "Food Pantry");
+    });
+
+    assertThrows(IllegalArgumentException.class, () -> {
+      new StorageCenter(null, "Food Pantry");
+    });
+
+    assertThrows(IllegalArgumentException.class, () -> {
+      new StorageCenter("CUFP", "");
+    });
+
+    assertThrows(IllegalArgumentException.class, () -> {
+      new StorageCenter("CUFP", null);
+    });
+  }
+
+  /**
+   * Tests the getName method to verify is the name is returned correctly.
+   */
   @Test
   public void getNameTest() {
     assertEquals("CUFP", testCenter.getName());
   }
 
+  /**
+   * Tests the changeName method to verify the name is succesfully updated.
+   */
   @Test
   public void updateNameTest() {
     testCenter.changeName("Food Drive");
     assertEquals("Food Drive", testCenter.getName());
   }
 
+  /**
+   * Tests the changeName method to verify it throws IllegalArgumentException on invalid input.
+   */
   @Test
   public void updateNameFailTest() {
-    boolean changed = testCenter.changeName("");
-    assertFalse(changed);
+    assertThrows(IllegalArgumentException.class, () -> {
+      testCenter.changeName("");
+    });
     assertEquals("CUFP", testCenter.getName());
 
-    changed = testCenter.changeName(null);
-    assertFalse(changed);
+
+    assertThrows(IllegalArgumentException.class, () -> {
+      testCenter.changeName(null);
+    });
     assertEquals("CUFP", testCenter.getName());
 
-    changed = testCenter.changeName(" ");
-    assertFalse(changed);
+
+    assertThrows(IllegalArgumentException.class, () -> {
+      testCenter.changeName(" ");
+    });
     assertEquals("CUFP", testCenter.getName());
   }
 
-  /** Description Tests */
+  /**
+   * Tests the getDescription method to verify the description is returned correctly.
+   */
   @Test
   public void getDescriptionTest() {
     assertEquals("Food Pantry", testCenter.getDescription());
   }
 
+  /**
+   * Tests the changeDescription method to verify the description is successfully updated.
+   */
   @Test
   public void updateDescriptionTest() {
     testCenter.changeDescription("Clothes Pantry");
     assertEquals("Clothes Pantry", testCenter.getDescription());
   }
 
+  /**
+   * Tests that the changeDescription method throws an IllegalArgumentException on invalid input.
+   */
   @Test
   public void updateDescriptionFailTest() {
-    boolean changed = testCenter.changeDescription("");
-    assertFalse(changed);
+    assertThrows(IllegalArgumentException.class, () -> {
+      testCenter.changeDescription("");
+    });
     assertEquals("Food Pantry", testCenter.getDescription());
 
-    changed = testCenter.changeDescription(null);
-    assertFalse(changed);
+    assertThrows(IllegalArgumentException.class, () -> {
+      testCenter.changeDescription(null);
+    });
     assertEquals("Food Pantry", testCenter.getDescription());
 
-    changed = testCenter.changeDescription(" ");
-    assertFalse(changed);
+    assertThrows(IllegalArgumentException.class, () -> {
+      testCenter.changeDescription(" ");
+    });
     assertEquals("Food Pantry", testCenter.getDescription());
   }
 
-  /** Hours Tests */
+  /**
+   * Tests the getHours method to verify the hours are returned correctly.
+   */
   @Test
   public void getHoursTest() {
     Map<DayOfWeek, TimeSlot> expectedHours = new EnumMap<>(DayOfWeek.class);
@@ -105,58 +168,74 @@ public class StorageCenterUnitTests {
     assertEquals(expectedHours, testHours);
   }
 
+  /**
+   * Tests the updateDayHours method to verify the hours are successfully updated.
+   */
   @Test
   public void updateHoursTest() {
     LocalTime start = LocalTime.of(10, 0);
     LocalTime end = LocalTime.of(19, 0);
     fridayTimeSlot = new TimeSlot(start, end);
-    testCenter.updateDayHours(start, end, DayOfWeek.FRIDAY);
+    testCenter.updateDayHours(fridayTimeSlot, 5);
     Map<DayOfWeek, TimeSlot> updatedHours = testCenter.getOperatingHours();
     assertEquals(fridayTimeSlot, updatedHours.get(DayOfWeek.FRIDAY));
   }
 
-  /** Items Tests */
+  /**
+   * Tests that the updateDayHours method throws an IllegalArgumentException on invalid input.
+   */
+  @Test
+  public void updateHoursFailTest() {
+    assertThrows(IllegalArgumentException.class, () -> {
+      testCenter.updateDayHours(fridayTimeSlot, 8);
+    });
+
+    assertThrows(IllegalArgumentException.class, () -> {
+      testCenter.updateDayHours(fridayTimeSlot, 0);
+    });
+
+    Map<DayOfWeek, TimeSlot> updatedHours = testCenter.getOperatingHours();
+    assertNotEquals(fridayTimeSlot, updatedHours.get(DayOfWeek.FRIDAY));
+  }
+
+  /**
+   * Tests the getItems method to verify the items are returned correctly.
+   */
   @Test
   public void getItemsTest() {
-    Set<Item> expectedItems = testCenter.getItems();
-    assertEquals(expectedItems, testCenter.getItems());
+    testCenter.setItems(testItems);
+    assertEquals(testItems, testCenter.getItems());
   }
 
-  @Test
-  public void setItemsTest() {
-    Set<Item> expectedItems = testCenter.getItems();
-    testCenter.setItems(expectedItems);
-    assertEquals(expectedItems, testCenter.getItems());
-  }
-
-  @Test
-  public void setItemsFailTest() {
-    Set<Item> expectedItems = testCenter.getItems();
-    testCenter.setItems(null);
-    assertNotEquals(expectedItems, testCenter.getItems());
-  }
-
-  /** Print Statement tests. */
+  /**
+   * Tests the printItems method to verify the items are printed correctly.
+   */
   @Test
   public void printItemsTest() {
     StringBuilder result = new StringBuilder();
     result.append("Items: ").append("\n");
+    for (Item item : testItems) {
+      result.append(item.toString()).append("\n");
+    }
     String expected = result.toString();
+    testCenter.setItems(testItems);
     assertEquals(expected, testCenter.printItems());
   }
 
+  /**
+   * Tests the toString method to verify toString returns the correct string.
+   */
   @Test
   public void toStringTest() {
-    Map<DayOfWeek, TimeSlot> operationHours = new EnumMap<>(DayOfWeek.class);
     StringBuilder result = new StringBuilder();
     result.append("Storage Center Name: ").append(testCenter.getName()).append("\n");
     result.append("Description: ").append(testCenter.getDescription()).append("\n");
     result.append("Operating Hours: ").append("\n");
-    operationHours.forEach((day, hours) -> {
+    testHours.forEach((day, hours) -> {
       result.append(day).append(": ").append(hours).append("\n");
     });
-    result.append("Items: ").append("\n");
     String expected = result.toString();
+    testCenter.updateDayHours(fridayTimeSlot, 5);
     assertEquals(expected, testCenter.toString());
   }
 }
