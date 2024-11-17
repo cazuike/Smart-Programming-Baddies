@@ -8,7 +8,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ContextConfiguration;
-import com.smartprogrammingbaddies.Volunteer.Volunteer;
+import com.smartprogrammingbaddies.volunteer.Volunteer;
 
 /**
  * Unit tests for the Volunteer class.

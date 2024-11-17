@@ -7,16 +7,23 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import com.smartprogrammingbaddies.Event.Event;
-import com.smartprogrammingbaddies.organization.Organization;
-import com.smartprogrammingbaddies.storageCenter.StorageCenter;
-import com.smartprogrammingbaddies.Volunteer.Volunteer;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.ContextConfiguration;
+
+import com.smartprogrammingbaddies.event.Event;
+import com.smartprogrammingbaddies.organization.Organization;
+import com.smartprogrammingbaddies.storagecenter.StorageCenter;
+import com.smartprogrammingbaddies.volunteer.Volunteer;
 
 /**
  * Unit tests for the Event class.
  */
+@ActiveProfiles("test")
+@SpringBootTest
+@ContextConfiguration(classes = {Event.class, StorageCenter.class, Volunteer.class})
 public class EventUnitTests {
 
     public static Event testEvent;

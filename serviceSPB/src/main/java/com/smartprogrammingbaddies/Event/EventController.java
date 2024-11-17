@@ -1,20 +1,17 @@
-package com.smartprogrammingbaddies.Event;
+package com.smartprogrammingbaddies.event;
 
-import com.smartprogrammingbaddies.Auth.AuthController;
-import com.smartprogrammingbaddies.Volunteer.Volunteer;
-import com.smartprogrammingbaddies.Event.EventRepository;
+import com.smartprogrammingbaddies.volunteer.Volunteer;
+import com.smartprogrammingbaddies.auth.AuthController;
+import com.smartprogrammingbaddies.event.EventRepository;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Map;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -71,10 +68,8 @@ public class EventController {
    *
    * @param eventId A {@code String} representing the event's ID.
    *
-   * @return A {@code ResponseEntity} A message if the Event was successfully
-   *         rertrieved
-   *         and a HTTP 200 response or, HTTP 404 reponse if API Key was not
-   *         found.
+   * @return A {@code ResponseEntity} A message if the Event was successfully rertrieved
+     and a HTTP 200 response or, HTTP 404 reponse if API Key was not found.
    */
     @GetMapping("/retrieveEvent")
     public ResponseEntity<?> retrieveEvent(@RequestParam("apiKey") String apiKey,
@@ -89,16 +84,13 @@ public class EventController {
     return new ResponseEntity<>(event, HttpStatus.OK);
   }
 
-
   /**
    * Removes an event from the database.
    *
    * @param eventId A {@code String} representing the event's ID.
    *
-   * @return A {@code ResponseEntity} A message if the Event was successfully
-   *         deleted
-   *         and a HTTP 200 response or, HTTP 404 reponse if API Key was not
-   *         found.
+   * @return A {@code ResponseEntity} A message if the Event was successfully deleted
+     and a HTTP 200 response or, HTTP 404 reponse if API Key was not found.
    */
     @DeleteMapping("/removeEvent")
     public ResponseEntity<?> removeEvent(@RequestParam("apiKey") String apiKey,
@@ -128,4 +120,3 @@ public class EventController {
     }
 
 }
-

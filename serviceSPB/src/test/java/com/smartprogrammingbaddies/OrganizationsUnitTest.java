@@ -8,11 +8,17 @@ import java.util.Set;
 import com.smartprogrammingbaddies.organization.Organization;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.ContextConfiguration;
 
 /**
  * Unit tests for the Organization class.
 
  */
+@ActiveProfiles("test")
+@SpringBootTest
+@ContextConfiguration(classes = {Organization.class})
 public class OrganizationsUnitTest {
     /**
      * The Organization set up to be tested.

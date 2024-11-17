@@ -1,4 +1,4 @@
-package com.smartprogrammingbaddies.Auth;
+package com.smartprogrammingbaddies.auth;
 
 import java.util.UUID;
 

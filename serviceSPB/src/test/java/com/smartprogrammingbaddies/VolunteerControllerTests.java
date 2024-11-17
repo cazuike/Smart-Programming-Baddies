@@ -3,8 +3,9 @@ package com.smartprogrammingbaddies;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import com.smartprogrammingbaddies.auth.ApiKey;
+import com.smartprogrammingbaddies.auth.ApiKeyRepository;
 import org.json.JSONObject;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,12 +27,12 @@ public class VolunteerControllerTests {
   private static String volunteerId;
 
   @Autowired
-  private com.smartprogrammingbaddies.ApiKeyRepository apiKeyRepository;
+  private ApiKeyRepository apiKeyRepository;
 
   @BeforeEach
   public void setUp() {
     if (!apiKeyRepository.existsByApiKey(TestUtils.apiKey)) {
-      com.smartprogrammingbaddies.ApiKey apiKeyEntity = new com.smartprogrammingbaddies.ApiKey(TestUtils.apiKey);
+      ApiKey apiKeyEntity = new ApiKey(TestUtils.apiKey);
       apiKeyRepository.save(apiKeyEntity);
     }
   }

@@ -1,17 +1,18 @@
 package com.smartprogrammingbaddies.utils;
 
-import javax.sql.DataSource;
+import com.smartprogrammingbaddies.auth.ApiKey;
+import com.smartprogrammingbaddies.auth.ApiKeyRepository;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import io.github.cdimascio.dotenv.Dotenv;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Optional;
+import javax.sql.DataSource;
 
 @Configuration
 public class SqlConnection {
@@ -24,7 +25,7 @@ public class SqlConnection {
     private static final String DB_NAME = dotenv.get("DB_NAME");
 
   @Autowired
-  private com.smartprogrammingbaddies.ApiKeyRepository apiKeyRepository;
+  private ApiKeyRepository apiKeyRepository;
 
 
   public static DataSource createSqlConnection() {
@@ -44,7 +45,7 @@ public class SqlConnection {
   public boolean enrollClient(String apiKey) {
     try {
       if (!apiKeyRepository.existsByApiKey(apiKey)) {
-        apiKeyRepository.save(new com.smartprogrammingbaddies.ApiKey(apiKey));
+        apiKeyRepository.save(new ApiKey(apiKey));
         System.out.println("API key added successfully!");
       } else {
         System.out.println("API key already exists!");
@@ -74,7 +75,7 @@ public class SqlConnection {
 
   public boolean removeClient(String apiKey) {
     try {
-      Optional<com.smartprogrammingbaddies.ApiKey> apiKeyEntry = apiKeyRepository.findByApiKey(apiKey);
+      Optional<ApiKey> apiKeyEntry = apiKeyRepository.findByApiKey(apiKey);
       if (apiKeyEntry.isPresent()) {
         apiKeyRepository.delete(apiKeyEntry.get());
         System.out.println("API key deleted successfully!");

@@ -1,4 +1,4 @@
-package com.smartprogrammingbaddies;
+package com.smartprogrammingbaddies.auth;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
