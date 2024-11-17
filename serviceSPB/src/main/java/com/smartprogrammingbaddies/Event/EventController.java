@@ -1,8 +1,10 @@
 package com.smartprogrammingbaddies.event;
 
 import com.smartprogrammingbaddies.volunteer.Volunteer;
+import com.smartprogrammingbaddies.event.EventRepository;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -45,10 +47,10 @@ public class EventController {
       HashSet<Volunteer> volunteers = new HashSet<>();
       /*TODO: Add the storageCenter and Organization reference once they are created*/
       Event event;
-      event = new Event(name, description, eventDate, eventTime, location, null, null, volunteers);
-      Event savedEvent = eventRepository.save(event);
-      String message = "Event with ID: " + savedEvent.getDatabaseId() + " was created successfully";
-      return new ResponseEntity<>(message, HttpStatus.OK);
+      // event = new Event(name, description, eventDate, eventTime, location, null, null, volunteers);
+      // Event savedEvent = eventRepository.save(event);
+      // String message = "Event with ID: " + savedEvent.getDatabaseId() + " was created successfully";
+      return new ResponseEntity<>("Test", HttpStatus.OK);
     } catch (Exception e) {
       return handleException(e);
     }

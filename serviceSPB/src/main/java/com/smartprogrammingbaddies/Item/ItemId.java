@@ -8,8 +8,6 @@ import java.util.Objects;
  */
 @Embeddable
 public class ItemId {
-
-
   private ItemType type;
   private String name;
 
@@ -26,14 +24,13 @@ public class ItemId {
   public enum ItemType {
     FOOD,
     TOILETRIES,
-    CLOTHES;
+    CLOTHING;
 
     /**
      * Converts a string to an ItemType.
      *
      * @param type the string to convert
-     * @return the ItemType that corresponds to the string
-     * or null if the string does not match any ItemType
+     * @return the ItemType that corresponds to the string, null otherwise
      */
     public static ItemType fromString(String type) {
       for (ItemType itemType : ItemType.values()) {
@@ -41,6 +38,7 @@ public class ItemId {
           return itemType;
         }
       }
+
       return null;
     }
   }
@@ -52,15 +50,35 @@ public class ItemId {
    * @param name the name of the item
    */
   public ItemId(ItemType type, String name) {
-    if (name == null || name.isEmpty()) {
+    if (name == null || name.isBlank()) {
       throw new IllegalArgumentException("Name must not be null or empty.");
     }
-
     if (type == null) {
       throw new IllegalArgumentException("Type must not be null.");
     }
 
     this.type = type;
+    this.name = name;
+  }
+
+  /**
+   * Constructs an ItemId with the specified type and name.
+   *
+   * @param type the type of the item
+   * @param name the name of the item
+   */
+  public ItemId(String type, String name) {
+    if (name == null || name.isBlank()) {
+      throw new IllegalArgumentException("Name must not be null or empty.");
+    }
+
+    if (type == null || type.isBlank()) {
+      throw new IllegalArgumentException("Type must not be null.");
+    }
+
+    ItemType itemType = ItemType.fromString(type);
+
+    this.type = itemType;
     this.name = name;
   }
 
@@ -86,22 +104,30 @@ public class ItemId {
    * Sets the type of the item.
    *
    * @param type the type of the item
-   * @return if the type was set successfully updated
+   * @throws IllegalArgumentException if the type is null, empty, or not a listed item type
    */
-  public boolean setType(String type) {
-    this.type = ItemType.valueOf(type);
-    return true;
+  public void setType(String type) {
+    if (type == null || type.isBlank()) {
+      throw new IllegalArgumentException("Type must not be null or empty.");
+    }
+    ItemType itemType = ItemType.fromString(type);
+    if (itemType == null) {
+      throw new IllegalArgumentException("Type must be a listed item type.");
+    }
+    this.type = itemType;
   }
 
   /**
    * Sets the name of the item.
    *
    * @param name the name of the item
-   * @return if the name was set successfully updated
+   * @throws IllegalArgumentException if the name is null or empty
    */
-  public boolean setName(String name) {
+  public void setName(String name) {
+    if (name == null || name.isBlank()) {
+      throw new IllegalArgumentException("Name must not be null or empty.");
+    }
     this.name = name;
-    return true;
   }
 
   /**

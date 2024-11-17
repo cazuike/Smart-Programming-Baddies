@@ -4,8 +4,13 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.HashMap;
 import java.util.Map;
+
+import org.checkerframework.checker.units.qual.C;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.ContextConfiguration;
 
 import com.smartprogrammingbaddies.organization.Organization;
 
@@ -13,11 +18,10 @@ import com.smartprogrammingbaddies.organization.Organization;
 
 /**
  * Unit tests for the Organization class.
-<<<<<<< HEAD
-=======
-
->>>>>>> ce4fb12d6f666952af023449a17131b05e1fc4a6
  */
+@ActiveProfiles("test")
+@SpringBootTest
+@ContextConfiguration(classes = {Organization.class})
 public class OrganizationsUnitTest {
   /**
    * The Organization set up to be tested.
