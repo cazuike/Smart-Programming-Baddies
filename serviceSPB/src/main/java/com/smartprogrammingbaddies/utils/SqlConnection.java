@@ -4,7 +4,16 @@ import javax.sql.DataSource;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import io.github.cdimascio.dotenv.Dotenv;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Configuration;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.Optional;
+
+@Configuration
 public class SqlConnection {
   private static final Dotenv dotenv = Dotenv.load();
 
@@ -14,6 +23,8 @@ public class SqlConnection {
     private static final String DB_PASS = dotenv.get("DB_PASS");
     private static final String DB_NAME = dotenv.get("DB_NAME");
 
+  @Autowired
+  private com.smartprogrammingbaddies.Auth.ApiKeyRepository apiKeyRepository;
 
   public static DataSource createSqlConnection() {
     HikariConfig config = new HikariConfig();
@@ -27,5 +38,54 @@ public class SqlConnection {
     System.out.println(config.getJdbcUrl());
 
     return new HikariDataSource(config);
+  }
+
+  public boolean enrollClient(String apiKey) {
+    try {
+      if (!apiKeyRepository.existsByApiKey(apiKey)) {
+        apiKeyRepository.save(new com.smartprogrammingbaddies.Auth.ApiKey(apiKey));
+        System.out.println("API key added successfully!");
+      } else {
+        System.out.println("API key already exists!");
+      }
+      return true;
+    } catch (Exception e) {
+      System.err.println("Failed to add API key.");
+      e.printStackTrace();
+    }
+    return false;
+  }
+  public boolean verifyClient(String apiKey) {
+    try {
+      boolean exists = apiKeyRepository.existsByApiKey(apiKey);
+      if (exists) {
+        System.out.println("API key exists in the database.");
+      } else {
+        System.out.println("API key does not exist.");
+      }
+      return exists;
+    } catch (Exception e) {
+      System.err.println("Failed to verify API key.");
+      e.printStackTrace();
+      return false;
+    }
+  }
+
+  public boolean removeClient(String apiKey) {
+    try {
+      Optional<com.smartprogrammingbaddies.Auth.ApiKey> apiKeyEntry = apiKeyRepository.findByApiKey(apiKey);
+      if (apiKeyEntry.isPresent()) {
+        apiKeyRepository.delete(apiKeyEntry.get());
+        System.out.println("API key deleted successfully!");
+        return true;
+      } else {
+        System.out.println("API key not found.");
+        return false;
+      }
+    } catch (Exception e) {
+      System.err.println("Failed to delete API key.");
+      e.printStackTrace();
+      return false;
+    }
   }
 }

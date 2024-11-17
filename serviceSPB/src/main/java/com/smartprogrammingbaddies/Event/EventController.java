@@ -1,19 +1,19 @@
 package com.smartprogrammingbaddies.event;
 
+import com.smartprogrammingbaddies.Auth.AuthController;
 import com.smartprogrammingbaddies.volunteer.Volunteer;
-import com.smartprogrammingbaddies.event.EventRepository;
-import java.util.Date;
+import com.smartprogrammingbaddies.utils.TimeSlot;
+
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.HashSet;
-import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -25,38 +25,57 @@ public class EventController {
   @Autowired
   EventRepository eventRepository;
 
+  @Autowired
+  private AuthController auth;
+
   /**
    * Enrolls a event into the database.
    *
-   * @param name A {@code String} representing the Event's name.
+   * @param name        A {@code String} representing the Event's name.
    * @param description A {@code String} representing the event's description.
-   * @param date A {@code String} representing the event's date in Java Date Format.
-   * @param time A {@code Date} representing the event's time in Java Time Format.
-   * @param location A {@code Date} representing the event's location.
+   * @param date        A {@code String} representing the event's date in Java
+   *                    Date Format.
+   * @param time        A {@code TimeSlot} representing the event's time in Java
+   *                    Time Format.
+   * @param location    A {@code Date} representing the event's location.
    *
-   * @return A {@code ResponseEntity} A message if the Event was successfully created
-     and a HTTP 200 response or, HTTP 500 reponse if an error occurred.
+   * @return A {@code ResponseEntity} A message if the Event was successfully
+   *         created
+   *         and a HTTP 200 response or, HTTP 500 reponse if an error occurred.
    */
   @PostMapping("/createEvent")
-  public ResponseEntity<?> createEvent(
-      @RequestParam("name") String name,
+  public ResponseEntity<?> createEvent(@RequestParam("name") String name,
       @RequestParam("description") String description,
       @RequestParam("date") String date,
-      @RequestParam("time") String time,
+      @RequestParam("startTime") String startTime,
+      @RequestParam("endTime") String endTime,
       @RequestParam("location") String location) {
     try {
-      Date eventDate = new Date();
-      Date eventTime = new Date();
+      DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
+      LocalTime parsedStartTime = LocalTime.parse(startTime, timeFormatter);
+      LocalTime parsedEndTime = LocalTime.parse(endTime, timeFormatter);
+      TimeSlot timeSlot = new TimeSlot(parsedStartTime, parsedEndTime);
+
       HashSet<Volunteer> volunteers = new HashSet<>();
-      /*TODO: Add the storageCenter and Organization reference once they are created*/
+      /*
+       * TODO: Add the storageCenter and Organization reference once they are created
+       */
       Event event;
-      event = new Event(name, description, eventDate, eventTime, location, null, null, volunteers);
+      event = new Event(name, description, date, timeSlot, location, null, null, volunteers);
       Event savedEvent = eventRepository.save(event);
-      String message = "Event with ID: " + savedEvent.getDatabaseId() + " was created successfully";
+      String message = "Event was created successfully with ID: " + savedEvent.getDatabaseId();
       return new ResponseEntity<>(message, HttpStatus.OK);
     } catch (Exception e) {
       return handleException(e);
     }
+  }
+
+  @GetMapping("/listEvents")
+  public ResponseEntity<?> listEvents(@RequestParam("apiKey") String apiKey) {
+    if (!(auth.verifyApiKey(apiKey).getStatusCode() == HttpStatus.OK)) {
+      return new ResponseEntity<>("Invalid API key", HttpStatus.NOT_FOUND);
+    }
+    return new ResponseEntity<>(eventRepository.findAll(), HttpStatus.OK);
   }
 
   /**
@@ -70,14 +89,17 @@ public class EventController {
    *         found.
    */
   @GetMapping("/retrieveEvent")
-  public ResponseEntity<?> retrieveEvent(@RequestParam("eventId") String eventId) {
+  public ResponseEntity<?> retrieveEvent(@RequestParam("apiKey") String apiKey,
+      @RequestParam("eventId") String eventId) {
+    if (!(auth.verifyApiKey(apiKey).getStatusCode() == HttpStatus.OK)) {
+      return new ResponseEntity<>("Invalid API key", HttpStatus.NOT_FOUND);
+    }
     Event event = eventRepository.findById(Integer.parseInt(eventId)).orElse(null);
     if (event == null) {
       return new ResponseEntity<>("Event not found with ID: " + eventId, HttpStatus.NOT_FOUND);
     }
     return new ResponseEntity<>(event, HttpStatus.OK);
   }
-
 
   /**
    * Removes an event from the database.
@@ -90,8 +112,12 @@ public class EventController {
    *         found.
    */
   @DeleteMapping("/removeEvent")
-  public ResponseEntity<?> removeEvent(@RequestParam("eventId") String eventId) {
+  public ResponseEntity<?> removeEvent(@RequestParam("apiKey") String apiKey,
+      @RequestParam("eventId") String eventId) {
     try {
+      if (!(auth.verifyApiKey(apiKey).getStatusCode() == HttpStatus.OK)) {
+        return new ResponseEntity<>("Invalid API key", HttpStatus.NOT_FOUND);
+      }
       eventRepository.deleteById(Integer.parseInt(eventId));
       boolean deleted = !eventRepository.existsById(Integer.parseInt(eventId));
       if (!deleted) {
@@ -111,4 +137,5 @@ public class EventController {
     System.out.println(e.toString());
     return new ResponseEntity<>("An Error has occurred", HttpStatus.INTERNAL_SERVER_ERROR);
   }
+
 }

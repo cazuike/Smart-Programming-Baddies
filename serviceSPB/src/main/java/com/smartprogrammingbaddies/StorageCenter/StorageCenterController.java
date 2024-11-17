@@ -4,7 +4,6 @@ import com.smartprogrammingbaddies.item.Item;
 import com.smartprogrammingbaddies.item.ItemId;
 import com.smartprogrammingbaddies.item.ItemRepository;
 import com.smartprogrammingbaddies.utils.DateParser;
-import java.text.DateFormat;
 import java.text.ParseException;
 import java.time.DayOfWeek;
 import java.time.LocalTime;

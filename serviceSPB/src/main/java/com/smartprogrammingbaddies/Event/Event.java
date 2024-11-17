@@ -15,7 +15,6 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
-import java.util.Date;
 import java.util.Set;
 
 /**
@@ -32,7 +31,7 @@ public class Event {
   private String name;
   private String description;
   @Temporal(TemporalType.DATE)
-  private Date date;
+  private String date;
   private TimeSlot time;
   private String location;
   private boolean isCancelled;
@@ -56,7 +55,7 @@ public class Event {
    * @param organizer the Organization that is hosting the event
    * @param volunteers a list of volunteers participating in the event
    */
-  public Event(String name, String description, Date date, TimeSlot time, String location,
+  public Event(String name, String description, String date, TimeSlot time, String location,
                StorageCenter storage, Organization organizer, Set<Volunteer> volunteers) {
     this.name = name;
     this.description = description;
@@ -126,7 +125,7 @@ public class Event {
    *
    * @return the date of the event
    */
-  public Date getDate() {
+  public String getDate() {
     return date;
   }
 
@@ -135,7 +134,7 @@ public class Event {
    *
    * @param newDate the new date of the event
    */
-  public void updateDate(Date newDate) {
+  public void updateDate(String newDate) {
     this.date = newDate;
   }
 
