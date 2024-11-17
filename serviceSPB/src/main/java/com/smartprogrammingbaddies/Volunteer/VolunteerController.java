@@ -2,6 +2,9 @@ package com.smartprogrammingbaddies.volunteer;
 
 import com.smartprogrammingbaddies.auth.AuthController;
 import java.util.Map;
+import java.util.UUID;
+
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -48,6 +51,7 @@ public class VolunteerController {
 
       Volunteer savedVolunteer = volunteerRepository.save(volunteer);
       String message = "Volunteer enrolled with ID: " + savedVolunteer.getDatabaseId();
+      System.out.println("testzz " + message);
       return ResponseEntity.ok(message);
     } catch (Exception e) {
       return handleException(e);

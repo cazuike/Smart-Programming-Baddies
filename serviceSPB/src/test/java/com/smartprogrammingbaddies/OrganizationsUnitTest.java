@@ -14,8 +14,6 @@ import org.springframework.test.context.ContextConfiguration;
 /**
  * Unit tests for the Organization class.
  */
-@ActiveProfiles("test")
-@SpringBootTest
 @ContextConfiguration(classes = {Organization.class})
 public class OrganizationsUnitTest {
   /**

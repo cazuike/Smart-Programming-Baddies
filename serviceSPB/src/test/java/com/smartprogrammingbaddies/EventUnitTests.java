@@ -19,8 +19,6 @@ import org.springframework.test.context.ContextConfiguration;
 /**
 * Unit tests for the Event class.
 */
-@ActiveProfiles("test")
-@SpringBootTest
 @ContextConfiguration(classes = {Event.class, StorageCenter.class, Volunteer.class})
 public class EventUnitTests {
 
