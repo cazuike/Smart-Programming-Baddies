@@ -3,14 +3,12 @@ package com.smartprogrammingbaddies.event;
 import com.smartprogrammingbaddies.auth.AuthController;
 import com.smartprogrammingbaddies.storagecenter.StorageCenter;
 import com.smartprogrammingbaddies.storagecenter.StorageCenterRepository;
+import com.smartprogrammingbaddies.utils.TimeSlot;
 import com.smartprogrammingbaddies.volunteer.Volunteer;
 import com.smartprogrammingbaddies.volunteer.VolunteerRepository;
-import com.smartprogrammingbaddies.utils.TimeSlot;
-
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.HashSet;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -38,20 +36,38 @@ public class EventController {
   private AuthController auth;
 
   /**
-   * Enrolls a event into the database.
+   * Enrolls an event into the database.
+   * This method creates a new event with the provided details, including the
+   * event's name,
+   * description, date, time, location, associated storage center, and
+   * organization.
+   * It validates the API key and checks the validity of the provided storage
+   * center ID.
    *
-   * @param name        A {@code String} representing the Event's name.
-   * @param description A {@code String} representing the event's description.
-   * @param date        A {@code String} representing the event's date in Java
-   *                    Date Format.
-   * @param time        A {@code TimeSlot} representing the event's time in Java
-   *                    Time Format.
-   * @param location    A {@code Date} representing the event's location.
-   *
-   * @return A {@code ResponseEntity} A message if the Event was successfully
-   *         created
-   *         and a HTTP 200 response or, HTTP 500 reponse if an error occurred.
+   * @param apiKey          A {@code String} representing the API key for
+   *                        authentication.
+   * @param name            A {@code String} representing the event's name.
+   * @param description     A {@code String} representing the event's description.
+   * @param date            A {@code String} representing the event's date in the
+   *                        format YYYY-MM-DD.
+   * @param startTime       A {@code String} representing the event's start time
+   *                        in the format HH:mm.
+   * @param endTime         A {@code String} representing the event's end time in
+   *                        the format HH:mm.
+   * @param location        A {@code String} representing the event's location.
+   * @param storageCenterId An {@code int} representing the ID of the associated
+   *                        storage center.
+   * @param organizationId  An {@code int} representing the ID of the associated
+   *                        organization
+   *                        (currently unused and passed as null).
+   * 
+   * @return A {@code ResponseEntity} containing a success message and an HTTP 200
+   *         response if the event
+   *         was successfully created. Returns an HTTP 404 response if the API key
+   *         or storage center ID is invalid,
+   *         or an HTTP 500 response if an error occurs.
    */
+
   @PostMapping("/createEvent")
   public ResponseEntity<?> createEvent(@RequestParam("apiKey") String apiKey,
       @RequestParam("name") String name,
@@ -61,10 +77,9 @@ public class EventController {
       @RequestParam("endTime") String endTime,
       @RequestParam("location") String location,
       @RequestParam("storageCenterId") int storageCenterId,
-      @RequestParam("organizationId") int organizationId
-      ) {
+      @RequestParam("organizationId") int organizationId) {
     try {
-      if (!(auth.verifyApiKey(apiKey).getStatusCode() == HttpStatus.OK)) {
+      if (auth.verifyApiKey(apiKey).getStatusCode() != HttpStatus.OK) {
         return new ResponseEntity<>("Invalid API key", HttpStatus.NOT_FOUND);
       }
 
@@ -81,7 +96,8 @@ public class EventController {
       HashSet<Volunteer> volunteers = new HashSet<>();
 
       Event event;
-      event = new Event(name, description, date, timeSlot, location, storageCenter, null, volunteers);
+      event = new Event(name, description, date, timeSlot, location, storageCenter,
+          null, volunteers);
       Event savedEvent = eventRepository.save(event);
       String message = "Event was created successfully with ID: " + savedEvent.getDatabaseId();
       return new ResponseEntity<>(message, HttpStatus.OK);
@@ -107,7 +123,7 @@ public class EventController {
       @RequestParam("eventId") int eventId,
       @RequestParam("volunteerId") int volunteerId) {
     // Validate API key
-    if (!(auth.verifyApiKey(apiKey).getStatusCode() == HttpStatus.OK)) {
+    if (auth.verifyApiKey(apiKey).getStatusCode() != HttpStatus.OK) {
       return new ResponseEntity<>("Invalid API key", HttpStatus.UNAUTHORIZED);
     }
 
@@ -118,12 +134,14 @@ public class EventController {
 
     Volunteer volunteer = volunteerRepository.findById(volunteerId).orElse(null);
     if (volunteer == null) {
-      return new ResponseEntity<>("Volunteer not found with ID: " + volunteerId, HttpStatus.NOT_FOUND);
+      return new ResponseEntity<>("Volunteer not found with ID: " + volunteerId,
+          HttpStatus.NOT_FOUND);
     }
     event.addVolunteer(volunteer);
     eventRepository.save(event);
 
-    return new ResponseEntity<>("Volunteer added successfully to event with ID: " + eventId, HttpStatus.OK);
+    return new ResponseEntity<>("Volunteer added successfully to event with ID: " + eventId,
+        HttpStatus.OK);
   }
 
   /**
@@ -138,7 +156,7 @@ public class EventController {
    */
   @GetMapping("/listEvents")
   public ResponseEntity<?> listEvents(@RequestParam("apiKey") String apiKey) {
-    if (!(auth.verifyApiKey(apiKey).getStatusCode() == HttpStatus.OK)) {
+    if (auth.verifyApiKey(apiKey).getStatusCode() != HttpStatus.OK) {
       return new ResponseEntity<>("Invalid API key", HttpStatus.NOT_FOUND);
     }
     return new ResponseEntity<>(eventRepository.findAll(), HttpStatus.OK);
@@ -157,7 +175,7 @@ public class EventController {
   @GetMapping("/retrieveEvent")
   public ResponseEntity<?> retrieveEvent(@RequestParam("apiKey") String apiKey,
       @RequestParam("eventId") String eventId) {
-    if (!(auth.verifyApiKey(apiKey).getStatusCode() == HttpStatus.OK)) {
+    if (auth.verifyApiKey(apiKey).getStatusCode() != HttpStatus.OK) {
       return new ResponseEntity<>("Invalid API key", HttpStatus.NOT_FOUND);
     }
     Event event = eventRepository.findById(Integer.parseInt(eventId)).orElse(null);
@@ -181,7 +199,7 @@ public class EventController {
   public ResponseEntity<?> removeEvent(@RequestParam("apiKey") String apiKey,
       @RequestParam("eventId") String eventId) {
     try {
-      if (!(auth.verifyApiKey(apiKey).getStatusCode() == HttpStatus.OK)) {
+      if (auth.verifyApiKey(apiKey).getStatusCode() != HttpStatus.OK) {
         return new ResponseEntity<>("Invalid API key", HttpStatus.NOT_FOUND);
       }
       eventRepository.deleteById(Integer.parseInt(eventId));
@@ -217,13 +235,14 @@ public class EventController {
       @RequestParam("date") String date) {
     try {
       // Validate API key
-      if (!(auth.verifyApiKey(apiKey).getStatusCode() == HttpStatus.OK)) {
+      if (auth.verifyApiKey(apiKey).getStatusCode() != HttpStatus.OK) {
         return new ResponseEntity<>("Invalid API key", HttpStatus.NOT_FOUND);
       }
       var events = eventRepository.findByDate(date);
 
       if (events.isEmpty()) {
-        return new ResponseEntity<>("No events found on the specified date: " + date, HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>("No events found on the specified date: " + date,
+            HttpStatus.NOT_FOUND);
       }
       return new ResponseEntity<>(events, HttpStatus.OK);
     } catch (Exception e) {
@@ -250,7 +269,7 @@ public class EventController {
       @RequestParam("location") String location) {
     try {
       // Validate API key
-      if (!(auth.verifyApiKey(apiKey).getStatusCode() == HttpStatus.OK)) {
+      if (auth.verifyApiKey(apiKey).getStatusCode() != HttpStatus.OK) {
         return new ResponseEntity<>("Invalid API key", HttpStatus.NOT_FOUND);
       }
 
@@ -258,7 +277,8 @@ public class EventController {
       var events = eventRepository.findByLocation(location);
 
       if (events.isEmpty()) {
-        return new ResponseEntity<>("No events found on the specified location: " + location, HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>("No events found on the specified location: " + location,
+            HttpStatus.NOT_FOUND);
       }
       return new ResponseEntity<>(events, HttpStatus.OK);
     } catch (Exception e) {
