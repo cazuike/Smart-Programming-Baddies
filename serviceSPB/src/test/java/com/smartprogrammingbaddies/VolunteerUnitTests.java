@@ -13,7 +13,6 @@ import org.springframework.test.context.ContextConfiguration;
 /**
  * Unit tests for the Volunteer class.
  */
-@SpringBootTest
 @ContextConfiguration
 public class VolunteerUnitTests {
 

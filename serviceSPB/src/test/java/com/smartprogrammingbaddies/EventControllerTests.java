@@ -43,7 +43,6 @@ public class EventControllerTests {
 
   @Test
   public void createEventTest() throws Exception {
-    System.out.println("testzz" + apiKeyRepository.existsByApiKey(apiKey));
     MvcResult result = mockMvc.perform(post("/createEvent")
         .param("apiKey", apiKey)
         .param("name", "Food Drive")
