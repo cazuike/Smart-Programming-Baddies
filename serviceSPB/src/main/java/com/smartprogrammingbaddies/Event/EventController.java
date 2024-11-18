@@ -1,7 +1,11 @@
 package com.smartprogrammingbaddies.event;
 
 import com.smartprogrammingbaddies.Auth.AuthController;
+import com.smartprogrammingbaddies.organization.Organization;
+import com.smartprogrammingbaddies.storageCenter.StorageCenter;
+import com.smartprogrammingbaddies.storageCenter.StorageCenterRepository;
 import com.smartprogrammingbaddies.volunteer.Volunteer;
+import com.smartprogrammingbaddies.volunteer.VolunteerRepository;
 import com.smartprogrammingbaddies.utils.TimeSlot;
 
 import java.time.LocalTime;
@@ -26,6 +30,12 @@ public class EventController {
   EventRepository eventRepository;
 
   @Autowired
+  StorageCenterRepository storageCenterRepository;
+
+  @Autowired
+  VolunteerRepository volunteerRepository;
+
+  @Autowired
   private AuthController auth;
 
   /**
@@ -44,24 +54,35 @@ public class EventController {
    *         and a HTTP 200 response or, HTTP 500 reponse if an error occurred.
    */
   @PostMapping("/createEvent")
-  public ResponseEntity<?> createEvent(@RequestParam("name") String name,
+  public ResponseEntity<?> createEvent(@RequestParam("apiKey") String apiKey,
+      @RequestParam("name") String name,
       @RequestParam("description") String description,
       @RequestParam("date") String date,
       @RequestParam("startTime") String startTime,
       @RequestParam("endTime") String endTime,
-      @RequestParam("location") String location) {
+      @RequestParam("location") String location,
+      @RequestParam("storageCenterId") int storageCenterId,
+      @RequestParam("organizationId") int organizationId
+      ) {
     try {
+      if (!(auth.verifyApiKey(apiKey).getStatusCode() == HttpStatus.OK)) {
+        return new ResponseEntity<>("Invalid API key", HttpStatus.NOT_FOUND);
+      }
+
       DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
       LocalTime parsedStartTime = LocalTime.parse(startTime, timeFormatter);
       LocalTime parsedEndTime = LocalTime.parse(endTime, timeFormatter);
       TimeSlot timeSlot = new TimeSlot(parsedStartTime, parsedEndTime);
 
+      StorageCenter storageCenter = storageCenterRepository.findById(storageCenterId).orElse(null);
+      if (storageCenter == null) {
+        return new ResponseEntity<>("Invalid Storage Center Id", HttpStatus.NOT_FOUND);
+      }
+
       HashSet<Volunteer> volunteers = new HashSet<>();
-      /*
-       * TODO: Add the storageCenter and Organization reference once they are created
-       */
+
       Event event;
-      event = new Event(name, description, date, timeSlot, location, null, null, volunteers);
+      event = new Event(name, description, date, timeSlot, location, storageCenter, null, volunteers);
       Event savedEvent = eventRepository.save(event);
       String message = "Event was created successfully with ID: " + savedEvent.getDatabaseId();
       return new ResponseEntity<>(message, HttpStatus.OK);
@@ -70,6 +91,52 @@ public class EventController {
     }
   }
 
+  /**
+   * Adds a volunteer to an event.
+   *
+   * @param apiKey      A {@code String} representing the API key for
+   *                    authentication.
+   * @param eventId     A {@code int} representing the ID of the event.
+   * @param volunteerId A {@code int} representing the ID of the volunteer to add.
+   *
+   * @return A {@code ResponseEntity} with a success message if the volunteer is
+   *         added,
+   *         or an error message if the event or volunteer is not found.
+   */
+  @PostMapping("/addVolunteerToEvent")
+  public ResponseEntity<?> addVolunteerToEvent(@RequestParam("apiKey") String apiKey,
+      @RequestParam("eventId") int eventId,
+      @RequestParam("volunteerId") int volunteerId) {
+    // Validate API key
+    if (!(auth.verifyApiKey(apiKey).getStatusCode() == HttpStatus.OK)) {
+      return new ResponseEntity<>("Invalid API key", HttpStatus.UNAUTHORIZED);
+    }
+
+    Event event = eventRepository.findById(eventId).orElse(null);
+    if (event == null) {
+      return new ResponseEntity<>("Event not found with ID: " + eventId, HttpStatus.NOT_FOUND);
+    }
+
+    Volunteer volunteer = volunteerRepository.findById(volunteerId).orElse(null);
+    if (volunteer == null) {
+      return new ResponseEntity<>("Volunteer not found with ID: " + volunteerId, HttpStatus.NOT_FOUND);
+    }
+    event.addVolunteer(volunteer);
+    eventRepository.save(event);
+
+    return new ResponseEntity<>("Volunteer added successfully to event with ID: " + eventId, HttpStatus.OK);
+  }
+
+  /**
+   * Lists all events in the database.
+   *
+   * @param apiKey A {@code String} representing the API key for authentication.
+   *
+   * @return A {@code ResponseEntity} containing a list of all events
+   *         if the API key is valid, along with an HTTP 200 response.
+   *         Returns an HTTP 404 response with an error message if the API key is
+   *         invalid.
+   */
   @GetMapping("/listEvents")
   public ResponseEntity<?> listEvents(@RequestParam("apiKey") String apiKey) {
     if (!(auth.verifyApiKey(apiKey).getStatusCode() == HttpStatus.OK)) {
@@ -128,6 +195,73 @@ public class EventController {
       return new ResponseEntity<>(message, HttpStatus.OK);
     } catch (NumberFormatException e) {
       return new ResponseEntity<>("Invalid Event ID", HttpStatus.BAD_REQUEST);
+    } catch (Exception e) {
+      return handleException(e);
+    }
+  }
+
+  /**
+   * Searches for all events on a particular date.
+   *
+   * @param apiKey A {@code String} representing the API key for authentication.
+   * @param date   A {@code String} representing the date to search for events.
+   *
+   * @return A {@code ResponseEntity} containing a list of events on the specified
+   *         date
+   *         if the API key is valid, along with an HTTP 200 response.
+   *         Returns an HTTP 404 response with an error message if the API key is
+   *         invalid
+   *         or if no events are found on the specified date.
+   */
+  @GetMapping("/searchEventsByDate")
+  public ResponseEntity<?> searchEventsByDate(@RequestParam("apiKey") String apiKey,
+      @RequestParam("date") String date) {
+    try {
+      // Validate API key
+      if (!(auth.verifyApiKey(apiKey).getStatusCode() == HttpStatus.OK)) {
+        return new ResponseEntity<>("Invalid API key", HttpStatus.NOT_FOUND);
+      }
+      var events = eventRepository.findByDate(date);
+
+      if (events.isEmpty()) {
+        return new ResponseEntity<>("No events found on the specified date: " + date, HttpStatus.NOT_FOUND);
+      }
+      return new ResponseEntity<>(events, HttpStatus.OK);
+    } catch (Exception e) {
+      return handleException(e);
+    }
+  }
+
+  /**
+   * Searches for all events on a particular date.
+   *
+   * @param apiKey   A {@code String} representing the API key for authentication.
+   * @param location A {@code String} representing the location to search for
+   *                 events.
+   *
+   * @return A {@code ResponseEntity} containing a list of events on the specified
+   *         date
+   *         if the API key is valid, along with an HTTP 200 response.
+   *         Returns an HTTP 404 response with an error message if the API key is
+   *         invalid
+   *         or if no events are found on the specified date.
+   */
+  @GetMapping("/searchEventsByLocation")
+  public ResponseEntity<?> searchEventsByLocation(@RequestParam("apiKey") String apiKey,
+      @RequestParam("location") String location) {
+    try {
+      // Validate API key
+      if (!(auth.verifyApiKey(apiKey).getStatusCode() == HttpStatus.OK)) {
+        return new ResponseEntity<>("Invalid API key", HttpStatus.NOT_FOUND);
+      }
+
+      // Fetch events by date
+      var events = eventRepository.findByLocation(location);
+
+      if (events.isEmpty()) {
+        return new ResponseEntity<>("No events found on the specified location: " + location, HttpStatus.NOT_FOUND);
+      }
+      return new ResponseEntity<>(events, HttpStatus.OK);
     } catch (Exception e) {
       return handleException(e);
     }
