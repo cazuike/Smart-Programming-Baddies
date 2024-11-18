@@ -1,25 +1,21 @@
 package com.smartprogrammingbaddies.organization;
 
-import java.io.Serializable;
-import java.sql.Date;
-import java.util.Set;
-
-import org.springframework.boot.autoconfigure.integration.IntegrationProperties.RSocket.Client;
-
-import com.smartprogrammingbaddies.storageCenter.StorageCenter;
 import com.smartprogrammingbaddies.event.Event;
-
+import com.smartprogrammingbaddies.storageCenter.StorageCenter;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
+import java.io.Serializable;
+import java.sql.Date;
+import java.util.Set;
+import org.springframework.boot.autoconfigure.integration.IntegrationProperties.RSocket.Client;
 
 /**
  * The Organization class represents an organization, including their name, their type,
@@ -29,16 +25,15 @@ import jakarta.persistence.TemporalType;
 public class Organization implements Serializable {
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
-  @Column(name= "id")
+  @Column(name = "id")
   private int id;
   private String orgName;
   private String orgType;
   @Temporal(TemporalType.DATE)
   private Date dateAdded;
   private Set<String> schedule;
-  // @OneToMany
-  // private Client client;
-  // ASK ABOUT THIS ONE
+  @OneToMany(mappedBy = "organization", cascade = CascadeType.ALL, orphanRemoval = true)
+  private Set<Client> client;
   @OneToOne
   private StorageCenter storage;
   @OneToMany(mappedBy = "organizer", cascade = CascadeType.ALL, orphanRemoval = true)
