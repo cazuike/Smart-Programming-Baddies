@@ -17,11 +17,9 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 
 /**
- * Unit tests for the Event class.
- */
-@ActiveProfiles("test")
-@SpringBootTest
-@ContextConfiguration(classes = { Event.class, StorageCenter.class, Volunteer.class })
+* Unit tests for the Event class.
+*/
+@ContextConfiguration(classes = {Event.class, StorageCenter.class, Volunteer.class})
 public class EventUnitTests {
 
   public static Event testEvent;
