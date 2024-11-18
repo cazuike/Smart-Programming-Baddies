@@ -5,8 +5,8 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeAll;
+import com.smartprogrammingbaddies.auth.ApiKey;
+import com.smartprogrammingbaddies.auth.ApiKeyRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,15 +28,19 @@ public class EventControllerTests {
   private static final String prefix = "Event was created successfully with ID: ";
 
   @Autowired
-  private com.smartprogrammingbaddies.Auth.ApiKeyRepository apiKeyRepository;
+  private ApiKeyRepository apiKeyRepository;
 
+  /**
+   * Sets up the API key before each test.
+   */
   @BeforeEach
   public void setUp() {
     if (!apiKeyRepository.existsByApiKey(TestUtils.apiKey)) {
-      com.smartprogrammingbaddies.Auth.ApiKey apiKeyEntity = new com.smartprogrammingbaddies.Auth.ApiKey(TestUtils.apiKey);
+      ApiKey apiKeyEntity = new ApiKey(TestUtils.apiKey);
       apiKeyRepository.save(apiKeyEntity);
     }
   }
+
   @Test
   public void createEventTest() throws Exception {
     System.out.println("testzz" + apiKeyRepository.existsByApiKey(apiKey));

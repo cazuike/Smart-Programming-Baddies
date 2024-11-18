@@ -1,14 +1,15 @@
 package com.smartprogrammingbaddies.item;
 
-import com.smartprogrammingbaddies.storageCenter.StorageCenter;
+import com.smartprogrammingbaddies.storagecenter.StorageCenter;
+import com.smartprogrammingbaddies.utils.DateParser;
 import jakarta.persistence.Column;
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Temporal;
-import jakarta.persistence.TemporalType;
-import java.util.Date;
+import java.text.ParseException;
+import java.time.LocalDate;
+import org.springframework.format.annotation.DateTimeFormat;
 
 /**
  * Represents an item that can be donated. This item can be a food item, toiletries, clothes, etc.
@@ -22,9 +23,9 @@ public class Item {
   @ManyToOne
   @JoinColumn(name = "storage_center_id", nullable = false)
   private StorageCenter storageCenter;
-  @Temporal(TemporalType.DATE)
+  @DateTimeFormat(pattern = "yyyy-MM-dd")
   @Column(name = "expiration_date")
-  private Date expirationDate;
+  private LocalDate expirationDate;
 
   /**
    * Constructs a new Item with the specified name, type, and quantity,
@@ -35,15 +36,12 @@ public class Item {
    * @param quantity       the quantity of the item
    * @param storageCenter  the storage center where the item is stored
    * @param expirationDate the item's expiration date
+   * @throws ParseException if the expiration date is not in the correct format
    */
   public Item(ItemId itemType, int quantity,
-      StorageCenter storageCenter, Date expirationDate) {
+      StorageCenter storageCenter, String expirationDate) throws ParseException {
     if (quantity < 0) {
       throw new IllegalArgumentException("Quantity must be greater than or equal to 0.");
-    }
-
-    if (expirationDate != null && expirationDate.before(new Date())) {
-      throw new IllegalArgumentException("Expiration date must be in the future.");
     }
 
     if (storageCenter == null) {
@@ -53,10 +51,16 @@ public class Item {
     if (itemType == null) {
       throw new IllegalArgumentException("Item type must not be null.");
     }
+
     this.itemType = itemType;
     this.quantity = quantity;
     this.storageCenter = storageCenter;
-    this.expirationDate = expirationDate;
+
+    if (expirationDate == null || expirationDate.isBlank()) {
+      this.expirationDate = null;
+    } else {
+      this.expirationDate = DateParser.stringToNumericDate(expirationDate);
+    }
   }
 
   /**
@@ -64,6 +68,15 @@ public class Item {
    */
   public Item() {
     // Empty constructor needed for JPA
+  }
+
+  /**
+   * Gets the item ID.
+   *
+   * @return the item ID
+   */
+  public ItemId getItemId() {
+    return itemType;
   }
 
   /**
@@ -76,32 +89,12 @@ public class Item {
   }
 
   /**
-   * Sets the name of the item.
-   *
-   * @param name the String new name of the item
-   */
-  public void setName(String name) {
-    this.itemType.setName(name);
-  }
-
-  /**
    * Gets the type of the item.
    *
    * @return the type of the item
    */
   public String getType() {
     return itemType.getType();
-  }
-
-  /**
-   * Sets the type of the item.
-   *
-   * @param type the new type of the item
-   * @return if the type was successfully updated
-   */
-  public boolean setType(String type) {
-    this.itemType.setType(type);
-    return true;
   }
 
   /**
@@ -114,17 +107,32 @@ public class Item {
   }
 
   /**
-   * Sets the quantity of the item.
+   * Increments the quantity of the item by the specified Quantity.
    *
-   * @param quantity the int of the new quantity of the item
-   * @return if the quantity was successfully updated
+   * @param quantity the Quantity to increment the quantity by
+   * @throws IllegalArgumentException if the Quantity is less than 0
    */
-  public boolean setQuantity(int quantity) {
-    if (quantity < 0) {
-      return false;
+  public void incrementQuantity(int quantity) {
+    if (quantity <= 0) {
+      throw new IllegalArgumentException("Quantity must be greater than 0.");
     }
-    this.quantity = quantity;
-    return true;
+    this.quantity += quantity;
+  }
+
+  /**
+   * Decrements the quantity of the item by the specified quantity.
+   *
+   * @param quantity the quantity to decrement the quantity by
+   * @throws IllegalArgumentException if the quantity is less than 0 or greater than the quantity
+   */
+  public void decrementQuantity(int quantity) {
+    if (quantity <= 0) {
+      throw new IllegalArgumentException("quantity must be greater than 0.");
+    }
+    if (quantity > this.quantity) {
+      throw new IllegalArgumentException("quantity must be less than or equal to the quantity.");
+    }
+    this.quantity -= quantity;
   }
 
 
@@ -142,27 +150,22 @@ public class Item {
    * Sets the storage center where the item is stored.
    *
    * @param storageCenter the new storage center where the item is stored
+    * @throws IllegalArgumentException if the storage center is null
    */
   public void setStorageCenter(StorageCenter storageCenter) {
+    if (storageCenter == null) {
+      throw new IllegalArgumentException("Storage center must not be null.");
+    }
     this.storageCenter = storageCenter;
   }
 
   /**
    * Gets the life span of the item.
    *
-   * @return the life span of the item
+   * @return the LocalDate of the item's expiration date
    */
-  public Date getExpirationDate() {
+  public LocalDate getExpirationDate() {
     return expirationDate;
-  }
-
-  /**
-   * Sets the life span of the item.
-   *
-   * @param expirationDate the item's new expiration date
-   */
-  public void setExpirationDate(Date expirationDate) {
-    this.expirationDate = expirationDate;
   }
 
   /**
@@ -173,17 +176,15 @@ public class Item {
   @Override
   public String toString() {
     StringBuilder result = new StringBuilder();
-    result.append("Item ID:").append("\n");
-    result.append(" Name: ").append(this.getName()).append("\n");
-    result.append(" Type: ").append(this.getType()).append("\n");
-    result.append("Quantity: ").append(quantity).append("\n");
-    result.append("Storage Center: ").append(storageCenter.getName()).append("\n");
+    result.append("\tName: ").append(this.getName());
+    result.append("\tType: ").append(this.getType());
+    result.append("\tQuantity: ").append(quantity);
+    result.append("\tExpiration Date: ");
     if (expirationDate != null) {
-      result.append("Expiration Date: ").append(expirationDate.toString()).append("\n");
+      result.append(expirationDate.toString()).append("\n");
     } else {
-      result.append("Item Expiration Date: N/A\n");
+      result.append("N/A\n");
     }
-
     return result.toString();
   }
 }

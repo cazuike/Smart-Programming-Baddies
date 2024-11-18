@@ -1,6 +1,7 @@
-package com.smartprogrammingbaddies.storageCenter;
+package com.smartprogrammingbaddies.storagecenter;
 
 import com.smartprogrammingbaddies.item.Item;
+import com.smartprogrammingbaddies.logger.Transaction;
 import com.smartprogrammingbaddies.utils.TimeSlot;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.CollectionTable;
@@ -15,7 +16,6 @@ import jakarta.persistence.MapKeyColumn;
 import jakarta.persistence.OneToMany;
 import java.io.Serializable;
 import java.time.DayOfWeek;
-import java.time.LocalTime;
 import java.util.EnumMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -32,6 +32,7 @@ public class StorageCenter implements Serializable {
   @GeneratedValue(strategy = GenerationType.AUTO)
   @Column(name = "storage_center_id")
   private int id;
+  @Column(nullable = false)
   private String description;
   @Column(nullable = false)
   private String name;
@@ -42,17 +43,27 @@ public class StorageCenter implements Serializable {
   private Map<DayOfWeek, TimeSlot> operationHours = new EnumMap<>(DayOfWeek.class);
   @OneToMany(mappedBy = "storageCenter", cascade = CascadeType.ALL, orphanRemoval = true)
   private Set<Item> items;
+  @OneToMany(mappedBy = "storageCenter", cascade = CascadeType.ALL, orphanRemoval = true)
+  private Set<Transaction> transactions;
 
   /**
    * Constructs a new StorageCenter where donated items can be tracked.
-   * The storage center will contain a list of Item objects. Initially,
-   * the list is empty.
+   * The storage center will contain a set of Item objects. Initially,
+   * the set is empty.
    *
    * @param name the name of the storage center
    * @param description the description of the storage center
+   * @throws IllegalArgumentException if the name is null, empty, or blank
    */
   public StorageCenter(String name, String description) {
+    if (name == null || name.isBlank()) {
+      throw new IllegalArgumentException("Storage center name cannot be null, or blank.");
+    }
     this.name = name;
+
+    if (description == null || description.isBlank()) {
+      throw new IllegalArgumentException("Storage center description cannot be null, or blank.");
+    }
     this.description = description;
     this.items = new HashSet<Item>();
   }
@@ -74,41 +85,21 @@ public class StorageCenter implements Serializable {
   }
 
   /**
-   * Adds an item to the storage.
-   *
-   * @param item the item to be added
-   */
-  public boolean checkInItem(String name, Item item) {
-    item.setStorageCenter(this);
-    return items.add(item);
-  }
-
-  /**
-   * Removes an item from the storage.
-   *
-   * @param item the item to be removed
-   * @return true if the item was successfully removed, false otherwise
-   */
-  public boolean checkOutItem(String name, Item item) {
-    return items.remove(item);
-  }
-
-  /**
    * Lists all items in the storage.
    *
-   * @return a list of all items in the storage
+   * @return a Set of all items in the storage
    */
   public Set<Item> getItems() {
     return items;
   }
 
   /**
-   * Sets the list of items in the storage.
+   * Sets the items in the storage center.
    *
-   * @param itemList the list of items to be set
+   * @param items the new set of items in the storage center
    */
-  public void setItems(Set<Item> itemList) {
-    items = itemList;
+  public void setItems(Set<Item> items) {
+    this.items = items;
   }
 
   /**
@@ -124,14 +115,14 @@ public class StorageCenter implements Serializable {
    * Sets the name of the storage center.
    *
    * @param name the new name of the storage center
-   * @return boolean if the name was successfully updated
+   * @throws IllegalArgumentException if the name is null, empty, or blank
    */
-  public boolean changeName(String name) {
-    if (name == null || name.isEmpty() || name.isBlank()) {
-      return false;
+  public void changeName(String name) {
+    if (name == null || name.isBlank()) {
+      throw new IllegalArgumentException("Storage center name cannot be null, or blank.");
+
     }
     this.name = name;
-    return true;
   }
 
   /**
@@ -147,14 +138,13 @@ public class StorageCenter implements Serializable {
    * Sets the description of the storage center.
    *
    * @param description the new description of the storage center
-   * @return boolean if the description was successfully updated
+   * @throws IllegalArgumentException if the description is null, empty, or blank
    */
-  public boolean changeDescription(String description) {
-    if (description == null || description.isEmpty() || description.isBlank()) {
-      return false;
+  public void changeDescription(String description) {
+    if (description == null || description.isBlank()) {
+      throw new IllegalArgumentException("Storage center description cannot be null, or blank.");
     }
     this.description = description;
-    return true;
   }
 
   /**
@@ -169,34 +159,44 @@ public class StorageCenter implements Serializable {
   /**
    * Sets the operating hours of the storage center.
    *
-   * @param open LocalTime of the opening time
-   * @param close LocalTime of the closing time
-   * @param day DayOfWeek of the day of the week
+   * @param timeSlot the hours of operation for the storage center
+   * @param day int of the day of the week between 1 and 7
+   * @throws IllegalArgumentException if the day is not between 1 and 7
    */
-  public boolean updateDayHours(LocalTime open, LocalTime close, DayOfWeek day) {
-    TimeSlot hours = new TimeSlot(open, close);
-    TimeSlot addedHours = operationHours.put(day, hours);
-    return addedHours != null;
+  public void updateDayHours(TimeSlot timeSlot, int day) {
+    if (day < 1 || day > 7) {
+      throw new IllegalArgumentException("Day of the week must be between 1 and 7.");
+    }
+    operationHours.put(DayOfWeek.of(day), timeSlot);
   }
 
   /**
    * Prints all the items in the storage.
    *
-   * @return a string representation of all items in the storage
+   * @return a string of all items in the storage
    */
   public String printItems() {
     StringBuilder result = new StringBuilder();
     result.append("Items: ").append("\n");
-    for (Item entry : items) {
-      Item value = entry;
-      result.append(value).append("\n");
+    for (Item item : items) {
+      result.append(item.toString()).append("\n");
     }
     return result.toString();
   }
 
   /**
+   * Gets the transactions that have occurred in the storage center.
+   *
+   * @return the transactions that have occurred in the storage center
+   */
+  public Set<Transaction> getTransactions() {
+    return transactions;
+  }
+
+
+  /**
    * Returns a string representation of the storage center, including its name,
-   * description, operating hours, and the list of items.
+   * description, and operating hours.
    *
    * @return a string representation of the storage center
    */
@@ -207,10 +207,9 @@ public class StorageCenter implements Serializable {
     result.append("Description: ").append(description).append("\n");
     result.append("Operating Hours: ").append("\n");
     operationHours.forEach((day, hours) -> {
-      result.append(day).append(": ").append(hours).append("\n");
+      result.append(day).append(": ");
+      result.append(hours.toString()).append("\n");
     });
-
-    result.append(printItems());
     return result.toString();
   }
 }

@@ -1,32 +1,57 @@
 package com.smartprogrammingbaddies.utils;
 
-import java.time.LocalTime;
-
 import jakarta.persistence.Embeddable;
+import java.time.LocalTime;
+import java.time.format.DateTimeParseException;
+import java.util.Objects;
 
 /**
- * The TimeSlot class represents a time slot for a date or day of the week.
+ * The TimeSlot class represents a time slot that consists of a start and end
+ * time.
  */
 @Embeddable
 public class TimeSlot {
-
   private LocalTime startTime;
   private LocalTime endTime;
 
   /**
    * Empty constructor needed for JPA.
    */
-  public TimeSlot() {}
+  public TimeSlot() {
+    // Empty constructor needed for JPA
+  }
 
   /**
    * Constructs a TimeSlot with the specified start and end times.
    *
    * @param startTime the start time of the time slot
-   * @param endTime the end time of the time slot
+   * @param endTime   the end time of the time slot
+   * @throws IllegalArgumentException if the start time is after the end time
    */
   public TimeSlot(LocalTime startTime, LocalTime endTime) {
     this.startTime = startTime;
     this.endTime = endTime;
+
+    if (startTime.isAfter(endTime)) {
+      throw new IllegalArgumentException("Start time must be before end time.");
+    }
+  }
+
+  /**
+   * Constructs a TimeSlot with the specified start and end times using strings.
+   *
+   * @param startTime the start time of the time slot
+   * @param endTime   the end time of the time slot
+   * @throws DateTimeParseException   if the strings cannot be parsed
+   * @throws IllegalArgumentException if the start time is after the end time
+   */
+  public TimeSlot(String startTime, String endTime) throws DateTimeParseException {
+    this.startTime = LocalTime.parse(startTime);
+    this.endTime = LocalTime.parse(endTime);
+
+    if (this.startTime.isAfter(this.endTime)) {
+      throw new IllegalArgumentException("Start time must be before end time.");
+    }
   }
 
   /**
@@ -48,8 +73,20 @@ public class TimeSlot {
   }
 
   /**
-  * Check if two TimeSlot objects are equal.
-  */
+   * toString method for the TimeSlot object.
+   *
+   * @return a string representation of the TimeSlot object
+   */
+  @Override
+  public String toString() {
+    return startTime + " - " + endTime;
+  }
+
+  /**
+   * Check if two TimeSlot objects are equal.
+   *
+   * @param otherSlot the other TimeSlot object to compare
+   */
   @Override
   public boolean equals(Object otherSlot) {
     if (otherSlot == null || getClass() != otherSlot.getClass()) {
@@ -62,13 +99,12 @@ public class TimeSlot {
   }
 
   /**
-   * Creates a string representation of timeslot
+   * Get the hash code of the TimeSlot object.
    *
-   *  @return a string in the format
+   * @return the hash code of the TimeSlot object
    */
   @Override
-  public String toString() {
-    return "startTime=" + (startTime != null ? startTime.toString() : "N/A") +
-            ", endTime=" + (endTime != null ? endTime.toString() : "N/A");
+  public int hashCode() {
+    return Objects.hash(startTime, endTime);
   }
 }

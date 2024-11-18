@@ -1,9 +1,8 @@
 package com.smartprogrammingbaddies.event;
 
-import com.smartprogrammingbaddies.Auth.AuthController;
-import com.smartprogrammingbaddies.organization.Organization;
-import com.smartprogrammingbaddies.storageCenter.StorageCenter;
-import com.smartprogrammingbaddies.storageCenter.StorageCenterRepository;
+import com.smartprogrammingbaddies.auth.AuthController;
+import com.smartprogrammingbaddies.storagecenter.StorageCenter;
+import com.smartprogrammingbaddies.storagecenter.StorageCenterRepository;
 import com.smartprogrammingbaddies.volunteer.Volunteer;
 import com.smartprogrammingbaddies.volunteer.VolunteerRepository;
 import com.smartprogrammingbaddies.utils.TimeSlot;
