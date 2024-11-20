@@ -38,6 +38,16 @@ public class Organization implements Serializable {
   private StorageCenter storage;
   @OneToMany(mappedBy = "organizer", cascade = CascadeType.ALL, orphanRemoval = true)
   private Set<Event> event;
+  
+  /**
+   * Constructs a new Organization with the specific name, type, and schedule.
+
+   * @param orgName the name of the organization.
+   * @param orgType the type of the organization.
+   * @param schedule the schedule of the organization.
+   */
+  public Organization() {
+  }
 
   /**
    * Constructs a new Organization with the specific name, type, schedule, and adate addded.
