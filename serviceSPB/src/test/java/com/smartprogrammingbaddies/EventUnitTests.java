@@ -42,7 +42,7 @@ public class EventUnitTests {
     testVolunteers.add(volunteer1);
     testVolunteers.add(volunteer2);
 
-    TimeSlot eventTime = new TimeSlot(LocalTime.of(10, 0), LocalTime.of(14, 0)); 
+    TimeSlot eventTime = new TimeSlot(LocalTime.of(10, 0), LocalTime.of(14, 0));
 
     testEvent = new Event(
         "Charity Drive",
@@ -94,7 +94,7 @@ public class EventUnitTests {
 
   @Test
   public void getTimeTest() {
-    TimeSlot expectedTime = new TimeSlot(LocalTime.of(10, 0), LocalTime.of(14, 0)); 
+    TimeSlot expectedTime = new TimeSlot(LocalTime.of(10, 0), LocalTime.of(14, 0));
     assertEquals(expectedTime, testEvent.getTime());
   }
 
