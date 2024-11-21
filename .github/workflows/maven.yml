@@ -42,10 +42,36 @@ jobs:
           DB_DATA_SOURCE_URL=${{ secrets.DB_DATA_SOURCE_URL }}
           EOL
 
-      - name: Build with Maven
-        run: mvn -B clean package --file serviceSPB/pom.xml -DskipTests
-
       - name: Run Unit Tests
         run: |
           cd serviceSPB
-          mvn test -Dtest=DonationsUnitTest,ItemUnitTests,ItemIdUnitTests,TransactionUnitTests,VolunteerUnitTests,OrganizationsUnitTest,EventUnitTests,DonationsUnitTest,StorageCenterUnitTests
+          mvn test -Dtest=DonationsUnitTest,ItemUnitTests,ItemIdUnitTests,TransactionUnitTests,    VolunteerUnitTests,OrganizationsUnitTest,EventUnitTests,DonationsUnitTest,StorageCenterUnitTests
+
+      - name: Run Static Bug Finder (PMD)
+        run: |
+        cd serviceSPB
+        mvn pmd:check
+
+      - name: Run Branch Coverage (JaCoCo)
+        run: mvn jacoco:report
+
+      - name: Upload Checkstyle Reports
+        uses: actions/upload-artifact@v2
+        with:
+          name: ci-reports-checkstyle
+          path: target/checkstyle-result.xml
+
+      - name: Upload Static Analysis Reports
+        uses: actions/upload-artifact@v2
+        with:
+          name: pmd-report
+          path: target/pmd.xml
+
+      - name: Upload JaCoCo Coverage Reports
+        uses: actions/upload-artifact@v2
+        with:
+          name: jacoco-report
+          path: target/site/jacoco/index.html
+
+      - name: Build with Maven
+        run: mvn -B clean package --file serviceSPB/pom.xml -DskipTests
