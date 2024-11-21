@@ -106,7 +106,13 @@ public class EventController {
       return handleException(e);
     }
   }
-
+  
+  /**
+   * Updates the event's name.
+   * @param e
+   * @return A {@code ResponseEntity} A message if the Event was successfully created
+   * and a HTTP 200 response or, HTTP 500 reponse if an error occurred.
+   */
   private ResponseEntity<?> handleException(Exception e) {
     System.out.println(e.toString());
     return new ResponseEntity<>("An Error has occurred", HttpStatus.INTERNAL_SERVER_ERROR);

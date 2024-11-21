@@ -25,7 +25,7 @@ import org.springframework.boot.autoconfigure.integration.IntegrationProperties.
 public class Organization implements Serializable {
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
-  @Column(name = "id")
+  @Column(name = "organization_id")
   private int id;
   private String orgName;
   private String orgType;
@@ -64,7 +64,14 @@ public class Organization implements Serializable {
     this.schedule = schedule;
     this.dateAdded = dateAdded;
   }
-
+  
+  /**
+   * Gets the database ID of the organization.
+   * @return
+   */
+  public int getDatabaseId() {
+    return id;
+  }
   /**
    * Returns the name of the organization.
 
