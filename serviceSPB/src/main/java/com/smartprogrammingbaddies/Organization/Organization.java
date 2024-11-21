@@ -8,6 +8,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Temporal;
@@ -32,7 +33,7 @@ public class Organization implements Serializable {
   @Temporal(TemporalType.DATE)
   private Date dateAdded;
   private Set<String> schedule;
-  @OneToMany(mappedBy = "organization", cascade = CascadeType.ALL, orphanRemoval = true)
+  @ManyToOne
   private Set<Client> client;
   @OneToOne
   private StorageCenter storage;
@@ -40,13 +41,10 @@ public class Organization implements Serializable {
   private Set<Event> event;
   
   /**
-   * Constructs a new Organization with the specific name, type, and schedule.
-
-   * @param orgName the name of the organization.
-   * @param orgType the type of the organization.
-   * @param schedule the schedule of the organization.
+   * Empty constructor for Organization for JPA use.
    */
   public Organization() {
+    // Empty constructor for JPA use.
   }
 
   /**
