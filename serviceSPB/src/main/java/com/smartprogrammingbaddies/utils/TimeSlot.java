@@ -6,7 +6,8 @@ import java.time.format.DateTimeParseException;
 import java.util.Objects;
 
 /**
- * The TimeSlot class represents a time slot that consists of a start and end time.
+ * The TimeSlot class represents a time slot that consists of a start and end
+ * time.
  */
 @Embeddable
 public class TimeSlot {
@@ -24,7 +25,7 @@ public class TimeSlot {
    * Constructs a TimeSlot with the specified start and end times.
    *
    * @param startTime the start time of the time slot
-   * @param endTime the end time of the time slot
+   * @param endTime   the end time of the time slot
    * @throws IllegalArgumentException if the start time is after the end time
    */
   public TimeSlot(LocalTime startTime, LocalTime endTime) {
@@ -40,8 +41,8 @@ public class TimeSlot {
    * Constructs a TimeSlot with the specified start and end times using strings.
    *
    * @param startTime the start time of the time slot
-   * @param endTime the end time of the time slot
-   * @throws DateTimeParseException if the strings cannot be parsed
+   * @param endTime   the end time of the time slot
+   * @throws DateTimeParseException   if the strings cannot be parsed
    * @throws IllegalArgumentException if the start time is after the end time
    */
   public TimeSlot(String startTime, String endTime) throws DateTimeParseException {
@@ -72,20 +73,20 @@ public class TimeSlot {
   }
 
   /**
-  * toString method for the TimeSlot object.
-  *
-  * @return a string representation of the TimeSlot object
-  */
+   * toString method for the TimeSlot object.
+   *
+   * @return a string representation of the TimeSlot object
+   */
   @Override
   public String toString() {
     return startTime + " - " + endTime;
   }
 
   /**
-  * Check if two TimeSlot objects are equal.
-  *
-  * @param otherSlot the other TimeSlot object to compare
-  */
+   * Check if two TimeSlot objects are equal.
+   *
+   * @param otherSlot the other TimeSlot object to compare
+   */
   @Override
   public boolean equals(Object otherSlot) {
     if (otherSlot == null || getClass() != otherSlot.getClass()) {
@@ -98,10 +99,10 @@ public class TimeSlot {
   }
 
   /**
-  * Get the hash code of the TimeSlot object.
-  *
-  * @return the hash code of the TimeSlot object
-  */
+   * Get the hash code of the TimeSlot object.
+   *
+   * @return the hash code of the TimeSlot object
+   */
   @Override
   public int hashCode() {
     return Objects.hash(startTime, endTime);

@@ -2,6 +2,7 @@ package com.smartprogrammingbaddies.event;
 
 import com.smartprogrammingbaddies.organization.Organization;
 import com.smartprogrammingbaddies.storagecenter.StorageCenter;
+import com.smartprogrammingbaddies.utils.TimeSlot;
 import com.smartprogrammingbaddies.volunteer.Volunteer;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -14,7 +15,6 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
-import java.util.Date;
 import java.util.Set;
 
 /**
@@ -24,7 +24,6 @@ import java.util.Set;
 */
 @Entity
 public class Event {
-
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
   @Column(name = "event_id")
@@ -32,9 +31,8 @@ public class Event {
   private String name;
   private String description;
   @Temporal(TemporalType.DATE)
-  private Date date;
-  @Temporal(TemporalType.TIME)
-  private Date time;
+  private String date;
+  private TimeSlot time;
   private String location;
   private boolean isCancelled;
   @OneToOne
@@ -57,7 +55,7 @@ public class Event {
    * @param organizer the Organization that is hosting the event
    * @param volunteers a list of volunteers participating in the event
    */
-  public Event(String name, String description, Date date, Date time, String location,
+  public Event(String name, String description, String date, TimeSlot time, String location,
                StorageCenter storage, Organization organizer, Set<Volunteer> volunteers) {
     this.name = name;
     this.description = description;
@@ -71,10 +69,10 @@ public class Event {
   }
 
   /**
-   * Default constructor for JPA.
+   * Empty constructor needed for JPA.
    */
   public Event() {
-    // Default constructor for JPA
+    // Empty constructor needed for JPA
   }
 
   /**
@@ -127,7 +125,7 @@ public class Event {
    *
    * @return the date of the event
    */
-  public Date getDate() {
+  public String getDate() {
     return date;
   }
 
@@ -136,7 +134,7 @@ public class Event {
    *
    * @param newDate the new date of the event
    */
-  public void updateDate(Date newDate) {
+  public void updateDate(String newDate) {
     this.date = newDate;
   }
 
@@ -145,16 +143,16 @@ public class Event {
    *
    * @return the time of the event
    */
-  public Date getTime() {
+  public TimeSlot getTime() {
     return time;
   }
 
   /**
    * Updates the time of the event.
    *
-   * @param newTime the new time of the event
+   * @param newTime the new TimeSlot object
    */
-  public void updateTime(Date newTime) {
+  public void updateTime(TimeSlot newTime) {
     this.time = newTime;
   }
 
