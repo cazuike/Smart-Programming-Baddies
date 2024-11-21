@@ -5,7 +5,9 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import org.junit.jupiter.api.AfterEach;
+import com.smartprogrammingbaddies.auth.ApiKey;
+import com.smartprogrammingbaddies.auth.ApiKeyRepository;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -23,7 +25,21 @@ public class EventControllerTests {
   private MockMvc mockMvc;
   private String apiKey = TestUtils.apiKey;
   private static String eventId;
-  private static final String prefix = "Event ID: ";
+  private static final String prefix = "Event was created successfully with ID: ";
+
+  @Autowired
+  private ApiKeyRepository apiKeyRepository;
+
+  /**
+   * Sets up the API key before each test.
+   */
+  @BeforeEach
+  public void setUp() {
+    if (!apiKeyRepository.existsByApiKey(TestUtils.apiKey)) {
+      ApiKey apiKeyEntity = new ApiKey(TestUtils.apiKey);
+      apiKeyRepository.save(apiKeyEntity);
+    }
+  }
 
   @Test
   public void createEventTest() throws Exception {
@@ -55,9 +71,6 @@ public class EventControllerTests {
         .contentType("application/json"))
             .andExpect(status().is4xxClientError())
             .andReturn();
-
-    String responseContent = result.getResponse().getContentAsString();
-    eventId = TestUtils.extract(prefix, responseContent);
   }
 
   @Test
@@ -101,19 +114,5 @@ public class EventControllerTests {
             .andReturn();
   }
 
-  /**
-   * Cleanup after each test.
-   *
-   * @throws Exception An exception if anything goes wrong with the cleanup.
-   */
-  @AfterEach
-  public void cleanup() throws Exception {
-    if (eventId != null) {
-      mockMvc.perform(delete("/removeEvent")
-            .param("apiKey", apiKey)
-            .param("eventId", eventId));
-      eventId = null;
-    }
-  }
 }
 
