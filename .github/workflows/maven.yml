@@ -50,7 +50,7 @@ jobs:
       - name: Run Static Bug Finder (PMD)
         run: |
           cd serviceSPB
-          mvn pmd:check
+          mvn clean verify pmd:check
 
       - name: Run Branch Coverage (JaCoCo)
         run: mvn jacoco:report
