@@ -60,7 +60,7 @@ public class EventController {
    * @param organizationId  An {@code int} representing the ID of the associated
    *                        organization
    *                        (currently unused and passed as null).
-   * 
+   *
    * @return A {@code ResponseEntity} containing a success message and an HTTP 200
    *         response if the event
    *         was successfully created. Returns an HTTP 404 response if the API key
