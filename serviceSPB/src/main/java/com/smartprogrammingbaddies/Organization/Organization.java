@@ -67,7 +67,8 @@ public class Organization implements Serializable {
   
   /**
    * Gets the database ID of the organization.
-   * @return
+
+   * @return the ID of the organization.
    */
   public int getDatabaseId() {
     return id;

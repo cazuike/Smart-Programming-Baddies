@@ -3,7 +3,6 @@ package com.smartprogrammingbaddies.organization;
 import java.text.SimpleDateFormat;
 import java.util.NoSuchElementException;
 import java.util.Set;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,7 +13,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 
-
+/**
+ * This class contains the OrganizationController class.
+ */
 @RestController
 public class OrganizationController {
   @Autowired
@@ -23,18 +24,20 @@ public class OrganizationController {
 
   /**
    * Creates an organization with the given parameters.
-   * @param orgName
-   * @param orgType
-   * @param schedule
-   * @param dateAdded
+
+   * @param orgName the name of the Organization.
+   * @param orgType the type of the Organization.
+   * @param schedule the schedule fo the Organization.
+   * @param dateAdded the date the Organization was added to the database.
    * @return A {@code ResponseEntity} A message if the Organization was successfully created
-   */
- @PostMapping("/createOrganization")
+   *
+  */
+  @PostMapping("/createOrganization")
   public ResponseEntity<?> createOrganization(
-      @RequestParam("orgName") String orgName,
-      @RequestParam("orgType") String orgType,
-      @RequestParam("schedule") Set<String> schedule,
-      @RequestParam("dateAdded") String dateAdded) {
+       @RequestParam("orgName") String orgName,
+       @RequestParam("orgType") String orgType,
+       @RequestParam("schedule") Set<String> schedule,
+       @RequestParam("dateAdded") String dateAdded) {
     try {
       SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
       dateFormat.setLenient(false);
@@ -42,7 +45,8 @@ public class OrganizationController {
       java.sql.Date sqlDate = new java.sql.Date(utilDate.getTime());
       Organization organization = new Organization(orgName, orgType, schedule, sqlDate);
       Organization savedOrganization = organizationRepository.save(organization);
-      String message = "Organization " + savedOrganization.getDatabaseId() + " was created successfully";
+      String message = "Organization " + savedOrganization.getDatabaseId()
+             + " was created successfully";
       return new ResponseEntity<>(message, HttpStatus.OK);
     } catch (Exception e) {
       return handleException(e);
@@ -51,9 +55,10 @@ public class OrganizationController {
 
   /**
    * Handles exceptions that occur during the creation of an organization.
-   * @param orgId
+
+   * @param orgId  the id of the organization.
    * @return A {@code ResponseEntity} A message if the Organization was successfully created
-   * and a HTTP 200 response or, HTTP 500 reponse if an error occurred.
+   *     and a HTTP 200 response or, HTTP 500 reponse if an error occurred.
    */
   @GetMapping("/getOrganization")
   public ResponseEntity<?> getOrganization(@RequestParam("orgId") int orgId) {
@@ -66,22 +71,24 @@ public class OrganizationController {
       return handleException(e);
     }
   }
+
   /**
    * Updates the schedule of the organization.
-   * @param orgId
+
+   * @param orgId  the id of the organization.
    * @return A {@code ResponseEntity} A message if the Organization was successfully created
-   * and a HTTP 200 response or, HTTP 500 reponse if an error occurred.
+   *     and a HTTP 200 response or, HTTP 500 reponse if an error occurred.
    */
   @DeleteMapping("/deleteOrganization")
-  public ResponseEntity<?> deleteOrganization(@RequestParam("orgId") String orgId){
+  public ResponseEntity<?> deleteOrganization(@RequestParam("orgId") String orgId) {
     try {
       organizationRepository.deleteById(Integer.parseInt(orgId));
       boolean deleted = !organizationRepository.existsById(Integer.parseInt(orgId));
-      if(!deleted){
+      if (!deleted) { 
         String message = "Organization with Id: " + orgId + " was not delted";
         return new ResponseEntity<>(message, HttpStatus.NOT_FOUND);
       }
-      String message = "Organization with Id: " +orgId + " was deleted";
+      String message = "Organization with Id: " + orgId + " was deleted";
       return new ResponseEntity<>(message, HttpStatus.OK);
     } catch (NumberFormatException e) {
       return new ResponseEntity<>("Invalid Organization ID", HttpStatus.BAD_REQUEST);
@@ -92,9 +99,10 @@ public class OrganizationController {
 
   /**
    * Handles exceptions that occur during the creation of an organization.
-   * @param e
+
+   * @param e the exception that occurred.
    * @return A {@code ResponseEntity} A message if the Organization was successfully created
-   * and a HTTP 200 response or, HTTP 500 reponse if an error occurred.
+   *     and a HTTP 200 response or, HTTP 500 reponse if an error occurred.
    */
   private ResponseEntity<?> handleException(Exception e) {
     System.out.println(e.toString());

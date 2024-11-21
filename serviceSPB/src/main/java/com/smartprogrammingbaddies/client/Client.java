@@ -1,16 +1,14 @@
 package com.smartprogrammingbaddies.client;
 
-import java.util.HashSet;
-import java.util.Set;
-import java.util.UUID;
-
 import com.smartprogrammingbaddies.organization.Organization;
-
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.UUID;
 
 /**
  * The client class represents a client, their client ID, and methods
@@ -49,7 +47,7 @@ public class Client {
    * @param clientId the client's ID.
    */
   public void addClient(String clientId) {
-    if(!clientDatabase.contains(clientId)) {
+    if (!clientDatabase.contains(clientId)) {
       clientDatabase.add(clientId);
       System.out.println("Client successfuly added: " + clientId);
     } else {
@@ -64,7 +62,7 @@ public class Client {
    * @param clientId the client's ID number.
    */
   public void verifyClient(String clientId) {
-    if(!clientDatabase.contains(clientId)) {
+    if (!clientDatabase.contains(clientId)) {
       System.out.println("Client Does Not Exist" + clientId);
     } else {
       System.out.println("Client exists!" + clientId);
