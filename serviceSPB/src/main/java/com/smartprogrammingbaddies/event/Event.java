@@ -1,9 +1,12 @@
 package com.smartprogrammingbaddies.event;
 
+import com.smartprogrammingbaddies.Donations;
 import com.smartprogrammingbaddies.organization.Organization;
 import com.smartprogrammingbaddies.storagecenter.StorageCenter;
 import com.smartprogrammingbaddies.utils.TimeSlot;
 import com.smartprogrammingbaddies.volunteer.Volunteer;
+
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -42,6 +45,9 @@ public class Event {
   @OneToMany
   @MapKey(name = "volunteer_id")
   private Set<Volunteer> volunteers;
+  @OneToMany(mappedBy = "event", cascade = CascadeType.ALL, orphanRemoval = true)
+  private Set<Donations> donations;
+
 
   /**
    * Constructs an Event with appropriate details.
