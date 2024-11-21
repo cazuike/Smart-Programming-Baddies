@@ -45,7 +45,7 @@ jobs:
       - name: Run Unit Tests
         run: |
           cd serviceSPB
-          mvn test -Dtest=DonationsUnitTest,ItemUnitTests,ItemIdUnitTests,TransactionUnitTests,    VolunteerUnitTests,OrganizationsUnitTest,EventUnitTests,DonationsUnitTest,StorageCenterUnitTests
+          mvn test -Dtest=DonationsUnitTest,ItemUnitTests,ItemIdUnitTests,TransactionUnitTests,VolunteerUnitTests,OrganizationsUnitTest,EventUnitTests,DonationsUnitTest,StorageCenterUnitTests
 
       - name: Run Static Bug Finder (PMD)
         run: |
