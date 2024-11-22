@@ -1,7 +1,14 @@
 package com.smartprogrammingbaddies.organization;
 
+import java.io.Serializable;
+import java.sql.Date;
+import java.util.Set;
+
+import org.springframework.boot.autoconfigure.integration.IntegrationProperties.RSocket.Client;
+
 import com.smartprogrammingbaddies.event.Event;
-import com.smartprogrammingbaddies.storageCenter.StorageCenter;
+import com.smartprogrammingbaddies.storagecenter.StorageCenter;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -12,10 +19,6 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
-import java.io.Serializable;
-import java.sql.Date;
-import java.util.Set;
-import org.springframework.boot.autoconfigure.integration.IntegrationProperties.RSocket.Client;
 
 /**
  * The Organization class represents an organization, including their name, their type,
