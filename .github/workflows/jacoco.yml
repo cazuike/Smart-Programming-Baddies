@@ -48,3 +48,28 @@ jobs:
           echo "| :heavy_check_mark: Covered Lines | ${{ steps.jacoco_reporter.outputs.covered_lines }} |" >> $GITHUB_STEP_SUMMARY
           echo "| :x: Missed Lines | ${{ steps.jacoco_reporter.outputs.missed_lines }} |" >> $GITHUB_STEP_SUMMARY
           echo "| Total Lines | ${{ steps.jacoco_reporter.outputs.total_lines }} |" >> $GITHUB_STEP_SUMMARY
+
+      - name: Upload Full JaCoCo HTML Report
+        uses: actions/upload-artifact@v4
+        with:
+          name: jacoco-full-report
+          path: serviceSPB/target/site/jacoco/index.html
+
+      - name: Push HTML report to GitHub Pages
+        run: |
+          git config --global user.name "github-actions"
+          git config --global user.email "github-actions@github.com"
+
+          git checkout -b gh-pages
+
+          cp -r serviceSPB/target/site/jacoco/* .
+
+          git add .
+          git commit -m "Add JaCoCo HTML report"
+          git push --force origin gh-pages
+
+      - name: Deploy GitHub Pages
+        uses: JamesIves/github-pages-deploy-action@v4.1.0
+        with:
+          branch: gh-pages
+          folder: .
