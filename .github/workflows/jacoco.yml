@@ -48,3 +48,9 @@ jobs:
           echo "| :heavy_check_mark: Covered Lines | ${{ steps.jacoco_reporter.outputs.covered_lines }} |" >> $GITHUB_STEP_SUMMARY
           echo "| :x: Missed Lines | ${{ steps.jacoco_reporter.outputs.missed_lines }} |" >> $GITHUB_STEP_SUMMARY
           echo "| Total Lines | ${{ steps.jacoco_reporter.outputs.total_lines }} |" >> $GITHUB_STEP_SUMMARY
+          
+      - name: Upload Full JaCoCo HTML Report
+        uses: actions/upload-artifact@v4
+        with:
+          name: jacoco-full-report
+          path: serviceSPB/target/site/jacoco/index.html
