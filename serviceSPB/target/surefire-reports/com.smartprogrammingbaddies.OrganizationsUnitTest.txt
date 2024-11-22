@@ -1,0 +1,36 @@
+-------------------------------------------------------------------------------
+Test set: com.smartprogrammingbaddies.OrganizationsUnitTest
+-------------------------------------------------------------------------------
+Tests run: 4, Failures: 0, Errors: 4, Skipped: 0, Time elapsed: 0.002 s <<< FAILURE! -- in com.smartprogrammingbaddies.OrganizationsUnitTest
+com.smartprogrammingbaddies.OrganizationsUnitTest.getScheduleTest -- Time elapsed: 0.001 s <<< ERROR!
+java.lang.IllegalArgumentException
+	at java.sql/java.sql.Date.valueOf(Date.java:141)
+	at com.smartprogrammingbaddies.OrganizationsUnitTest.setUpOrganizationForTesting(OrganizationsUnitTest.java:32)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1597)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1597)
+
+com.smartprogrammingbaddies.OrganizationsUnitTest.getOrgTypeTest -- Time elapsed: 0 s <<< ERROR!
+java.lang.IllegalArgumentException
+	at java.sql/java.sql.Date.valueOf(Date.java:141)
+	at com.smartprogrammingbaddies.OrganizationsUnitTest.setUpOrganizationForTesting(OrganizationsUnitTest.java:32)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1597)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1597)
+
+com.smartprogrammingbaddies.OrganizationsUnitTest.getDateAddedTest -- Time elapsed: 0 s <<< ERROR!
+java.lang.IllegalArgumentException
+	at java.sql/java.sql.Date.valueOf(Date.java:141)
+	at com.smartprogrammingbaddies.OrganizationsUnitTest.setUpOrganizationForTesting(OrganizationsUnitTest.java:32)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1597)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1597)
+
+com.smartprogrammingbaddies.OrganizationsUnitTest.getOrgNameTest -- Time elapsed: 0.001 s <<< ERROR!
+java.lang.IllegalArgumentException
+	at java.sql/java.sql.Date.valueOf(Date.java:141)
+	at com.smartprogrammingbaddies.OrganizationsUnitTest.setUpOrganizationForTesting(OrganizationsUnitTest.java:32)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1597)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1597)
+

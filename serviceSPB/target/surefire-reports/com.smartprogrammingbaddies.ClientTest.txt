@@ -1,0 +1,22 @@
+-------------------------------------------------------------------------------
+Test set: com.smartprogrammingbaddies.ClientTest
+-------------------------------------------------------------------------------
+Tests run: 2, Failures: 1, Errors: 1, Skipped: 0, Time elapsed: 0.004 s <<< FAILURE! -- in com.smartprogrammingbaddies.ClientTest
+com.smartprogrammingbaddies.ClientTest.verifyClientExistsTest(String) -- Time elapsed: 0.001 s <<< ERROR!
+org.junit.jupiter.api.extension.ParameterResolutionException: No ParameterResolver registered for parameter [java.lang.String clientId] in method [public void com.smartprogrammingbaddies.ClientTest.verifyClientExistsTest(java.lang.String)].
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1597)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1597)
+
+com.smartprogrammingbaddies.ClientTest.addClientTest -- Time elapsed: 0.002 s <<< FAILURE!
+org.opentest4j.AssertionFailedError: expected: <Client successfuly added!> but was: <Client already exists>
+	at org.junit.jupiter.api.AssertionFailureBuilder.build(AssertionFailureBuilder.java:151)
+	at org.junit.jupiter.api.AssertionFailureBuilder.buildAndThrow(AssertionFailureBuilder.java:132)
+	at org.junit.jupiter.api.AssertEquals.failNotEqual(AssertEquals.java:197)
+	at org.junit.jupiter.api.AssertEquals.assertEquals(AssertEquals.java:182)
+	at org.junit.jupiter.api.AssertEquals.assertEquals(AssertEquals.java:177)
+	at org.junit.jupiter.api.Assertions.assertEquals(Assertions.java:1145)
+	at com.smartprogrammingbaddies.ClientTest.addClientTest(ClientTest.java:31)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1597)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1597)
+

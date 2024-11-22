@@ -1,5 +1,6 @@
 package com.smartprogrammingbaddies.organization;
 
+import com.smartprogrammingbaddies.client.Client;
 import com.smartprogrammingbaddies.event.Event;
 import com.smartprogrammingbaddies.storagecenter.StorageCenter;
 import jakarta.persistence.CascadeType;
@@ -15,7 +16,7 @@ import jakarta.persistence.TemporalType;
 import java.io.Serializable;
 import java.sql.Date;
 import java.util.Set;
-import org.springframework.boot.autoconfigure.integration.IntegrationProperties.RSocket.Client;
+
 
 
 /**

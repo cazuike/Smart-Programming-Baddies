@@ -1,0 +1,17 @@
+com/smartprogrammingbaddies/EventUnitTests.class
+com/smartprogrammingbaddies/VolunteerUnitTests.class
+com/smartprogrammingbaddies/utils/TimeSlotUnitTests.class
+com/smartprogrammingbaddies/logger/TransactionUnitTests.class
+com/smartprogrammingbaddies/storagecenter/StorageCenterUnitTests.class
+com/smartprogrammingbaddies/ClientTest.class
+com/smartprogrammingbaddies/item/ItemIdUnitTests.class
+com/smartprogrammingbaddies/EventControllerTests.class
+com/smartprogrammingbaddies/utils/DateParserUnitTests.class
+com/smartprogrammingbaddies/DonationsUnitTest.class
+com/smartprogrammingbaddies/storagecenter/StorageCenterControllerTests.class
+com/smartprogrammingbaddies/item/ItemUnitTests.class
+com/smartprogrammingbaddies/VolunteerControllerTests.class
+com/smartprogrammingbaddies/AppTest.class
+com/smartprogrammingbaddies/OrganizationsUnitTest.class
+com/smartprogrammingbaddies/AuthTest.class
+com/smartprogrammingbaddies/TestUtils.class
