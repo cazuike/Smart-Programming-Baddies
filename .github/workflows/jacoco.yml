@@ -23,8 +23,9 @@ jobs:
           distribution: 'temurin'
           cache: maven
 
-      - name: Debugging Directory
-        run: pwd
+      - name: Run JaCoCo Report
+        run: mvn clean test jacoco:report
+        working-directory: ./serviceSPB
 
  # JaCoCo Code Coverage Report
       - name: JaCoCo Code Coverage Report
