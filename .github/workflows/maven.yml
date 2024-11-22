@@ -42,7 +42,7 @@ jobs:
           DB_DATA_SOURCE_URL=${{ secrets.DB_DATA_SOURCE_URL }}
           EOL
 
-       - name: Cache Maven dependencies
+      - name: Cache Maven dependencies
         uses: actions/cache@v3
         with:
           path: ~/.m2
