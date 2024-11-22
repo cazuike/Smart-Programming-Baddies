@@ -42,10 +42,17 @@ jobs:
           DB_DATA_SOURCE_URL=${{ secrets.DB_DATA_SOURCE_URL }}
           EOL
 
+       - name: Cache Maven dependencies
+        uses: actions/cache@v3
+        with:
+          path: ~/.m2
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: ${{ runner.os }}-maven
+
       - name: Run Unit Tests
         run: |
           cd serviceSPB
-          mvn test -Dtest=DonationsUnitTest,ItemUnitTests,ItemIdUnitTests,TransactionUnitTests,VolunteerUnitTests,OrganizationsUnitTest,EventUnitTests,DonationsUnitTest,StorageCenterUnitTests
+          mvn clean test
 
       - name: Run Static Bug Finder (PMD)
         run: |
@@ -53,7 +60,9 @@ jobs:
           mvn clean verify pmd:check
 
       - name: Run Branch Coverage (JaCoCo)
-        run: mvn jacoco:report
+        run: |
+          cd serviceSPB
+          mvn jacoco:report
 
       - name: Upload Checkstyle Reports
         uses: actions/upload-artifact@v4
