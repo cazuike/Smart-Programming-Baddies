@@ -5,7 +5,6 @@ import com.smartprogrammingbaddies.organization.Organization;
 import com.smartprogrammingbaddies.storagecenter.StorageCenter;
 import com.smartprogrammingbaddies.utils.TimeSlot;
 import com.smartprogrammingbaddies.volunteer.Volunteer;
-
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -261,6 +260,15 @@ public class Event {
    */
   public int getVolunteerCount() {
     return this.volunteers.size();
+  }
+
+  /**
+   * Get Donations.
+   *
+   * @return the donations of the event
+   */
+  public Set<Donations> getDonations() {
+    return donations;
   }
 
   /**

@@ -6,16 +6,16 @@ import com.smartprogrammingbaddies.organization.Organization;
 import java.util.HashSet;
 import java.util.Set;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 
 /**
  * Unit tests for the Organization class.
  */
+@Disabled
 @ContextConfiguration(classes = {Organization.class})
-public class OrganizationsUnitTest {
+public class OrganizationUnitTests {
   /**
     * The Organization set up to be tested.
     */

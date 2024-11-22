@@ -38,6 +38,13 @@ public class Organization implements Serializable {
   }
 
   /**
+   * Default constructor required for JPA and ObjectMapper.
+   */
+  public int getDatabaseId() {
+    return id;
+  }
+
+  /**
    * Returns the name of the organization.
 
    * @return the organization's name.

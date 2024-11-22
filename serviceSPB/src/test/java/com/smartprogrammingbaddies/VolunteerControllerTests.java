@@ -7,13 +7,17 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.smartprogrammingbaddies.auth.ApiKey;
 import com.smartprogrammingbaddies.auth.ApiKeyRepository;
+import com.smartprogrammingbaddies.auth.AuthController;
+import com.smartprogrammingbaddies.volunteer.VolunteerController;
+import com.smartprogrammingbaddies.volunteer.VolunteerRepository;
 import org.json.JSONObject;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
@@ -21,8 +25,8 @@ import org.springframework.test.web.servlet.MvcResult;
  * Unit tests for the Volunteer Controller.
  */
 @Disabled
-@SpringBootTest
-@AutoConfigureMockMvc
+@ActiveProfiles("test")
+@WebMvcTest(VolunteerController.class)
 public class VolunteerControllerTests {
   private static final String prefix = "Enrolled Volunteer ID:";
   @Autowired
@@ -30,8 +34,14 @@ public class VolunteerControllerTests {
   private String apiKey = TestUtils.apiKey;
   private static String volunteerId;
 
-  @Autowired
+  @MockBean
+  private AuthController auth;
+
+  @MockBean
   private ApiKeyRepository apiKeyRepository;
+
+  @MockBean
+  private VolunteerRepository volunteerRepository;
 
   /**
    * Sets up the API key before each test.

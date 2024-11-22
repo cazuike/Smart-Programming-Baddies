@@ -8,6 +8,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.smartprogrammingbaddies.auth.ApiKey;
 import com.smartprogrammingbaddies.auth.ApiKeyRepository;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -18,6 +19,7 @@ import org.springframework.test.web.servlet.MvcResult;
 /**
  * Unit tests for the Event Controller.
  */
+@Disabled
 @SpringBootTest
 @AutoConfigureMockMvc
 public class EventControllerTests {

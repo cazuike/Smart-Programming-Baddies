@@ -32,7 +32,7 @@ public class Client {
   public Client() {
     this.clientId = UUID.randomUUID().toString();
   }
-  
+
   /**
    * Returns the client's ID.
 
@@ -44,7 +44,7 @@ public class Client {
 
   /**
    * Adds client to client database.
-
+   *
    * @param clientId the client's ID.
    */
   public void addClient(String clientId) {
@@ -54,7 +54,16 @@ public class Client {
     } else {
       System.out.println("Client already exists: " + clientId);
     }
-    
+
+  }
+
+  /**
+   * Get Organization.
+   *
+   * @return organization the organization to get.
+   */
+  public Organization getOrganization() {
+    return organization;
   }
 
   /**
