@@ -23,12 +23,16 @@ jobs:
           distribution: 'temurin'
           cache: maven
 
- # JaCoCo Code Coverage Report
+      - name: Run Branch Coverage (JaCoCo)
+        run: |
+          cd serviceSPB
+          mvn jacoco:report
+
       - name: JaCoCo Code Coverage Report
         id: jacoco_reporter
         uses: PavanMudigonda/jacoco-reporter@v5.0
         with:
-          coverage_results_path: serviceSPB/target/sitejacoco/jacoco.xml
+          coverage_results_path: serviceSPB/target/site/jacoco/jacoco.xml
           coverage_report_name: Code Coverage
           coverage_report_title: JaCoCo Code Coverage
           github_token: ${{ secrets.GITHUB_TOKEN }}
