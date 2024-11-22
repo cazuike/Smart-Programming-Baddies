@@ -54,3 +54,22 @@ jobs:
         with:
           name: jacoco-full-report
           path: serviceSPB/target/site/jacoco/index.html
+
+      - name: Push HTML report to GitHub Pages
+        run: |
+          git config --global user.name "github-actions"
+          git config --global user.email "github-actions@github.com"
+          
+          git checkout -b gh-pages
+
+          cp -r serviceSPB/target/site/jacoco/* .
+
+          git add .
+          git commit -m "Add JaCoCo HTML report"
+          git push --force origin gh-pages
+
+      - name: Deploy GitHub Pages
+        uses: JamesIves/github-pages-deploy-action@v4.1.0
+        with:
+          branch: gh-pages
+          folder: .  
