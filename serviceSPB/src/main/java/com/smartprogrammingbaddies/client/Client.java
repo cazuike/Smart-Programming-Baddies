@@ -1,11 +1,14 @@
 package com.smartprogrammingbaddies.client;
 
 import com.smartprogrammingbaddies.organization.Organization;
+
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
@@ -21,7 +24,7 @@ public class Client {
   private String id;
   private String clientId;
   private Set<String> clientDatabase = new HashSet<>();
-  @ManyToOne
+  @OneToMany(mappedBy = "client", cascade = CascadeType.ALL, orphanRemoval = true)
   private Organization organization;
 
 
