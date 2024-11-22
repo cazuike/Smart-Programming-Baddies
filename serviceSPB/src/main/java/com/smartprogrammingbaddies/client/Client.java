@@ -20,8 +20,8 @@ public class Client {
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
   private String id;
-  private String clientId;
-  private Set<String> clientDatabase = new HashSet<>();
+  private final String clientId;
+  private final Set<String> clientDatabase = new HashSet<>();
   @OneToMany(mappedBy = "client", cascade = CascadeType.ALL, orphanRemoval = true)
   private Organization organization;
 
@@ -47,12 +47,12 @@ public class Client {
    *
    * @param clientId the client's ID.
    */
-  public void addClient(String clientId) {
+  public String addClient(String clientId) {
     if (!clientDatabase.contains(clientId)) {
       clientDatabase.add(clientId);
-      System.out.println("Client successfuly added: " + clientId);
+      return "Client successfuly added!";
     } else {
-      System.out.println("Client already exists: " + clientId);
+      return "Client already exists";
     }
 
   }
@@ -71,11 +71,11 @@ public class Client {
 
    * @param clientId the client's ID number.
    */
-  public void verifyClient(String clientId) {
+  public String verifyClient(String clientId) {
     if (!clientDatabase.contains(clientId)) {
-      System.out.println("Client Does Not Exist" + clientId);
+      return "Client Does Not Exist";
     } else {
-      System.out.println("Client exists!" + clientId);
+      return "Client exists!";
     }
   }
 }
