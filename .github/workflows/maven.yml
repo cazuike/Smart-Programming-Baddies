@@ -83,27 +83,5 @@ jobs:
           path: serviceSPB/target/site/jacoco/index.html
 
 
-      # JaCoCo Code Coverage Report
-      - name: JaCoCo Code Coverage Report
-        id: jacoco_reporter
-        uses: PavanMudigonda/jacoco-reporter@v5.0
-        with:
-          coverage_results_path: serviceSPB/target/jacoco.xml
-          coverage_report_name: Code Coverage
-          coverage_report_title: JaCoCo Code Coverage
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          skip_check_run: true
-          minimum_coverage: 85
-          publish_only_summary: false
-
-      - name: Add JaCoCo report to workflow run summary
-        run: |
-          echo "| Outcome | Value |" >> $GITHUB_STEP_SUMMARY
-          echo "| --- | --- |" >> $GITHUB_STEP_SUMMARY
-          echo "| Code Coverage % | ${{ steps.jacoco_reporter.outputs.coverage_percentage }} |" >> $GITHUB_STEP_SUMMARY
-          echo "| :heavy_check_mark: Covered Lines | ${{ steps.jacoco_reporter.outputs.covered_lines }} |" >> $GITHUB_STEP_SUMMARY
-          echo "| :x: Missed Lines | ${{ steps.jacoco_reporter.outputs.missed_lines }} |" >> $GITHUB_STEP_SUMMARY
-          echo "| Total Lines | ${{ steps.jacoco_reporter.outputs.total_lines }} |" >> $GITHUB_STEP_SUMMARY
-
       - name: Build with Maven
         run: mvn -B clean package --file serviceSPB/pom.xml -DskipTests
