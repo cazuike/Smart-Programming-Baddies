@@ -24,7 +24,7 @@ public class AuthController {
     * Generates a unique API key for a client.
     *
     * @return A {@code ResponseEntity} containing the generated API key with an
-  HTTP 200 status code, or a HTTP 500 status code if API could not be generated.
+  HTTP 200 status code, or a HTTP 500 status code if API could not be generated.  HTTP 200 status code, or a HTTP 500 status code if API could not be generated.  HTTP 200 status code, or a HTTP 500 status code if API could not be generated.
     */
   @GetMapping("/generateApiKey")
   public ResponseEntity<?> generateApiKey() {
