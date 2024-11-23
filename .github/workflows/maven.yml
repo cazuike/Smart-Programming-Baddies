@@ -72,10 +72,15 @@ jobs:
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          
+          git fetch origin ${{ github.head_ref }}:$(( github.head_ref ))
+          git checkout ${{ github.head_ref }}
+          
           git add -f serviceSPB/target/checkstyle-result.xml
           git add -f serviceSPB/target/pmd.xml
           git add -f serviceSPB/target/site/jacoco/index.html
           git commit -m "Add CI reports from workflow pull request" || echo "No changes to commit"
+          
           git push origin ${{ github.head_ref }}
 
 
