@@ -73,13 +73,13 @@ jobs:
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
 
-          cp serviceSPB/target/checkstyle-result.xml ../Reports-And-Docs/
-          cp serviceSPB/target/pmd.xml ../Reports-And-Docs/
-          cp serviceSPB/target/site/jacoco/index.html ../Reports-And-Docs/
+          cp serviceSPB/target/checkstyle-result.xml Reports-And-Docs/
+          cp serviceSPB/target/pmd.xml Reports-And-Docs/
+          cp serviceSPB/target/site/jacoco/index.html Reports-And-Docs/
 
-          git add -f ../Reports-And-Docs/checkstyle-result.xml
-          git add -f ../Reports-And-Docs/pmd.xml
-          git add -f ../Reports-And-Docs/index.html
+          git add -f Reports-And-Docs/checkstyle-result.xml
+          git add -f Reports-And-Docs/pmd.xml
+          git add -f Reports-And-Docs/index.html
           git commit -m "Add CI reports to Reports-And-Docs from run ${{ github.run_id }}" || echo "No changes to commit"
 
           git checkout -b ci-reports-${{ github.run_id }}
