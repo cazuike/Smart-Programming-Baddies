@@ -1,12 +1,15 @@
 package com.smartprogrammingbaddies.volunteer;
 
-import jakarta.persistence.ElementCollection;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import com.smartprogrammingbaddies.event.Event;
+import jakarta.persistence.*;
+
 import java.io.Serializable;
+import java.time.DayOfWeek;
+import java.time.LocalDate;
+import java.util.EnumMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * The Volunteer class represents a volunteer, including their name, role,
@@ -18,36 +21,37 @@ public class Volunteer implements Serializable {
   @GeneratedValue(strategy = GenerationType.AUTO)
   private int id;
 
+  @Column(nullable = false)
   private String name;
+
+  @Column(nullable = false)
   private String role;
-  private String dateSignUp;
+
+  @Column(nullable = false)
+  private LocalDate dateSignUp;
 
   @ElementCollection
-  private Map<String, String> schedule;
+  @CollectionTable(name = "volunteer_schedule", joinColumns = @JoinColumn(name = "volunteer_id"))
+  @MapKeyColumn(name = "day_of_week")
+  @Column(name = "availability")
+  private Map<DayOfWeek, String> schedule = new EnumMap<>(DayOfWeek.class);
 
-  /**
-   * Default constructor required for JPA and ObjectMapper.
-   */
-  public Volunteer() {
-    // Default constructor for JPA and ObjectMapper
+  @ManyToMany(mappedBy = "volunteers")
+  private Set<Event> events = new HashSet<>();
+
+  protected Volunteer() {
+    // Default constructor for JPA
   }
 
-  /**
-   * Constructs a new Volunteer with the specified name, role, date of sign-up, and schedule.
-   *
-   * @param name the name of the volunteer
-   * @param role the volunteer role
-   * @param dateSignUp the date that they signed up as a volunteer
-   * @param schedule the volunteering schedule
-   */
-  public Volunteer(String name, String role, String dateSignUp, Map<String, String> schedule) {
+  public Volunteer(String name, String role, LocalDate dateSignUp) {
     this.name = name;
     this.role = role;
     this.dateSignUp = dateSignUp;
-    this.schedule = schedule;
   }
 
-  public int getDatabaseId() {
+  // Getters and setters
+
+  public int getId() {
     return id;
   }
 
@@ -67,34 +71,40 @@ public class Volunteer implements Serializable {
     this.role = role;
   }
 
-  public String getDateSignUp() {
+  public LocalDate getDateSignUp() {
     return dateSignUp;
   }
 
-  public void setDateSignUp(String dateSignUp) {
+  public void setDateSignUp(LocalDate dateSignUp) {
     this.dateSignUp = dateSignUp;
   }
 
-  public Map<String, String> getSchedule() {
+  public Map<DayOfWeek, String> getSchedule() {
     return schedule;
   }
 
-  public void setSchedule(Map<String, String> schedule) {
+  public void setSchedule(Map<DayOfWeek, String> schedule) {
     this.schedule = schedule;
   }
 
-  public void updateRole(String newRole) {
-    this.role = newRole;
+  public Set<Event> getEvents() {
+    return events;
   }
 
-  public void updateSchedule(Map<String, String> newSchedule) {
-    this.schedule = newSchedule;
+  public void addEvent(Event event) {
+    events.add(event);
+    event.getVolunteers().add(this);
+  }
+
+  public void removeEvent(Event event) {
+    events.remove(event);
+    event.getVolunteers().remove(this);
   }
 
   @Override
   public String toString() {
     StringBuilder scheduleString = new StringBuilder();
-    for (Map.Entry<String, String> entry : schedule.entrySet()) {
+    for (Map.Entry<DayOfWeek, String> entry : schedule.entrySet()) {
       scheduleString.append("Date: ").append(entry.getKey())
               .append(", Time: ").append(entry.getValue()).append("\n");
     }

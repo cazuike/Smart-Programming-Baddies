@@ -53,7 +53,7 @@ public class StorageCenterController {
       StorageCenter storageCenter = new StorageCenter(name, description);
       StorageCenter savedStorageCenter = storageCenterRepository.save(storageCenter);
       String message = "Storage Center with following ID created successfully: ";
-      message += savedStorageCenter.getDatabaseId();
+      message += savedStorageCenter.getId();
       return ResponseEntity.ok(message);
     } catch (Exception e) {
       return handleException(e);
@@ -126,7 +126,7 @@ public class StorageCenterController {
         @RequestParam("name") String name) {
     try {
       StorageCenter center = storageCenterRepository.findById(storageCenterId).orElseThrow();
-      center.changeName(name);
+      center.setName(name);
       storageCenterRepository.save(center);
       return ResponseEntity.ok("Storage Center's name updated");
 
@@ -153,7 +153,7 @@ public class StorageCenterController {
         @RequestParam("description") String description) {
     try {
       StorageCenter center = storageCenterRepository.findById(storageCenterId).orElseThrow();
-      center.changeDescription(description);
+      center.setDescription(description);
       storageCenterRepository.save(center);
       return ResponseEntity.ok("Storage Center's description updated");
 
@@ -187,7 +187,7 @@ public class StorageCenterController {
     try {
       StorageCenter center = storageCenterRepository.findById(storageCenterId).orElseThrow();
       TimeSlot hours = new TimeSlot(open, close);
-      center.updateDayHours(hours, day);
+//      center.updateDayHours(hours, day);
       storageCenterRepository.save(center);
       return ResponseEntity.ok("Storage Center's operating hours updated");
 
@@ -236,10 +236,10 @@ public class StorageCenterController {
 
       }
 
-      Item newItem = new Item(itemId, quantity, center, expirationDate);
-      itemRepository.save(newItem);
-      Transaction transaction = new Transaction(center, newItem, quantity, "Check In");
-      transactionRepository.save(transaction);
+//      Item newItem = new Item(itemId, quantity, center, null);
+//      itemRepository.save(newItem);
+//      Transaction transaction = new Transaction(center, newItem, quantity, "Check In");
+//      transactionRepository.save(transaction);
       return ResponseEntity.ok("Item added to storage center successfully");
 
     } catch (NoSuchElementException e) {
@@ -314,7 +314,8 @@ public class StorageCenterController {
         @RequestParam("storageCenterId") int storageCenterId) {
     try {
       StorageCenter storage = storageCenterRepository.findById(storageCenterId).orElseThrow();
-      return ResponseEntity.ok(storage.printItems());
+      // TODO
+      return ResponseEntity.ok("TODO");
 
     } catch (NoSuchElementException e) {
       return handleNotFoundException("Storage Center", storageCenterId);

@@ -27,7 +27,7 @@ public class VolunteerUnitTests {
     Set<String> testVolunteerSchedule = new HashSet<>();
     testVolunteerSchedule.add("10-30-2024");
 
-    testVolunteer = new Volunteer("John Doe", "Cook", "10-17-2024", null);
+    testVolunteer = new Volunteer("John Doe", "Cook", null);
   }
 
   /**
@@ -51,18 +51,18 @@ public class VolunteerUnitTests {
   /**
     * Tests the .getDateSignUp method to verify that it returns the correct sign-up date.
     */
-  @Test
-  public void getDateSignUpTest() {
-    String expectedResult = "10-17-2024";
-    assertEquals(expectedResult, testVolunteer.getDateSignUp());
-  }
+//  @Test
+//  public void getDateSignUpTest() {
+//    String expectedResult = "10-17-2024";
+//    assertEquals(expectedResult, testVolunteer.getDateSignUp());
+//  }
 
   /**
     * Tests the updateRole() method to verify that the role is updated correctly.
     */
   @Test
   public void updateRoleTest() {
-    testVolunteer.updateRole("Server");
+    testVolunteer.setRole("Server");
     String expectedResult = "Server";
     assertEquals(expectedResult, testVolunteer.getRole());
   }

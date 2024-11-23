@@ -43,9 +43,9 @@ public class OrganizationController {
       SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
       dateFormat.setLenient(false);
       Date date = dateFormat.parse(dateAdded);
-      Organization organization = new Organization(orgName, orgType, schedule, date);
+      Organization organization = new Organization(orgName, orgType, null);
       Organization savedOrganization = organizationRepository.save(organization);
-      String message = "Organization " + savedOrganization.getDatabaseId()
+      String message = "Organization " + savedOrganization.getId()
              + " was created successfully";
       return new ResponseEntity<>(message, HttpStatus.OK);
     } catch (Exception e) {

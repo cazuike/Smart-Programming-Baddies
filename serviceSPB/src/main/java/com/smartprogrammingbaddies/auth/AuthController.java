@@ -84,7 +84,7 @@ public class AuthController {
   public boolean enrollClient(String apiKey) {
     try {
       if (!apiKeyRepository.existsByApiKey(apiKey)) {
-        apiKeyRepository.save(new ApiKey(apiKey));
+        apiKeyRepository.save(new ApiKey());
         System.out.println("API key added successfully!");
       } else {
         System.out.println("API key already exists!");

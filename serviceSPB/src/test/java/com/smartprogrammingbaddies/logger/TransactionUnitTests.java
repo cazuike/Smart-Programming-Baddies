@@ -28,7 +28,7 @@ public class TransactionUnitTests {
   public void setUp() throws ParseException {
     testCenter = new StorageCenter("Test Center", "Test");
     testItemId = new ItemId(ItemId.ItemType.FOOD, "Test Item");
-    testItem = new Item(testItemId, 10, testCenter, "2022-12-31");
+    testItem = new Item(testItemId, 10, testCenter, null);
     testTransaction = new Transaction(testCenter, testItem, 10, "Check Out");
   }
 

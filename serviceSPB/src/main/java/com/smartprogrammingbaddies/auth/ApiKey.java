@@ -1,72 +1,40 @@
 package com.smartprogrammingbaddies.auth;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import com.smartprogrammingbaddies.client.Client;
+import jakarta.persistence.*;
 
-/**
- * Represents an API key stored in the database.
- */
+import java.util.UUID;
+
 @Entity
 public class ApiKey {
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
   private Long id;
 
-  @Column(unique = true, nullable = false)
+  @Column(unique = true, nullable = false, updatable = false)
   private String apiKey;
 
-  /**
-    * Default constructor for JPA.
-    */
-  protected ApiKey() {
-    // Default constructor for JPA
+  @OneToOne(mappedBy = "apiKey", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+  private Client client;
+
+  public ApiKey() {
+    this.apiKey = UUID.randomUUID().toString();
   }
 
-  /**
-    * Constructs an ApiKey entity with the specified key.
-    *
-    * @param apiKey the API key
-    */
-  public ApiKey(String apiKey) {
-    this.apiKey = apiKey;
-  }
-
-  /**
-    * Gets the unique ID of the API key entry.
-    *
-    * @return the unique ID of the API key entry
-    */
+  // Getters and no setter for apiKey to maintain immutability
   public Long getId() {
     return id;
   }
 
-  /**
-    * Gets the API key.
-    *
-    * @return the API key
-    */
   public String getApiKey() {
     return apiKey;
   }
 
-  /**
-    * Sets the API key.
-    *
-    * @param apiKey the new API key
-    */
-  public void setApiKey(String apiKey) {
-    this.apiKey = apiKey;
+  public Client getClient() {
+    return client;
   }
 
-  @Override
-  public String toString() {
-    return "ApiKey{"
-            + "id=" + id
-            + ", apiKey='"
-            + apiKey + '\''
-            + '}';
+  public void setClient(Client client) {
+    this.client = client;
   }
 }

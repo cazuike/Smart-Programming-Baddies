@@ -96,10 +96,9 @@ public class EventController {
       HashSet<Volunteer> volunteers = new HashSet<>();
 
       Event event;
-      event = new Event(name, description, date, timeSlot, location, storageCenter,
-          null, volunteers);
+      event = new Event();
       Event savedEvent = eventRepository.save(event);
-      String message = "Event was created successfully with ID: " + savedEvent.getDatabaseId();
+      String message = "Event was created successfully with ID: " + savedEvent.getId();
       return new ResponseEntity<>(message, HttpStatus.OK);
     } catch (Exception e) {
       return handleException(e);
@@ -238,7 +237,7 @@ public class EventController {
       if (auth.verifyApiKey(apiKey).getStatusCode() != HttpStatus.OK) {
         return new ResponseEntity<>("Invalid API key", HttpStatus.NOT_FOUND);
       }
-      var events = eventRepository.findByDate(date);
+      var events = eventRepository.findByDate(null);
 
       if (events.isEmpty()) {
         return new ResponseEntity<>("No events found on the specified date: " + date,

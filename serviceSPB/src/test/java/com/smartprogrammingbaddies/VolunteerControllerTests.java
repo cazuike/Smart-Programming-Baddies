@@ -63,7 +63,7 @@ public class VolunteerControllerTests {
     Mockito.when(auth.verifyApiKey(apiKey)).thenReturn((ResponseEntity) mockResponse);
     Mockito.when(auth.verifyApiKey(badApiKey)).thenReturn((ResponseEntity) mockResponse2);
 
-    Volunteer mockVolunteer = new Volunteer("John Doe", "Tester", "1234567890", new HashMap<>());
+    Volunteer mockVolunteer = new Volunteer("John Doe", "Tester", null);
     Mockito.when(volunteerRepository.findById(Integer.valueOf(volunteerId)))
             .thenReturn(Optional.of(mockVolunteer));
   }
