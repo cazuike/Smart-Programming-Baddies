@@ -1,5 +1,44 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <checkstyle version="9.3">
-<file name="C:\Users\Bryan\Documents\ASE\Smart-Programming-Baddies\serviceSPB\src\main\java\com\smartprogrammingbaddies\organization\Organization.java">
+<file name="/Users/chidi/Documents/Smart-Programming-Baddies/serviceSPB/src/main/java/com/smartprogrammingbaddies/auth/AuthController.java">
+<error line="79" column="3" severity="warning" message="Missing a Javadoc comment." source="com.puppycrawl.tools.checkstyle.checks.javadoc.MissingJavadocMethodCheck"/>
+</file>
+<file name="/Users/chidi/Documents/Smart-Programming-Baddies/serviceSPB/src/main/java/com/smartprogrammingbaddies/event/Event.java">
+<error line="84" column="5" severity="warning" message="Block comment has incorrect indentation level 4, expected is 2, indentation should be the same level as line 89." source="com.puppycrawl.tools.checkstyle.checks.indentation.CommentsIndentationCheck"/>
+<error line="289" severity="warning" message="Line is longer than 100 characters (found 105)." source="com.puppycrawl.tools.checkstyle.checks.sizes.LineLengthCheck"/>
+<error line="295" severity="warning" message="Line is longer than 100 characters (found 108)." source="com.puppycrawl.tools.checkstyle.checks.sizes.LineLengthCheck"/>
+</file>
+<file name="/Users/chidi/Documents/Smart-Programming-Baddies/serviceSPB/src/test/java/com/smartprogrammingbaddies/AuthTest.java">
+<error line="9" column="1" severity="warning" message="Extra separation in import group before &apos;com.smartprogrammingbaddies.auth.ApiKey&apos;" source="com.puppycrawl.tools.checkstyle.checks.imports.CustomImportOrderCheck"/>
+<error line="9" column="1" severity="warning" message="Wrong lexicographical order for &apos;com.smartprogrammingbaddies.auth.ApiKey&apos; import. Should be before &apos;javax.sql.DataSource&apos;." source="com.puppycrawl.tools.checkstyle.checks.imports.CustomImportOrderCheck"/>
+<error line="10" column="1" severity="warning" message="Wrong lexicographical order for &apos;com.smartprogrammingbaddies.auth.ApiKeyRepository&apos; import. Should be before &apos;javax.sql.DataSource&apos;." source="com.puppycrawl.tools.checkstyle.checks.imports.CustomImportOrderCheck"/>
+<error line="11" column="1" severity="warning" message="Wrong lexicographical order for &apos;com.smartprogrammingbaddies.auth.AuthController&apos; import. Should be before &apos;javax.sql.DataSource&apos;." source="com.puppycrawl.tools.checkstyle.checks.imports.CustomImportOrderCheck"/>
+<error line="26" column="1" severity="warning" message="Extra separation in import group before &apos;java.util.Optional&apos;" source="com.puppycrawl.tools.checkstyle.checks.imports.CustomImportOrderCheck"/>
+<error line="26" column="1" severity="warning" message="Wrong lexicographical order for &apos;java.util.Optional&apos; import. Should be before &apos;org.springframework.test.web.servlet.MvcResult&apos;." source="com.puppycrawl.tools.checkstyle.checks.imports.CustomImportOrderCheck"/>
+<error line="56" severity="warning" message="Line is longer than 100 characters (found 108)." source="com.puppycrawl.tools.checkstyle.checks.sizes.LineLengthCheck"/>
+</file>
+<file name="/Users/chidi/Documents/Smart-Programming-Baddies/serviceSPB/src/test/java/com/smartprogrammingbaddies/EventControllerTests.java">
+<error line="9" column="1" severity="warning" message="Wrong lexicographical order for &apos;com.smartprogrammingbaddies.auth.ApiKeyRepository&apos; import. Should be before &apos;com.smartprogrammingbaddies.auth.AuthController&apos;." source="com.puppycrawl.tools.checkstyle.checks.imports.CustomImportOrderCheck"/>
+<error line="30" column="1" severity="warning" message="Extra separation in import group before &apos;java.util.Optional&apos;" source="com.puppycrawl.tools.checkstyle.checks.imports.CustomImportOrderCheck"/>
+<error line="30" column="1" severity="warning" message="Wrong lexicographical order for &apos;java.util.Optional&apos; import. Should be before &apos;org.springframework.test.web.servlet.MvcResult&apos;." source="com.puppycrawl.tools.checkstyle.checks.imports.CustomImportOrderCheck"/>
+<error line="31" column="1" severity="warning" message="Wrong lexicographical order for &apos;java.util.Set&apos; import. Should be before &apos;org.springframework.test.web.servlet.MvcResult&apos;." source="com.puppycrawl.tools.checkstyle.checks.imports.CustomImportOrderCheck"/>
+<error line="32" column="1" severity="warning" message="Wrong lexicographical order for &apos;java.util.HashSet&apos; import. Should be before &apos;org.springframework.test.web.servlet.MvcResult&apos;." source="com.puppycrawl.tools.checkstyle.checks.imports.CustomImportOrderCheck"/>
+<error line="59" column="3" severity="warning" message="Missing a Javadoc comment." source="com.puppycrawl.tools.checkstyle.checks.javadoc.MissingJavadocMethodCheck"/>
+<error line="61" severity="warning" message="Line is longer than 100 characters (found 106)." source="com.puppycrawl.tools.checkstyle.checks.sizes.LineLengthCheck"/>
+<error line="63" severity="warning" message="Line is longer than 100 characters (found 106)." source="com.puppycrawl.tools.checkstyle.checks.sizes.LineLengthCheck"/>
+<error line="73" column="45" severity="warning" message="&apos;,&apos; is not followed by whitespace." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAfterCheck"/>
+<error line="74" severity="warning" message="Line is longer than 100 characters (found 105)." source="com.puppycrawl.tools.checkstyle.checks.sizes.LineLengthCheck"/>
+<error line="74" column="43" severity="warning" message="&apos;,&apos; is not followed by whitespace." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAfterCheck"/>
+<error line="83" severity="warning" message="Line is longer than 100 characters (found 104)." source="com.puppycrawl.tools.checkstyle.checks.sizes.LineLengthCheck"/>
+<error line="138" column="1" severity="warning" message="Comment has incorrect indentation level 0, expected is 4, indentation should be the same level as line 140." source="com.puppycrawl.tools.checkstyle.checks.indentation.CommentsIndentationCheck"/>
+</file>
+<file name="/Users/chidi/Documents/Smart-Programming-Baddies/serviceSPB/src/test/java/com/smartprogrammingbaddies/VolunteerControllerTests.java">
+<error line="28" column="1" severity="warning" message="Extra separation in import group before &apos;java.util.HashMap&apos;" source="com.puppycrawl.tools.checkstyle.checks.imports.CustomImportOrderCheck"/>
+<error line="28" column="1" severity="warning" message="Wrong lexicographical order for &apos;java.util.HashMap&apos; import. Should be before &apos;org.springframework.test.web.servlet.MvcResult&apos;." source="com.puppycrawl.tools.checkstyle.checks.imports.CustomImportOrderCheck"/>
+<error line="29" column="1" severity="warning" message="Wrong lexicographical order for &apos;java.util.Optional&apos; import. Should be before &apos;org.springframework.test.web.servlet.MvcResult&apos;." source="com.puppycrawl.tools.checkstyle.checks.imports.CustomImportOrderCheck"/>
+<error line="60" severity="warning" message="Line is longer than 100 characters (found 101)." source="com.puppycrawl.tools.checkstyle.checks.sizes.LineLengthCheck"/>
+</file>
+<file name="/Users/chidi/Documents/Smart-Programming-Baddies/serviceSPB/src/test/java/com/smartprogrammingbaddies/EventUnitTests.java">
+<error line="151" column="3" severity="warning" message="&apos;METHOD_DEF&apos; should be separated from previous line." source="com.puppycrawl.tools.checkstyle.checks.whitespace.EmptyLineSeparatorCheck"/>
 </file>
 </checkstyle>
