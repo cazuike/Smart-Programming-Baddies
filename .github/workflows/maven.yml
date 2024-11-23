@@ -12,9 +12,11 @@ on:
   push:
     branches:
       - main
+      - chidi/fix-tests
   pull_request:
     branches:
       - main
+      - chidi/fix-tests
 
 jobs:
   build:
