@@ -1,5 +1,6 @@
 package com.smartprogrammingbaddies.organization;
 
+import com.smartprogrammingbaddies.client.Client;
 import com.smartprogrammingbaddies.event.Event;
 import com.smartprogrammingbaddies.storagecenter.StorageCenter;
 import jakarta.persistence.CascadeType;
@@ -8,15 +9,15 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
 import java.io.Serializable;
-import java.sql.Date;
+import java.util.Date;
 import java.util.Set;
-import org.springframework.boot.autoconfigure.integration.IntegrationProperties.RSocket.Client;
-
 
 /**
  * The Organization class represents an organization, including their name, their type,
@@ -33,19 +34,16 @@ public class Organization implements Serializable {
   @Temporal(TemporalType.DATE)
   private Date dateAdded;
   private Set<String> schedule;
-  @OneToMany(mappedBy = "organization", cascade = CascadeType.ALL, orphanRemoval = true)
+  @ManyToOne
+  @JoinColumn(name = "client_id", nullable = false)
   private Set<Client> client;
   @OneToOne
   private StorageCenter storage;
   @OneToMany(mappedBy = "organizer", cascade = CascadeType.ALL, orphanRemoval = true)
   private Set<Event> event;
-  
-  /**
-   * Constructs a new Organization with the specific name, type, and schedule.
 
-   * @param orgName the name of the organization.
-   * @param orgType the type of the organization.
-   * @param schedule the schedule of the organization.
+  /**
+   * Empty constructor for JPA.
    */
   public Organization() {
     // empty constructor for JPA
@@ -66,15 +64,14 @@ public class Organization implements Serializable {
     this.schedule = schedule;
     this.dateAdded = dateAdded;
   }
-  
-  /**
-   * Gets the database ID of the organization.
 
-   * @return the ID of the organization.
+  /**
+   * Default constructor required for JPA and ObjectMapper.
    */
   public int getDatabaseId() {
     return id;
   }
+
   /**
    * Returns the name of the organization.
 
@@ -109,6 +106,33 @@ public class Organization implements Serializable {
    */
   public Date getDateAdded() {
     return dateAdded;
+  }
+
+  /**
+   * Gets the id of the client.
+   *
+   * @return the id of the client
+   */
+  public Set<Client> getClient() {
+    return client;
+  }
+
+  /**
+   * Gets the storage center of the organization.
+   *
+   * @return the storage center of the organization
+   */
+  public StorageCenter getStorage() {
+    return storage;
+  }
+
+  /**
+   * Gets the events of the organization.
+   *
+   * @return the events of the organization
+   */
+  public Set<Event> getEvent() {
+    return event;
   }
 
   /**

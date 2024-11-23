@@ -146,6 +146,14 @@
 						<goals>
 							<goal>report</goal>
 						</goals>
+
+             <configuration>
+            <reportFormats>
+              <reportFormat>html</reportFormat>
+              <reportFormat>xml</reportFormat>
+            </reportFormats>
+            <destFile>${project.build.directory}/jacoco/jacoco.xml</destFile>
+          </configuration>
 					</execution>
 				</executions>
 			</plugin>

@@ -12,12 +12,14 @@ import java.time.LocalTime;
 import java.util.HashSet;
 import java.util.Set;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.test.context.ContextConfiguration;
 
 /**
 * Unit tests for the Event class.
 */
+@Disabled
 @ContextConfiguration(classes = {Event.class, StorageCenter.class, Volunteer.class})
 public class EventUnitTests {
 

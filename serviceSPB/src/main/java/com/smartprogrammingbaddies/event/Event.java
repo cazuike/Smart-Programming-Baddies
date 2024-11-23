@@ -263,6 +263,15 @@ public class Event {
   }
 
   /**
+   * Get Donations.
+   *
+   * @return the donations of the event
+   */
+  public Set<Donations> getDonations() {
+    return donations;
+  }
+
+  /**
    * Returns a string representation of the event, including its name, description, date, time,
    * location, storage, and the list of volunteer names.
    *
