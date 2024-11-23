@@ -105,6 +105,9 @@
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-surefire-plugin</artifactId>
 				<configuration>
+					<systemPropertyVariables>
+						<net.bytebuddy.experimental>true</net.bytebuddy.experimental>
+					</systemPropertyVariables>
 					<excludedGroups>local</excludedGroups>
 				</configuration>
 			</plugin>

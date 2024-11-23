@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <checkstyle version="9.3">
-<file name="C:\Users\Bryan\Documents\ASE\Smart-Programming-Baddies\serviceSPB\src\main\java\com\smartprogrammingbaddies\organization\Organization.java">
+<file name="/Users/chidi/Documents/Smart-Programming-Baddies/serviceSPB/src/main/java/com/smartprogrammingbaddies/auth/AuthController.java">
+<error line="27" severity="warning" message="Line is longer than 100 characters (found 240)." source="com.puppycrawl.tools.checkstyle.checks.sizes.LineLengthCheck"/>
 </file>
 </checkstyle>
