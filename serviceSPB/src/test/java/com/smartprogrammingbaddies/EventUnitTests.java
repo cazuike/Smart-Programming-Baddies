@@ -7,20 +7,16 @@ import com.smartprogrammingbaddies.organization.Organization;
 import com.smartprogrammingbaddies.storagecenter.StorageCenter;
 import com.smartprogrammingbaddies.utils.TimeSlot;
 import com.smartprogrammingbaddies.volunteer.Volunteer;
-import java.sql.Date;
 import java.time.LocalTime;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
-import org.springframework.test.context.ContextConfiguration;
 
 /**
-* Unit tests for the Event class.
-*/
-@Disabled
-@ContextConfiguration(classes = {Event.class, StorageCenter.class, Volunteer.class})
+ * Unit tests for the Event class.
+ */
 public class EventUnitTests {
 
   public static Event testEvent;
@@ -34,12 +30,10 @@ public class EventUnitTests {
   @BeforeEach
   public void setupEventForTesting() {
     testStorageCenter = new StorageCenter();
-    String dateStorageCenterAdded = "12-01-2024";
-    Date dateAdded = Date.valueOf(dateStorageCenterAdded);
-    testOrganizer = new Organization("Charity Org", "Non-Profit", new HashSet<>(), dateAdded);
+    testOrganizer = new Organization("Charity Org", "Non-Profit", new HashSet<>(), new Date());
 
-    Volunteer volunteer1 = new Volunteer("John Doe", "Helper", "12-01-2024", null);
-    Volunteer volunteer2 = new Volunteer("Jane Smith", "Cook", "12-01-2024", null);
+    Volunteer volunteer1 = new Volunteer("John Doe", "Helper", "2024-12-01", null);
+    Volunteer volunteer2 = new Volunteer("Jane Smith", "Cook", "2024-12-01", null);
 
     testVolunteers = new HashSet<>();
     testVolunteers.add(volunteer1);
@@ -48,14 +42,14 @@ public class EventUnitTests {
     TimeSlot eventTime = new TimeSlot(LocalTime.of(10, 0), LocalTime.of(14, 0));
 
     testEvent = new Event(
-        "Charity Drive",
-        "A community charity event",
-        "2024-12-25", // Date in String format
-        eventTime,
-        "East Village",
-        testStorageCenter,
-        testOrganizer,
-        testVolunteers);
+            "Charity Drive",
+            "A community charity event",
+            "2024-12-25",
+            eventTime,
+            "East Village",
+            testStorageCenter,
+            testOrganizer,
+            testVolunteers);
   }
 
   @Test
@@ -139,58 +133,52 @@ public class EventUnitTests {
 
   @Test
   public void addVolunteerTest() {
-    Volunteer newVolunteer = new Volunteer("Alice Doe", "Driver", "12-02-2024", null);
+    Volunteer newVolunteer = new Volunteer("Alice Doe", "Driver", "2024-12-02", null);
     testEvent.addVolunteer(newVolunteer);
 
     int expectedVolunteerCount = 3;
     assertEquals(expectedVolunteerCount, testEvent.getVolunteerCount());
   }
 
-  // @Test
-  // public void removeVolunteerTest() {
-  // Volunteer volunteerToRemove = testVolunteers.iterator().next();
-  // testEvent.removeVolunteer(volunteerToRemove.getDatabaseId());
-  //
-  // int expectedVolunteerCount = 1;
-  // assertEquals(expectedVolunteerCount, testEvent.getVolunteerCount());
-  // }
-  //
-  // @Test
-  // public void toStringWithVolunteersTest() { - issue is with volunteers, they
-  // print random order
-  // String expectedString = "Event Name: Charity Drive\n"
-  // + "Description: A community charity event\n"
-  // + "Date: Wed Dec 25 00:00:00 EST 2024\n"
-  // + "Time: Wed Dec 25 10:00:00 EST 2024\n"
-  // + "Location: East Village\n"
-  // + "Storage Center: Food Pantry\n"
-  // + "Organizer: Organization Name: Charity Org\n"
-  // + "Organizaton Type: Non-Profit\n"
-  // + "Date Added: 12-01-2024\n"
-  // + "Schedule: \n\n"
-  // + "Volunteer Names: \n"
-  // + "- John Doe - 0\n"
-  // + "- Jane Smith - 0\n";
-  //
-  // assertEquals(expectedString, testEvent.toString());
-  // }
-  //
-  // @Test
-  // public void toStringWithNoVolunteersTest() {
-  // testEvent.getListOfVolunteers().clear();
-  // String expectedString = "Event Name: Charity Drive\n"
-  // + "Description: A community charity event\n"
-  // + "Date: Wed Dec 25 00:00:00 EST 2024\n"
-  // + "Time: Wed Dec 25 10:00:00 EST 2024\n"
-  // + "Location: East Village\n"
-  // + "Storage Center: Food Pantry\n"
-  // + "Organizer: Organization Name: Charity Org\n"
-  // + "Organizaton Type: Non-Profit\n"
-  // + "Date Added: 12-01-2024\n"
-  // + "Schedule: \n\n"
-  // + "No volunteers have signed up yet.\n";
-  //
-  // assertEquals(expectedString, testEvent.toString());
-  // }
+  @Test
+  public void removeVolunteerTest() {
+    Volunteer volunteerToRemove = testVolunteers.iterator().next();
+    testEvent.getListOfVolunteers().remove(volunteerToRemove);
+
+    int expectedVolunteerCount = 1;
+    assertEquals(expectedVolunteerCount, testEvent.getVolunteerCount());
+  }
+
+  @Test
+  public void toStringWithVolunteersTest() {
+    String expectedString = "Event Name: Charity Drive\n"
+            + "Description: A community charity event\n"
+            + "Date: 2024-12-25\n"
+            + "Time: 10:00 - 14:00\n"
+            + "Location: East Village\n"
+            + "Storage Center: null\n"
+            + "Organizer: Organization Name: Charity Org\n"
+            + "Volunteer Names: \n"
+            + "- Jane Smith - 0\n"
+            + "- John Doe - 0\n";
+
+    assertEquals(expectedString.trim(), testEvent.toString().trim());
+  }
+
+  @Test
+  public void toStringWithNoVolunteersTest() {
+    testEvent.getListOfVolunteers().clear();
+
+    String expectedString = "Event Name: Charity Drive\n"
+            + "Description: A community charity event\n"
+            + "Date: 2024-12-25\n"
+            + "Time: 10:00 - 14:00\n"
+            + "Location: East Village\n"
+            + "Storage Center: null\n"
+            + "Organizer: Organization Name: Charity Org\n"
+            + "No volunteers have signed up yet.";
+
+    assertEquals(expectedString.trim(), testEvent.toString().trim());
+  }
 
 }
