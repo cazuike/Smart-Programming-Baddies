@@ -1,3 +1,75 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<pmd xmlns="http://pmd.sourceforge.net/report/2.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://pmd.sourceforge.net/report/2.0.0 http://pmd.sourceforge.net/report_2_0_0.xsd" version="6.48.0" timestamp="2024-11-23T20:18:22.117">
+<pmd xmlns="http://pmd.sourceforge.net/report/2.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://pmd.sourceforge.net/report/2.0.0 http://pmd.sourceforge.net/report_2_0_0.xsd" version="6.48.0" timestamp="2024-11-23T23:24:34.589">
+<file name="/home/runner/work/Smart-Programming-Baddies/Smart-Programming-Baddies/serviceSPB/src/main/java/com/smartprogrammingbaddies/client/Individual.java">
+<violation beginline="17" endline="17" begincolumn="20" endcolumn="23" rule="UnusedPrivateField" ruleset="Best Practices" package="com.smartprogrammingbaddies.client" class="Individual" variable="name" externalInfoUrl="https://pmd.github.io/pmd-6.48.0/pmd_rules_java_bestpractices.html#unusedprivatefield" priority="3">
+Avoid unused private fields such as 'name'.
+</violation>
+<violation beginline="17" endline="17" begincolumn="13" endcolumn="24" rule="SingularField" ruleset="Design" package="com.smartprogrammingbaddies.client" class="Individual" variable="VariableDeclaratorId" externalInfoUrl="https://pmd.github.io/pmd-6.48.0/pmd_rules_java_design.html#singularfield" priority="3">
+Perhaps 'name' could be replaced by a local variable.
+</violation>
+<violation beginline="20" endline="20" begincolumn="20" endcolumn="24" rule="UnusedPrivateField" ruleset="Best Practices" package="com.smartprogrammingbaddies.client" class="Individual" variable="email" externalInfoUrl="https://pmd.github.io/pmd-6.48.0/pmd_rules_java_bestpractices.html#unusedprivatefield" priority="3">
+Avoid unused private fields such as 'email'.
+</violation>
+<violation beginline="20" endline="20" begincolumn="13" endcolumn="25" rule="SingularField" ruleset="Design" package="com.smartprogrammingbaddies.client" class="Individual" variable="VariableDeclaratorId" externalInfoUrl="https://pmd.github.io/pmd-6.48.0/pmd_rules_java_design.html#singularfield" priority="3">
+Perhaps 'email' could be replaced by a local variable.
+</violation>
+<violation beginline="24" endline="24" begincolumn="20" endcolumn="25" rule="UnusedPrivateField" ruleset="Best Practices" package="com.smartprogrammingbaddies.client" class="Individual" variable="client" externalInfoUrl="https://pmd.github.io/pmd-6.48.0/pmd_rules_java_bestpractices.html#unusedprivatefield" priority="3">
+Avoid unused private fields such as 'client'.
+</violation>
+<violation beginline="24" endline="24" begincolumn="13" endcolumn="26" rule="SingularField" ruleset="Design" package="com.smartprogrammingbaddies.client" class="Individual" variable="VariableDeclaratorId" externalInfoUrl="https://pmd.github.io/pmd-6.48.0/pmd_rules_java_design.html#singularfield" priority="3">
+Perhaps 'client' could be replaced by a local variable.
+</violation>
+</file>
+<file name="/home/runner/work/Smart-Programming-Baddies/Smart-Programming-Baddies/serviceSPB/src/main/java/com/smartprogrammingbaddies/event/Event.java">
+<violation beginline="6" endline="6" begincolumn="1" endcolumn="50" rule="UnnecessaryImport" ruleset="Code Style" package="com.smartprogrammingbaddies.event" class="Event" externalInfoUrl="https://pmd.github.io/pmd-6.48.0/pmd_rules_java_codestyle.html#unnecessaryimport" priority="4">
+Unused import 'com.smartprogrammingbaddies.utils.TimeSlot'
+</violation>
+</file>
+<file name="/home/runner/work/Smart-Programming-Baddies/Smart-Programming-Baddies/serviceSPB/src/main/java/com/smartprogrammingbaddies/event/EventController.java">
+<violation beginline="89" endline="89" begincolumn="16" endcolumn="23" rule="UnusedLocalVariable" ruleset="Best Practices" package="com.smartprogrammingbaddies.event" class="EventController" method="createEvent" variable="timeSlot" externalInfoUrl="https://pmd.github.io/pmd-6.48.0/pmd_rules_java_bestpractices.html#unusedlocalvariable" priority="3">
+Avoid unused local variables such as 'timeSlot'.
+</violation>
+<violation beginline="96" endline="96" begincolumn="26" endcolumn="35" rule="UnusedLocalVariable" ruleset="Best Practices" package="com.smartprogrammingbaddies.event" class="EventController" method="createEvent" variable="volunteers" externalInfoUrl="https://pmd.github.io/pmd-6.48.0/pmd_rules_java_bestpractices.html#unusedlocalvariable" priority="3">
+Avoid unused local variables such as 'volunteers'.
+</violation>
+</file>
+<file name="/home/runner/work/Smart-Programming-Baddies/Smart-Programming-Baddies/serviceSPB/src/main/java/com/smartprogrammingbaddies/item/ItemId.java">
+<violation beginline="37" endline="37" begincolumn="33" endcolumn="50" rule="UseLocaleWithCaseConversions" ruleset="Error Prone" package="com.smartprogrammingbaddies.item" class="ItemId$ItemType" method="fromString" externalInfoUrl="https://pmd.github.io/pmd-6.48.0/pmd_rules_java_errorprone.html#uselocalewithcaseconversions" priority="3">
+When doing a String.toLowerCase()/toUpperCase() call, use a Locale
+</violation>
+<violation beginline="148" endline="148" begincolumn="22" endcolumn="33" rule="ControlStatementBraces" ruleset="Code Style" package="com.smartprogrammingbaddies.item" class="ItemId" method="equals" externalInfoUrl="https://pmd.github.io/pmd-6.48.0/pmd_rules_java_codestyle.html#controlstatementbraces" priority="3">
+This statement should have braces
+</violation>
+<violation beginline="149" endline="149" begincolumn="35" endcolumn="47" rule="ControlStatementBraces" ruleset="Code Style" package="com.smartprogrammingbaddies.item" class="ItemId" method="equals" externalInfoUrl="https://pmd.github.io/pmd-6.48.0/pmd_rules_java_codestyle.html#controlstatementbraces" priority="3">
+This statement should have braces
+</violation>
+</file>
+<file name="/home/runner/work/Smart-Programming-Baddies/Smart-Programming-Baddies/serviceSPB/src/main/java/com/smartprogrammingbaddies/logger/Transaction.java">
+<violation beginline="14" endline="14" begincolumn="1" endcolumn="27" rule="UnnecessaryImport" ruleset="Code Style" package="com.smartprogrammingbaddies.logger" class="Transaction" externalInfoUrl="https://pmd.github.io/pmd-6.48.0/pmd_rules_java_codestyle.html#unnecessaryimport" priority="4">
+Unused import 'java.time.LocalTime'
+</violation>
+</file>
+<file name="/home/runner/work/Smart-Programming-Baddies/Smart-Programming-Baddies/serviceSPB/src/main/java/com/smartprogrammingbaddies/organization/OrganizationController.java">
+<violation beginline="45" endline="45" begincolumn="12" endcolumn="15" rule="UnusedLocalVariable" ruleset="Best Practices" package="com.smartprogrammingbaddies.organization" class="OrganizationController" method="createOrganization" variable="date" externalInfoUrl="https://pmd.github.io/pmd-6.48.0/pmd_rules_java_bestpractices.html#unusedlocalvariable" priority="3">
+Avoid unused local variables such as 'date'.
+</violation>
+</file>
+<file name="/home/runner/work/Smart-Programming-Baddies/Smart-Programming-Baddies/serviceSPB/src/main/java/com/smartprogrammingbaddies/storagecenter/StorageCenter.java">
+<violation beginline="6" endline="6" begincolumn="1" endcolumn="50" rule="UnnecessaryImport" ruleset="Code Style" package="com.smartprogrammingbaddies.storagecenter" class="StorageCenter" externalInfoUrl="https://pmd.github.io/pmd-6.48.0/pmd_rules_java_codestyle.html#unnecessaryimport" priority="4">
+Unused import 'com.smartprogrammingbaddies.utils.TimeSlot'
+</violation>
+</file>
+<file name="/home/runner/work/Smart-Programming-Baddies/Smart-Programming-Baddies/serviceSPB/src/main/java/com/smartprogrammingbaddies/storagecenter/StorageCenterController.java">
+<violation beginline="189" endline="189" begincolumn="16" endcolumn="20" rule="UnusedLocalVariable" ruleset="Best Practices" package="com.smartprogrammingbaddies.storagecenter" class="StorageCenterController" method="updateCenterHours" variable="hours" externalInfoUrl="https://pmd.github.io/pmd-6.48.0/pmd_rules_java_bestpractices.html#unusedlocalvariable" priority="3">
+Avoid unused local variables such as 'hours'.
+</violation>
+<violation beginline="316" endline="316" begincolumn="21" endcolumn="27" rule="UnusedLocalVariable" ruleset="Best Practices" package="com.smartprogrammingbaddies.storagecenter" class="StorageCenterController" method="listInventory" variable="storage" externalInfoUrl="https://pmd.github.io/pmd-6.48.0/pmd_rules_java_bestpractices.html#unusedlocalvariable" priority="3">
+Avoid unused local variables such as 'storage'.
+</violation>
+</file>
+<file name="/home/runner/work/Smart-Programming-Baddies/Smart-Programming-Baddies/serviceSPB/src/main/java/com/smartprogrammingbaddies/volunteer/VolunteerController.java">
+<violation beginline="46" endline="46" begincolumn="14" endcolumn="23" rule="UnusedLocalVariable" ruleset="Best Practices" package="com.smartprogrammingbaddies.volunteer" class="VolunteerController" method="enrollVolunteer" variable="dateSignUp" externalInfoUrl="https://pmd.github.io/pmd-6.48.0/pmd_rules_java_bestpractices.html#unusedlocalvariable" priority="3">
+Avoid unused local variables such as 'dateSignUp'.
+</violation>
+</file>
 </pmd>
