@@ -70,7 +70,7 @@ public class AuthTest {
 
   @Test
   public void removeApiKeyTest() throws Exception {
-    ApiKey mockApiKey = new ApiKey(apiKey);
+    ApiKey mockApiKey = new ApiKey();
     Mockito.when(apiKeyRepository.findByApiKey(apiKey))
             .thenReturn(Optional.of(mockApiKey));
 

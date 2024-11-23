@@ -1,20 +1,14 @@
 package com.smartprogrammingbaddies;
 
+import com.smartprogrammingbaddies.client.Individual;
 import com.smartprogrammingbaddies.event.Event;
 import com.smartprogrammingbaddies.storagecenter.StorageCenter;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.*;
 import java.io.Serializable;
 
-
 /**
- * The Donation class representes a donation, including their name, type, donator of this item,
- * the date of this donation, lifespan, and its location.
+ * The Donation class represents a donation, including its name, type, donator,
+ * lifespan, location, associated event, storage center, and the individual who made the donation.
  */
 @Entity
 public class Donations implements Serializable {
@@ -22,108 +16,130 @@ public class Donations implements Serializable {
   @GeneratedValue(strategy = GenerationType.AUTO)
   @Column(name = "donation_id")
   private int id;
-  private String donationName;
-  private String donationType;
-  private String donator;
-  private String lifeSpan;
-  private String location;
-  @ManyToOne
-  private Event event;
-  @OneToMany
-  private StorageCenter storage;
 
-  /**
-   * Constructs a new Donations item with the specific name, type, donator, lifespan and location.
-   *
-   * @param donationName the name of the donation.
-   * @param donationType the type of the donation.
-   * @param donator the donator of the donation.
-   * @param lifeSpan the lifespan of the donation.
-   * @param location the location of the donation.
-   */
+  @Column(nullable = false)
+  private String donationName;
+
+  @Column(nullable = false)
+  private String donationType;
+
+  @Column(nullable = false)
+  private String donator;
+
+  @Column(nullable = true)
+  private String lifeSpan;
+
+  @Column(nullable = false)
+  private String location;
+
+  @ManyToOne
+  @JoinColumn(name = "event_id", nullable = false)
+  private Event event;
+
+  @ManyToOne
+  @JoinColumn(name = "storage_center_id", nullable = false)
+  private StorageCenter storageCenter;
+
+  // **New Field Added:**
+  @ManyToOne
+  @JoinColumn(name = "individual_id", nullable = false)
+  private Individual individual;
+
+  protected Donations() {
+    // Default constructor for JPA
+  }
+
   public Donations(String donationName, String donationType,
-      String donator, String lifeSpan, String location) {
+                   String donator, String lifeSpan, String location,
+                   Event event, StorageCenter storageCenter, Individual individual) {
     this.donationName = donationName;
     this.donationType = donationType;
     this.donator = donator;
     this.lifeSpan = lifeSpan;
     this.location = location;
+    this.event = event;
+    this.storageCenter = storageCenter;
+    this.individual = individual;
   }
-  /**
-   * Returns the name of the donation.
 
-   * @return the donation's name.
-   */
+  // Getters and setters
+
+  public int getId() {
+    return id;
+  }
+
   public String getDonationName() {
     return donationName;
   }
 
-  /**
-   * Returns the type of the donation.
+  public void setDonationName(String donationName) {
+    this.donationName = donationName;
+  }
 
-   * @return the donation's type.
-   */
   public String getDonationType() {
     return donationType;
   }
 
-  /**
-   * Returns the name of the donator.
+  public void setDonationType(String donationType) {
+    this.donationType = donationType;
+  }
 
-   * @return donation's donator.
-   */
   public String getDonator() {
     return donator;
   }
 
-  /**
-   * Returns the lifespan of the donation if it has any.
-   *
-   * @return the donation's lifespan.
-   */
+  public void setDonator(String donator) {
+    this.donator = donator;
+  }
+
   public String getLifeSpan() {
     return lifeSpan;
   }
 
-  /**
-   * Returns the location of the donation.
-   *
-   * @return donation's location.
-   */
+  public void setLifeSpan(String lifeSpan) {
+    this.lifeSpan = lifeSpan;
+  }
+
   public String getLocation() {
     return location;
   }
 
-  /**
-    * Returns the event associated with the donation.
-    *
-    * @return the event associated with the donation
-    */
+  public void setLocation(String location) {
+    this.location = location;
+  }
+
   public Event getEvent() {
     return event;
   }
 
-  /**
-  * Returns the storage center associated with the donation.
-  *
-  * @return the storage center associated with the donation
-  */
-  public StorageCenter getStorage() {
-    return storage;
+  public void setEvent(Event event) {
+    this.event = event;
   }
 
-  /**
-   * Returns a string representation of the donations, including their name,
-   * type, donator, lifespan, and location.
-   *
-   * @return a string representation of the donation's details
-   */
+  public StorageCenter getStorageCenter() {
+    return storageCenter;
+  }
+
+  public void setStorageCenter(StorageCenter storageCenter) {
+    this.storageCenter = storageCenter;
+  }
+
+  public Individual getIndividual() {
+    return individual;
+  }
+
+  public void setIndividual(Individual individual) {
+    this.individual = individual;
+  }
+
   @Override
   public String toString() {
     return "Donation Name: " + donationName + "\n"
-           + "Donation Type: " + donationType + "\n"
-           + "Donator: "  + donator + "\n"
-           + "Lifespan: " + lifeSpan + "\n"
-           + "Location: \n" + location;
+            + "Donation Type: " + donationType + "\n"
+            + "Donator: " + donator + "\n"
+            + "Lifespan: " + lifeSpan + "\n"
+            + "Location: " + location + "\n"
+            + "Event: " + event.getName() + "\n"
+            + "Storage Center: " + storageCenter.getName() + "\n";
   }
 }

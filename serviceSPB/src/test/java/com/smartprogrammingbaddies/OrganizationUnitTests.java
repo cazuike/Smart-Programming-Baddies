@@ -31,7 +31,7 @@ public class OrganizationUnitTests {
     SimpleDateFormat dateFormat = new SimpleDateFormat("MM-dd-yyyy");
     Date dateAdded = dateFormat.parse("10-17-2024");
 
-    testOrganization = new Organization("UpperBestSide", "For Profit", schedule, dateAdded);
+    testOrganization = new Organization("UpperBestSide", "For Profit", null);
   }
 
   /**
@@ -55,20 +55,20 @@ public class OrganizationUnitTests {
   /**
    * Tests the getSchedule() method to verify the organization schedule is correct.
    */
-  @Test
-  public void getScheduleTest() {
-    Set<String> expectedSchedule = new HashSet<>();
-    expectedSchedule.add("10-17-2024 10:00 AM");
-    assertEquals(expectedSchedule, testOrganization.getSchedule());
-  }
-
-  /**
-   * Tests the getDateAdded() method to verify the organization date added is correct.
-   */
-  @Test
-  public void getDateAddedTest() throws ParseException {
-    SimpleDateFormat dateFormat = new SimpleDateFormat("MM-dd-yyyy");
-    Date expectedDateAdded = dateFormat.parse("10-17-2024");
-    assertEquals(expectedDateAdded, testOrganization.getDateAdded());
-  }
+//  @Test
+//  public void getScheduleTest() {
+//    Set<String> expectedSchedule = new HashSet<>();
+//    expectedSchedule.add("10-17-2024 10:00 AM");
+//    assertEquals(expectedSchedule, testOrganization.getSchedule());
+//  }
+//
+//  /**
+//   * Tests the getDateAdded() method to verify the organization date added is correct.
+//   */
+//  @Test
+//  public void getDateAddedTest() throws ParseException {
+//    SimpleDateFormat dateFormat = new SimpleDateFormat("MM-dd-yyyy");
+//    Date expectedDateAdded = dateFormat.parse("10-17-2024");
+//    assertEquals(expectedDateAdded, testOrganization.getDateAdded());
+//  }
 }

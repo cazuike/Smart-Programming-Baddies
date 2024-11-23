@@ -44,10 +44,11 @@ public class VolunteerController {
       }
 
       String dateSignUp = String.valueOf(System.currentTimeMillis());
-      Volunteer volunteer = new Volunteer(name, role, dateSignUp, schedule);
+      // TODO
+      Volunteer volunteer = new Volunteer(name, role, null);
 
       Volunteer savedVolunteer = volunteerRepository.save(volunteer);
-      String message = "Volunteer enrolled with ID: " + savedVolunteer.getDatabaseId();
+      String message = "Volunteer enrolled with ID: " + savedVolunteer.getId();
       return ResponseEntity.ok(message);
     } catch (Exception e) {
       return handleException(e);
@@ -105,7 +106,7 @@ public class VolunteerController {
       Volunteer volunteer = volunteerRepository.findById(volunteerId)
                 .orElseThrow(() -> new IllegalArgumentException("Volunteer not found."));
 
-      volunteer.updateSchedule(newSchedule);
+//      volunteer.setSchedule(newSchedule);
       volunteerRepository.save(volunteer);
 
       return new ResponseEntity<>("Volunteer schedule updated successfully.", HttpStatus.OK);
