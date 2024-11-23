@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enroll an Organization</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        form {
+            max-width: 400px;
+            margin: auto;
+        }
+        label {
+            display: block;
+            margin: 10px 0 5px;
+        }
+        input, select, button {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+        }
+        .checkbox-group {
+            display: flex;
+            justify-content: space-between;
+        }
+    </style>
+</head>
+<body>
+    <h1>Enroll an Organization</h1>
+    <form action="/api/enroll-organization" method="POST">
+        <label for="org-name">Organization Name</label>
+        <input type="text" id="org-name" name="organizationName" required>
+        
+        <label for="org-type">Organization Type</label>
+        <select id="org-type" name="organizationType" required>
+            <option value="Non-Profit">Non-Profit</option>
+            <option value="For-Profit">For-Profit</option>
+        </select>
+        
+        <label>Days Available</label>
+        <div class="checkbox-group">
+            <label><input type="checkbox" name="daysAvailable" value="Monday"> Monday</label>
+            <label><input type="checkbox" name="daysAvailable" value="Tuesday"> Tuesday</label>
+            <label><input type="checkbox" name="daysAvailable" value="Wednesday"> Wednesday</label>
+            <label><input type="checkbox" name="daysAvailable" value="Thursday"> Thursday</label>
+            <label><input type="checkbox" name="daysAvailable" value="Friday"> Friday</label>
+        </div>
+        
+        <button type="submit">Submit</button>
+    </form>
+</body>
+</html>
