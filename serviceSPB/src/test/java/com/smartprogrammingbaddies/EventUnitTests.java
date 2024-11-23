@@ -148,6 +148,7 @@ public class EventUnitTests {
     int expectedVolunteerCount = 1;
     assertEquals(expectedVolunteerCount, testEvent.getVolunteerCount());
   }
+
   @Test
   public void toStringWithVolunteersTest() {
     String expectedString = "Event Name: Charity Drive\n"

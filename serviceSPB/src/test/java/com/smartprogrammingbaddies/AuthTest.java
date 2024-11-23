@@ -4,11 +4,10 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import javax.sql.DataSource;
-
 import com.smartprogrammingbaddies.auth.ApiKey;
 import com.smartprogrammingbaddies.auth.ApiKeyRepository;
 import com.smartprogrammingbaddies.auth.AuthController;
+import java.util.Optional;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -22,8 +21,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
-
-import java.util.Optional;
 
 /**
  * This class contains unit tests for Auth Controller.
@@ -53,7 +50,8 @@ public class AuthTest {
 
   @Test
   public void verifyApiKeyTest() throws Exception {
-    ResponseEntity<?> mockResponse = new ResponseEntity<>("API key not found in DB.", HttpStatus.NOT_FOUND);
+    ResponseEntity<?> mockResponse = new ResponseEntity<>("API key not found in DB.",
+            HttpStatus.NOT_FOUND);
 
     Mockito.when(apiKeyRepository.existsByApiKey(apiKey)).thenReturn(true);
     MvcResult result = mockMvc.perform(get("/verifyApiKey")

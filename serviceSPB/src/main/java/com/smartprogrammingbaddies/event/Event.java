@@ -81,7 +81,7 @@ public class Event {
   }
 
 
-    /**
+  /**
    * Gets the database's primary key of the event.
    *
    * @return int value of the id of the event
@@ -286,13 +286,14 @@ public class Event {
             .append("Date: ").append(date).append("\n")
             .append("Time: ").append(time.toString()).append("\n")
             .append("Location: ").append(location).append("\n")
-            .append("Storage Center: ").append(storage == null ? "null" : storage.getName()).append("\n")
+            .append("Storage Center: ").append(storage == null
+                    ? "null" : storage.getName()).append("\n")
             .append("Organizer: Organization Name: ").append(organizer.getOrgName()).append("\n");
 
     if (!volunteers.isEmpty()) {
       eventDetails.append("Volunteer Names: \n");
       volunteers.stream()
-              .sorted((v1, v2) -> v1.getName().compareToIgnoreCase(v2.getName())) // Sort volunteers by name
+              .sorted((v1, v2) -> v1.getName().compareToIgnoreCase(v2.getName()))
               .forEach(volunteer -> eventDetails.append("- ")
                       .append(volunteer.getName())
                       .append(" - ")

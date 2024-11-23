@@ -5,8 +5,8 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import com.smartprogrammingbaddies.auth.AuthController;
 import com.smartprogrammingbaddies.auth.ApiKeyRepository;
+import com.smartprogrammingbaddies.auth.AuthController;
 import com.smartprogrammingbaddies.event.Event;
 import com.smartprogrammingbaddies.event.EventController;
 import com.smartprogrammingbaddies.event.EventRepository;
@@ -14,8 +14,10 @@ import com.smartprogrammingbaddies.organization.Organization;
 import com.smartprogrammingbaddies.storagecenter.StorageCenter;
 import com.smartprogrammingbaddies.storagecenter.StorageCenterRepository;
 import com.smartprogrammingbaddies.utils.TimeSlot;
-import com.smartprogrammingbaddies.volunteer.Volunteer;
 import com.smartprogrammingbaddies.volunteer.VolunteerRepository;
+import java.util.HashSet;
+import java.util.Optional;
+import java.util.Set;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -26,10 +28,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
-
-import java.util.Optional;
-import java.util.Set;
-import java.util.HashSet;
 
 /**
  * Unit tests for the Event Controller.
@@ -56,11 +54,17 @@ public class EventControllerTests {
   @MockBean
   private VolunteerRepository volunteerRepository;
 
+  /**
+   * Sets up the Event instance and related objects before each test.
+   */
   @BeforeEach
   public void setUp() {
-    Mockito.when(eventRepository.findById(Integer.valueOf(eventId))).thenReturn(Optional.of(new Event()));
-    ResponseEntity<?> validKeyResponse = new ResponseEntity<>("Valid API Key", HttpStatus.OK);
-    ResponseEntity<?> invalidKeyResponse = new ResponseEntity<>("Invalid API key.", HttpStatus.FORBIDDEN);
+    Mockito.when(eventRepository.findById(Integer.valueOf(eventId))).thenReturn(
+            Optional.of(new Event()));
+    ResponseEntity<?> validKeyResponse = new ResponseEntity<>("Valid API Key",
+            HttpStatus.OK);
+    ResponseEntity<?> invalidKeyResponse = new ResponseEntity<>("Invalid API key.",
+            HttpStatus.FORBIDDEN);
 
     Mockito.when(auth.verifyApiKey(apiKey)).thenReturn((ResponseEntity) validKeyResponse);
     Mockito.when(auth.verifyApiKey(badApiKey)).thenReturn((ResponseEntity) invalidKeyResponse);
@@ -68,19 +72,23 @@ public class EventControllerTests {
     StorageCenter mockStorage = new StorageCenter("Mock Storage", "A mock storage for testing");
     Set<String> mockSchedule = new HashSet<>();
     mockSchedule.add("10-17-2024 10:00 AM");
-    Organization mockOrg = new Organization("Mock Org", "Test", mockSchedule, null);
+    Organization mockOrg = new Organization("Mock Org", "Test",
+            mockSchedule, null);
 
-    Event mockEvent = new Event("Food Drive","A food drive for the local community", "07-11-2021",
-            new TimeSlot("09:00", "13:30"),"Columbia University", mockStorage, mockOrg, new HashSet<>());
+    Event mockEvent = new Event("Food Drive", "A food drive for the local community",
+            "07-11-2021", new TimeSlot("09:00", "13:30"), "Columbia University",
+            mockStorage, mockOrg, new HashSet<>());
 
     // Mock repository behavior
     Mockito.when(eventRepository.findById(1)).thenReturn(Optional.of(mockEvent));
-    Mockito.when(eventRepository.save(Mockito.any(Event.class))).thenAnswer(invocation -> {
-      Event event = invocation.getArgument(0);
-      return event;
-    });
+    Mockito.when(eventRepository.save(Mockito.any(Event.class)))
+                    .thenAnswer(invocation -> {
+                      Event event = invocation.getArgument(0);
+                      return event;
+                    });
 
-    Mockito.when(eventRepository.findById(Integer.valueOf(eventId))).thenReturn(Optional.of(mockEvent));
+    Mockito.when(eventRepository.findById(Integer.valueOf(eventId)))
+                    .thenReturn(Optional.of(mockEvent));
   }
 
   @Test
@@ -134,8 +142,8 @@ public class EventControllerTests {
             .andExpect(status().isOk())
             .andReturn();
 
-//    String responseContent = result.getResponse().getContentAsString();
-//    eventId = TestUtils.extract(prefix, responseContent);
+    //    String responseContent = result.getResponse().getContentAsString();
+    //    eventId = TestUtils.extract(prefix, responseContent);
 
     mockMvc.perform(get("/retrieveEvent")
                     .param("apiKey", apiKey)

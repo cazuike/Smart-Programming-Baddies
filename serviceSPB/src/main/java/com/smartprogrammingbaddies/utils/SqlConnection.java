@@ -1,20 +1,16 @@
 package com.smartprogrammingbaddies.utils;
 
-import com.smartprogrammingbaddies.auth.ApiKey;
-import com.smartprogrammingbaddies.auth.ApiKeyRepository;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import io.github.cdimascio.dotenv.Dotenv;
-import java.util.Optional;
 import javax.sql.DataSource;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 
 /**
  * This class contains the SqlConnection class.
  */
 @Configuration
-public class SqlConnection {
+public abstract class SqlConnection {
   private static final Dotenv dotenv = Dotenv.load();
 
   private static final String INSTANCE_CONNECTION_NAME =
@@ -22,9 +18,6 @@ public class SqlConnection {
   private static final String DB_USER = dotenv.get("DB_USER");
   private static final String DB_PASS = dotenv.get("DB_PASS");
   private static final String DB_NAME = dotenv.get("DB_NAME");
-
-  @Autowired
-  private ApiKeyRepository apiKeyRepository;
 
   /**
    * Creates a connection to the SQL database.

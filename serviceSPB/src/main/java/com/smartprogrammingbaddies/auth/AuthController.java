@@ -6,7 +6,6 @@ import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -76,6 +75,12 @@ public class AuthController {
     }
   }
 
+  /**
+   * Enrolls a client into the database.
+   *
+   * @param apiKey A {@code String} representing the client's API key.
+   * @return A {@code boolean} indicating if the client was successfully enrolled.
+   */
   public boolean enrollClient(String apiKey) {
     try {
       if (!apiKeyRepository.existsByApiKey(apiKey)) {

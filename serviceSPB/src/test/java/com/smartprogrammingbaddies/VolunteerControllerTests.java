@@ -11,6 +11,8 @@ import com.smartprogrammingbaddies.auth.AuthController;
 import com.smartprogrammingbaddies.volunteer.Volunteer;
 import com.smartprogrammingbaddies.volunteer.VolunteerController;
 import com.smartprogrammingbaddies.volunteer.VolunteerRepository;
+import java.util.HashMap;
+import java.util.Optional;
 import org.json.JSONObject;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
@@ -24,9 +26,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
-
-import java.util.HashMap;
-import java.util.Optional;
 
 /**
  * Unit tests for the Volunteer Controller.
@@ -56,8 +55,10 @@ public class VolunteerControllerTests {
   @BeforeEach
   public void setUp() {
 
-    ResponseEntity<?> mockResponse = new ResponseEntity<>("Valid API Key", HttpStatus.OK);
-    ResponseEntity<?> mockResponse2 = new ResponseEntity<>("Invalid API key.", HttpStatus.FORBIDDEN);
+    ResponseEntity<?> mockResponse = new ResponseEntity<>("Valid API Key",
+            HttpStatus.OK);
+    ResponseEntity<?> mockResponse2 = new ResponseEntity<>("Invalid API key.",
+            HttpStatus.FORBIDDEN);
 
     Mockito.when(auth.verifyApiKey(apiKey)).thenReturn((ResponseEntity) mockResponse);
     Mockito.when(auth.verifyApiKey(badApiKey)).thenReturn((ResponseEntity) mockResponse2);
