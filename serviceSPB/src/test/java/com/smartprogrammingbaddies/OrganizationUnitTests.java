@@ -3,40 +3,40 @@ package com.smartprogrammingbaddies;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import com.smartprogrammingbaddies.organization.Organization;
-import java.sql.Date;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.test.context.ContextConfiguration;
-
 
 /**
  * Unit tests for the Organization class.
  */
-@ContextConfiguration(classes = {Organization.class})
-public class OrganizationsUnitTest {
+public class OrganizationUnitTests {
   /**
-    * The Organization set up to be tested.
-    */
-  public static Organization testOrganization;
+   * The Organization set up to be tested.
+   */
+  private static Organization testOrganization;
 
   /**
-    * Sets up the Organization instance and schedule before each test.
-    */
+   * Sets up the Organization instance and schedule before each test.
+   */
   @BeforeEach
-  public void setUpOrganizationForTesting() {
+  public void setUpOrganizationForTesting() throws ParseException {
     Set<String> schedule = new HashSet<>();
     schedule.add("10-17-2024 10:00 AM");
-    String dateString = "10-17-2024";
-    Date dateAdded = Date.valueOf(dateString);
+
+    SimpleDateFormat dateFormat = new SimpleDateFormat("MM-dd-yyyy");
+    Date dateAdded = dateFormat.parse("10-17-2024");
 
     testOrganization = new Organization("UpperBestSide", "For Profit", schedule, dateAdded);
   }
 
   /**
-    * Tests the getOrgName() method to verify the organization name is correct.
-    */
+   * Tests the getOrgName() method to verify the organization name is correct.
+   */
   @Test
   public void getOrgNameTest() {
     String expectedName = "UpperBestSide";
@@ -44,8 +44,8 @@ public class OrganizationsUnitTest {
   }
 
   /**
-    * Tests the getOrgType() method to verify the organization type is correct.
-    */
+   * Tests the getOrgType() method to verify the organization type is correct.
+   */
   @Test
   public void getOrgTypeTest() {
     String expectedType = "For Profit";
@@ -53,8 +53,8 @@ public class OrganizationsUnitTest {
   }
 
   /**
-    * Tests the getSchedule() method to verify the organization schedule is correct.
-    */
+   * Tests the getSchedule() method to verify the organization schedule is correct.
+   */
   @Test
   public void getScheduleTest() {
     Set<String> expectedSchedule = new HashSet<>();
@@ -63,11 +63,12 @@ public class OrganizationsUnitTest {
   }
 
   /**
-    * Tests the getDateAdded() method to verify the organization date added is correct.
-    */
+   * Tests the getDateAdded() method to verify the organization date added is correct.
+   */
   @Test
-  public void getDateAddedTest() {
-    String expectedDateAdded = "10-17-2024";
+  public void getDateAddedTest() throws ParseException {
+    SimpleDateFormat dateFormat = new SimpleDateFormat("MM-dd-yyyy");
+    Date expectedDateAdded = dateFormat.parse("10-17-2024");
     assertEquals(expectedDateAdded, testOrganization.getDateAdded());
   }
 }

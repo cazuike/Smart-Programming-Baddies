@@ -105,6 +105,9 @@
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-surefire-plugin</artifactId>
 				<configuration>
+					<systemPropertyVariables>
+						<net.bytebuddy.experimental>true</net.bytebuddy.experimental>
+					</systemPropertyVariables>
 					<excludedGroups>local</excludedGroups>
 				</configuration>
 			</plugin>
@@ -146,6 +149,14 @@
 						<goals>
 							<goal>report</goal>
 						</goals>
+
+             <configuration>
+            <reportFormats>
+              <reportFormat>html</reportFormat>
+              <reportFormat>xml</reportFormat>
+            </reportFormats>
+            <destFile>${project.build.directory}/jacoco/jacoco.xml</destFile>
+          </configuration>
 					</execution>
 				</executions>
 			</plugin>

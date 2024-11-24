@@ -7,6 +7,8 @@ package com.smartprogrammingbaddies;
 public class TestUtils {
   public static String apiKey = "test-service-key";
 
+  public static String badApiKey = "bad-test-key";
+
   /**
    * Extracts a substring from a string.
    *

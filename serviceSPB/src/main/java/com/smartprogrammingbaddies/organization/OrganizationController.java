@@ -1,6 +1,7 @@
 package com.smartprogrammingbaddies.organization;
 
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.NoSuchElementException;
 import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,9 +42,8 @@ public class OrganizationController {
     try {
       SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
       dateFormat.setLenient(false);
-      java.util.Date utilDate = dateFormat.parse(dateAdded);
-      java.sql.Date sqlDate = new java.sql.Date(utilDate.getTime());
-      Organization organization = new Organization(orgName, orgType, schedule, sqlDate);
+      Date date = dateFormat.parse(dateAdded);
+      Organization organization = new Organization(orgName, orgType, schedule, date);
       Organization savedOrganization = organizationRepository.save(organization);
       String message = "Organization " + savedOrganization.getDatabaseId()
              + " was created successfully";
@@ -84,7 +84,7 @@ public class OrganizationController {
     try {
       organizationRepository.deleteById(Integer.parseInt(orgId));
       boolean deleted = !organizationRepository.existsById(Integer.parseInt(orgId));
-      if (!deleted) { 
+      if (!deleted) {
         String message = "Organization with Id: " + orgId + " was not delted";
         return new ResponseEntity<>(message, HttpStatus.NOT_FOUND);
       }
