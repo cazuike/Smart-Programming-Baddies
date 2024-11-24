@@ -6,7 +6,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
@@ -22,7 +23,8 @@ public class Client {
   private String id;
   private final String clientId;
   private final Set<String> clientDatabase = new HashSet<>();
-  @OneToMany(mappedBy = "client", cascade = CascadeType.ALL, orphanRemoval = true)
+  @ManyToOne(cascade = CascadeType.ALL)
+  @JoinColumn(name = "organization_id")
   private Organization organization;
 
 
@@ -66,6 +68,15 @@ public class Client {
     return organization;
   }
 
+  /**
+   * Gets the organization that the client is associated with.
+
+   * @return the organization that the client is associated with.
+   */
+  public Organization getOrganization() {
+    return organization;
+  }
+  
   /**
    * Verifies the existence of the client.
 
