@@ -60,7 +60,7 @@ public class EventController {
    * @param organizationId  An {@code int} representing the ID of the associated
    *                        organization
    *                        (currently unused and passed as null).
-   * 
+   *
    * @return A {@code ResponseEntity} containing a success message and an HTTP 200
    *         response if the event
    *         was successfully created. Returns an HTTP 404 response if the API key
@@ -80,7 +80,7 @@ public class EventController {
       @RequestParam("organizationId") int organizationId) {
     try {
       if (auth.verifyApiKey(apiKey).getStatusCode() != HttpStatus.OK) {
-        return new ResponseEntity<>("Invalid API key", HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>("Invalid API key", HttpStatus.UNAUTHORIZED);
       }
 
       DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
@@ -176,13 +176,13 @@ public class EventController {
   public ResponseEntity<?> retrieveEvent(@RequestParam("apiKey") String apiKey,
       @RequestParam("eventId") String eventId) {
     if (auth.verifyApiKey(apiKey).getStatusCode() != HttpStatus.OK) {
-      return new ResponseEntity<>("Invalid API key", HttpStatus.NOT_FOUND);
+      return new ResponseEntity<>("Invalid API key", HttpStatus.UNAUTHORIZED);
     }
     Event event = eventRepository.findById(Integer.parseInt(eventId)).orElse(null);
     if (event == null) {
       return new ResponseEntity<>("Event not found with ID: " + eventId, HttpStatus.NOT_FOUND);
     }
-    return new ResponseEntity<>(event, HttpStatus.OK);
+    return new ResponseEntity<>(event.toString(), HttpStatus.OK);
   }
 
   /**
@@ -200,7 +200,7 @@ public class EventController {
       @RequestParam("eventId") String eventId) {
     try {
       if (auth.verifyApiKey(apiKey).getStatusCode() != HttpStatus.OK) {
-        return new ResponseEntity<>("Invalid API key", HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>("Invalid API key", HttpStatus.UNAUTHORIZED);
       }
       eventRepository.deleteById(Integer.parseInt(eventId));
       boolean deleted = !eventRepository.existsById(Integer.parseInt(eventId));

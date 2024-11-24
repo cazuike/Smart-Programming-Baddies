@@ -11,8 +11,6 @@ import org.springframework.test.context.ActiveProfiles;
  * Unit tests for the Donations class.
 
  */
-@ActiveProfiles("test")
-@SpringBootTest
 public class DonationsUnitTest {
 
   /**

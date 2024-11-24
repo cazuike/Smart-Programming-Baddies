@@ -40,7 +40,7 @@ public class VolunteerController {
     try {
       boolean validApiKey = auth.verifyApiKey(apiKey).getStatusCode() == HttpStatus.OK;
       if (!validApiKey) {
-        return new ResponseEntity<>("Invalid API key", HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>("Invalid API key.", HttpStatus.FORBIDDEN);
       }
 
       String dateSignUp = String.valueOf(System.currentTimeMillis());

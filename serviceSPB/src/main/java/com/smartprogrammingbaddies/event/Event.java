@@ -1,9 +1,11 @@
 package com.smartprogrammingbaddies.event;
 
+import com.smartprogrammingbaddies.Donations;
 import com.smartprogrammingbaddies.organization.Organization;
 import com.smartprogrammingbaddies.storagecenter.StorageCenter;
 import com.smartprogrammingbaddies.utils.TimeSlot;
 import com.smartprogrammingbaddies.volunteer.Volunteer;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -42,6 +44,9 @@ public class Event {
   @OneToMany
   @MapKey(name = "volunteer_id")
   private Set<Volunteer> volunteers;
+  @OneToMany(mappedBy = "event", cascade = CascadeType.ALL, orphanRemoval = true)
+  private Set<Donations> donations;
+
 
   /**
    * Constructs an Event with appropriate details.
@@ -258,6 +263,15 @@ public class Event {
   }
 
   /**
+   * Get Donations.
+   *
+   * @return the donations of the event
+   */
+  public Set<Donations> getDonations() {
+    return donations;
+  }
+
+  /**
    * Returns a string representation of the event, including its name, description, date, time,
    * location, storage, and the list of volunteer names.
    *
@@ -267,21 +281,28 @@ public class Event {
   public String toString() {
     StringBuilder eventDetails = new StringBuilder();
     eventDetails.append("Event Name: ").append(name).append("\n")
-                  .append("Description: ").append(description).append("\n")
-                  .append("Date: ").append(date.toString()).append("\n")
-                  .append("Time: ").append(time.toString()).append("\n")
-                  .append("Location: ").append(location).append("\n")
-                  .append("Storage Center: ").append(storage.getName()).append("\n")
-                  .append("Organizer: ").append(organizer).append("\n");
+            .append("Description: ").append(description).append("\n")
+            .append("Date: ").append(date).append("\n")
+            .append("Time: ").append(time.toString()).append("\n")
+            .append("Location: ").append(location).append("\n")
+            .append("Storage Center: ").append(storage == null
+                    ? "null" : storage.getName()).append("\n")
+            .append("Organizer: Organization Name: ").append(organizer.getOrgName()).append("\n");
+
     if (!volunteers.isEmpty()) {
       eventDetails.append("Volunteer Names: \n");
-      for (Volunteer volunteer : volunteers) {
-        String info = volunteer.getName() + " - " + volunteer.getDatabaseId();
-        eventDetails.append("- ").append(info).append("\n");
-      }
+      volunteers.stream()
+              .sorted((v1, v2) -> v1.getName().compareToIgnoreCase(v2.getName()))
+              .forEach(volunteer -> eventDetails.append("- ")
+                      .append(volunteer.getName())
+                      .append(" - ")
+                      .append(volunteer.getDatabaseId())
+                      .append("\n"));
     } else {
       eventDetails.append("No volunteers have signed up yet.\n");
     }
-    return eventDetails.toString();
+
+    return eventDetails.toString().trim();
   }
+
 }
