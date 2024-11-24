@@ -184,7 +184,7 @@ public class Event {
    *
    * @return the storage of the event (StorageCenter)
    */
-  public StorageCenter getstorage() {
+  public StorageCenter getStorageCenter() {
     return storage;
   }
 

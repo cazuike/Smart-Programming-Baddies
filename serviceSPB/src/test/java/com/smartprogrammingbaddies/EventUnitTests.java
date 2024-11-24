@@ -116,7 +116,19 @@ public class EventUnitTests {
   }
 
   @Test
+  public void getStorageCenterTest() {
+    assertEquals(testStorageCenter, testEvent.getStorageCenter());
+  }
+
+  @Test
   public void getOrganizerTest() {
+    Organization expectedOrganizer = new Organization("Food Org", "Non-Profit", new HashSet<>(), new Date());
+    testEvent.updateOrganizer(expectedOrganizer);
+    assertEquals(expectedOrganizer, testEvent.getOrganizer());
+  }
+
+  @Test
+  public void updateOrganizerTest() {
     assertEquals(testOrganizer, testEvent.getOrganizer());
   }
 
@@ -148,6 +160,20 @@ public class EventUnitTests {
     int expectedVolunteerCount = 1;
     assertEquals(expectedVolunteerCount, testEvent.getVolunteerCount());
   }
+
+  @Test
+  public void isCancelledFalseTest() {
+    boolean expectedResult = false;
+    assertEquals(expectedResult, testEvent.isCancelled());
+  }
+
+  @Test
+  public void isCancelledTrueTest() {
+    boolean expectedResult = true;
+    testEvent.cancelEvent();
+    assertEquals(expectedResult, testEvent.isCancelled());
+  }
+
 
   @Test
   public void toStringWithVolunteersTest() {
