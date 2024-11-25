@@ -1,8 +1,13 @@
 package com.smartprogrammingbaddies.organization;
 
+import java.io.Serializable;
+import java.util.Date;
+import java.util.Set;
+
 import com.smartprogrammingbaddies.client.Client;
 import com.smartprogrammingbaddies.event.Event;
 import com.smartprogrammingbaddies.storagecenter.StorageCenter;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -15,9 +20,6 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
-import java.io.Serializable;
-import java.util.Date;
-import java.util.Set;
 
 /**
  * The Organization class represents an organization, including their name, their type,
@@ -36,7 +38,7 @@ public class Organization implements Serializable {
   private Set<String> schedule;
   @ManyToOne
   @JoinColumn(name = "client_id", nullable = false)
-  private Set<Client> client;
+  private Client client;
   @OneToOne
   private StorageCenter storage;
   @OneToMany(mappedBy = "organizer", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -113,7 +115,7 @@ public class Organization implements Serializable {
    *
    * @return the id of the client
    */
-  public Set<Client> getClient() {
+  public Client getClient() {
     return client;
   }
 
