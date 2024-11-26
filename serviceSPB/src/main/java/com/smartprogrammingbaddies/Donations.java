@@ -10,7 +10,6 @@ import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
 import java.io.Serializable;
 
-
 /**
  * The Donation class representes a donation, including their name, type, donator of this item,
  * the date of this donation, lifespan, and its location.

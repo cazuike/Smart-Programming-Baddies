@@ -1,5 +1,6 @@
 package com.smartprogrammingbaddies.storagecenter;
 
+import com.google.gson.JsonObject;
 import com.smartprogrammingbaddies.item.Item;
 import com.smartprogrammingbaddies.logger.Transaction;
 import com.smartprogrammingbaddies.utils.TimeSlot;
@@ -171,6 +172,32 @@ public class StorageCenter implements Serializable {
   }
 
   /**
+   * get all expired Items in the storage center.
+   *
+   * @return a set of all expired items in the storage center
+   */
+  public Set<Item> getExpiredItems() {
+    Set<Item> expiredItems = new HashSet<>();
+    for (Item item : items) {
+      if (item.isExpired()) {
+        expiredItems.add(item);
+      }
+    }
+    return expiredItems;
+  }
+
+  /**
+   * Remove expired items from the storage.
+   */
+  public void removeExpiredItems() {
+    Set<Item> expiredItems = getExpiredItems();
+    for (Item item : expiredItems) {
+      transactions.add(new Transaction(this, item, item.getQuantity(), "Remove Expired Item"));
+      items.remove(item);
+    }
+  }
+
+  /**
    * Prints all the items in the storage.
    *
    * @return a string of all items in the storage
@@ -211,5 +238,24 @@ public class StorageCenter implements Serializable {
       result.append(hours.toString()).append("\n");
     });
     return result.toString();
+  }
+
+  /**
+   * Converts storage center info into json format.
+   *
+   * @return a json string of the storage center
+   */
+  public JsonObject toJson() {
+    JsonObject json = new JsonObject();
+    json.addProperty("name", name);
+    json.addProperty("description", description);
+    JsonObject hours = new JsonObject();
+    operationHours.forEach((day, timeSlot) -> {
+      hours.add(day.toString(), timeSlot.toJson());
+    });
+
+    json.add("operationHours", hours);
+
+    return json;
   }
 }
