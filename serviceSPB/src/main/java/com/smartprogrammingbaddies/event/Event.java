@@ -80,7 +80,6 @@ public class Event {
     // Empty constructor needed for JPA
   }
 
-
   /**
    * Gets the database's primary key of the event.
    *
@@ -185,7 +184,7 @@ public class Event {
    *
    * @return the storage of the event (StorageCenter)
    */
-  public StorageCenter getstorage() {
+  public StorageCenter getStorageCenter() {
     return storage;
   }
 

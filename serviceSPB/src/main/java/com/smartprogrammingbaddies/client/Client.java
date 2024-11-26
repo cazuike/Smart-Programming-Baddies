@@ -6,6 +6,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import java.util.HashSet;
 import java.util.Set;
@@ -24,7 +25,6 @@ public class Client {
   private Set<String> clientDatabase = new HashSet<>();
   @OneToMany(mappedBy = "client", cascade = CascadeType.ALL, orphanRemoval = true)
   private Set<Organization> organization;
-
 
   /**
    * Constructs a new client and assigns an ID.
