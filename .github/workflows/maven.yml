@@ -81,7 +81,7 @@ jobs:
           git commit -m "Add CI reports to Reports-And-Docs from run ${{ github.run_id }}" || echo "No changes to commit"
 
           git checkout -b ci-reports-${{ github.run_id }}
-          git push origin ci-reports-${{ github.run_id }}
+          git push https://${{ secrets.PERSONAL_ACCESS_TOKEN }}@github.com/cazuike/Smart-Programming-Baddies.git ci-reports-${{ github.run_id }}
 
       - name: Build with Maven
         run: mvn -B clean package --file serviceSPB/pom.xml -DskipTests
