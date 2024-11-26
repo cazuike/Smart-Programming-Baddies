@@ -69,7 +69,7 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           base: main
-          head: ci-reports-${{ github.run_id }
+          head: ci-reports-${{ github.run_id }}
           title: "Add CI reports from run ${{ github.run_id }}"
           body: "CI reports for run ${{ github.run_id }}"
 
