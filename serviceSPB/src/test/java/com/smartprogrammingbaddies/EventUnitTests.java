@@ -42,14 +42,14 @@ public class EventUnitTests {
     TimeSlot eventTime = new TimeSlot(LocalTime.of(10, 0), LocalTime.of(14, 0));
 
     testEvent = new Event(
-            "Charity Drive",
-            "A community charity event",
-            "2024-12-25",
-            eventTime,
-            "East Village",
-            testStorageCenter,
-            testOrganizer,
-            testVolunteers);
+        "Charity Drive",
+        "A community charity event",
+        "2024-12-25",
+        eventTime,
+        "East Village",
+        testStorageCenter,
+        testOrganizer,
+        testVolunteers);
   }
 
   @Test
@@ -122,7 +122,8 @@ public class EventUnitTests {
 
   @Test
   public void getOrganizerTest() {
-    Organization expectedOrganizer = new Organization("Food Org", "Non-Profit", new HashSet<>(), new Date());
+    Organization expectedOrganizer = new Organization("Food Org", "Non-Profit",
+        new HashSet<>(), new Date());
     testEvent.updateOrganizer(expectedOrganizer);
     assertEquals(expectedOrganizer, testEvent.getOrganizer());
   }
@@ -174,19 +175,18 @@ public class EventUnitTests {
     assertEquals(expectedResult, testEvent.isCancelled());
   }
 
-
   @Test
   public void toStringWithVolunteersTest() {
     String expectedString = "Event Name: Charity Drive\n"
-            + "Description: A community charity event\n"
-            + "Date: 2024-12-25\n"
-            + "Time: 10:00 - 14:00\n"
-            + "Location: East Village\n"
-            + "Storage Center: null\n"
-            + "Organizer: Organization Name: Charity Org\n"
-            + "Volunteer Names: \n"
-            + "- Jane Smith - 0\n"
-            + "- John Doe - 0\n";
+        + "Description: A community charity event\n"
+        + "Date: 2024-12-25\n"
+        + "Time: 10:00 - 14:00\n"
+        + "Location: East Village\n"
+        + "Storage Center: null\n"
+        + "Organizer: Organization Name: Charity Org\n"
+        + "Volunteer Names: \n"
+        + "- Jane Smith - 0\n"
+        + "- John Doe - 0\n";
 
     assertEquals(expectedString.trim(), testEvent.toString().trim());
   }
@@ -196,13 +196,13 @@ public class EventUnitTests {
     testEvent.getListOfVolunteers().clear();
 
     String expectedString = "Event Name: Charity Drive\n"
-            + "Description: A community charity event\n"
-            + "Date: 2024-12-25\n"
-            + "Time: 10:00 - 14:00\n"
-            + "Location: East Village\n"
-            + "Storage Center: null\n"
-            + "Organizer: Organization Name: Charity Org\n"
-            + "No volunteers have signed up yet.";
+        + "Description: A community charity event\n"
+        + "Date: 2024-12-25\n"
+        + "Time: 10:00 - 14:00\n"
+        + "Location: East Village\n"
+        + "Storage Center: null\n"
+        + "Organizer: Organization Name: Charity Org\n"
+        + "No volunteers have signed up yet.";
 
     assertEquals(expectedString.trim(), testEvent.toString().trim());
   }

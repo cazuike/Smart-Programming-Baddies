@@ -16,7 +16,6 @@ import com.smartprogrammingbaddies.storagecenter.StorageCenterRepository;
 import com.smartprogrammingbaddies.utils.TimeSlot;
 import com.smartprogrammingbaddies.volunteer.Volunteer;
 import com.smartprogrammingbaddies.volunteer.VolunteerRepository;
-
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -320,6 +319,4 @@ public class EventControllerTests {
         .param("eventId", "invalid"))
         .andExpect(status().isBadRequest());
   }
-
-
 }

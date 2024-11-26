@@ -6,8 +6,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
@@ -23,10 +23,8 @@ public class Client {
   private String id;
   private final String clientId;
   private final Set<String> clientDatabase = new HashSet<>();
-  @ManyToOne(cascade = CascadeType.ALL)
-  @JoinColumn(name = "organization_id")
+  @ManyToOne(name = "organization_id", nullable = false)
   private Organization organization;
-
 
   /**
    * Constructs a new client and assigns an ID.
@@ -68,15 +66,6 @@ public class Client {
     return organization;
   }
 
-  /**
-   * Gets the organization that the client is associated with.
-
-   * @return the organization that the client is associated with.
-   */
-  public Organization getOrganization() {
-    return organization;
-  }
-  
   /**
    * Verifies the existence of the client.
 
