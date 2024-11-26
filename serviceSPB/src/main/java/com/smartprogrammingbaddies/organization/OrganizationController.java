@@ -1,6 +1,7 @@
 package com.smartprogrammingbaddies.organization;
 
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.NoSuchElementException;
 import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,7 +42,8 @@ public class OrganizationController {
     try {
       SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
       dateFormat.setLenient(false);
-      Organization organization = new Organization(orgName, orgType, schedule, dateAdded);
+      Date date = dateFormat.parse(dateAdded);
+      Organization organization = new Organization(orgName, orgType, schedule, date);
       Organization savedOrganization = organizationRepository.save(organization);
       String message = "Organization " + savedOrganization.getDatabaseId()
              + " was created successfully";

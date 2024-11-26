@@ -7,6 +7,7 @@ import com.smartprogrammingbaddies.organization.Organization;
 import com.smartprogrammingbaddies.storagecenter.StorageCenter;
 import com.smartprogrammingbaddies.utils.TimeSlot;
 import com.smartprogrammingbaddies.volunteer.Volunteer;
+import java.sql.Date;
 import java.time.LocalTime;
 import java.util.HashSet;
 import java.util.Set;
@@ -33,7 +34,9 @@ public class EventUnitTests {
   @BeforeEach
   public void setupEventForTesting() {
     testStorageCenter = new StorageCenter();
-    testOrganizer = new Organization("Charity Org", "Non-Profit", new HashSet<>(), "12-01-2024");
+    String dateStorageCenterAdded = "12-01-2024";
+    Date dateAdded = Date.valueOf(dateStorageCenterAdded);
+    testOrganizer = new Organization("Charity Org", "Non-Profit", new HashSet<>(), dateAdded);
 
     Volunteer volunteer1 = new Volunteer("John Doe", "Helper", "12-01-2024", null);
     Volunteer volunteer2 = new Volunteer("Jane Smith", "Cook", "12-01-2024", null);

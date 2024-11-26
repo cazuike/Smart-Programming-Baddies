@@ -8,12 +8,10 @@ import io.github.cdimascio.dotenv.Dotenv;
 import java.util.Optional;
 import javax.sql.DataSource;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Configuration;
 
 /**
  * This class contains the SqlConnection class.
  */
-@Configuration
 public class SqlConnection {
   private static final Dotenv dotenv = Dotenv.load();
 

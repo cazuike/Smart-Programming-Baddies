@@ -1,10 +1,22 @@
 package com.smartprogrammingbaddies.organization;
 
+import com.smartprogrammingbaddies.client.Client;
+import com.smartprogrammingbaddies.event.Event;
+import com.smartprogrammingbaddies.storagecenter.StorageCenter;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
+import jakarta.persistence.Temporal;
+import jakarta.persistence.TemporalType;
 import java.io.Serializable;
+import java.util.Date;
 import java.util.Set;
 
 /**
@@ -15,11 +27,27 @@ import java.util.Set;
 public class Organization implements Serializable {
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
+  @Column(name = "organization_id")
   private int id;
   private String orgName;
   private String orgType;
-  private String dateAdded;
+  @Temporal(TemporalType.DATE)
+  private Date dateAdded;
   private Set<String> schedule;
+  @ManyToOne
+  @JoinColumn(name = "client_id", nullable = false)
+  private Client client;
+  @OneToOne
+  private StorageCenter storage;
+  @OneToMany(mappedBy = "organizer", cascade = CascadeType.ALL, orphanRemoval = true)
+  private Set<Event> event;
+
+  /**
+   * Empty constructor for JPA.
+   */
+  public Organization() {
+    // empty constructor for JPA
+  }
 
   /**
    * Constructs a new Organization with the specific name, type, schedule, and adate addded.
@@ -30,7 +58,7 @@ public class Organization implements Serializable {
    * @param dateAdded the date the organization was added to the system.
    */
   public Organization(String orgName, String orgType,
-      Set<String> schedule, String dateAdded) {
+      Set<String> schedule, Date dateAdded) {
     this.orgName = orgName;
     this.orgType = orgType;
     this.schedule = schedule;
@@ -76,8 +104,35 @@ public class Organization implements Serializable {
 
    * @return the date the org was added.
    */
-  public String getDateAdded() {
+  public Date getDateAdded() {
     return dateAdded;
+  }
+
+  /**
+   * Gets the id of the client.
+   *
+   * @return the id of the client
+   */
+  public Client getClient() {
+    return client;
+  }
+
+  /**
+   * Gets the storage center of the organization.
+   *
+   * @return the storage center of the organization
+   */
+  public StorageCenter getStorage() {
+    return storage;
+  }
+
+  /**
+   * Gets the events of the organization.
+   *
+   * @return the events of the organization
+   */
+  public Set<Event> getEvent() {
+    return event;
   }
 
   /**

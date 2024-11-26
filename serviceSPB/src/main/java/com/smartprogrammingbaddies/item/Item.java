@@ -80,6 +80,15 @@ public class Item {
   }
 
   /**
+   * Gets the storage center where the item is stored.
+   *
+   * @return the storage center id where the item is stored
+   */
+  public int getStorageCenter() {
+    return storageCenter.getDatabaseId();
+  }
+
+  /**
    * Gets the name of the item.
    *
    * @return the String name of the item
@@ -135,15 +144,13 @@ public class Item {
     this.quantity -= quantity;
   }
 
-
-
   /**
-   * Gets the storage center where the item is stored.
+   * Check if item is expired.
    *
-   * @return the storage center where the item is stored
+   * @return true if the item is expired, false otherwise
    */
-  public StorageCenter getStorageCenter() {
-    return storageCenter;
+  public boolean isExpired() {
+    return expirationDate != null && expirationDate.isBefore(LocalDate.now());
   }
 
   /**
@@ -166,6 +173,33 @@ public class Item {
    */
   public LocalDate getExpirationDate() {
     return expirationDate;
+  }
+
+  /**
+  * Equals method for the Item class.
+  *
+  * @param otherItem the other Item object to compare
+  * @return true if the two items are equal, false otherwise
+  */
+  @Override
+  public boolean equals(Object otherItem) {
+    if (otherItem == null || getClass() != otherItem.getClass()) {
+      return false;
+    }
+    Item item = (Item) otherItem;
+    return itemType.equals(item.itemType)
+        && storageCenter.equals(item.storageCenter)
+        && expirationDate.equals(item.expirationDate);
+  }
+
+  /**
+   * Hash code method for the Item class.
+   *
+   * @return the hash code of the Item object
+   */
+  @Override
+  public int hashCode() {
+    return itemType.hashCode() + storageCenter.hashCode() + expirationDate.hashCode();
   }
 
   /**

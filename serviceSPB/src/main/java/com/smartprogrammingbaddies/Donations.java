@@ -10,6 +10,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import java.io.Serializable;
+import java.util.Set;
 
 
 /**
@@ -30,7 +31,7 @@ public class Donations implements Serializable {
   @ManyToOne
   private Event event;
   @OneToMany
-  private StorageCenter storage;
+  private Set<StorageCenter> storage;
 
   /**
    * Constructs a new Donations item with the specific name, type, donator, lifespan and location.
@@ -108,7 +109,7 @@ public class Donations implements Serializable {
   *
   * @return the storage center associated with the donation
   */
-  public StorageCenter getStorage() {
+  public Set<StorageCenter> getStorage() {
     return storage;
   }
 

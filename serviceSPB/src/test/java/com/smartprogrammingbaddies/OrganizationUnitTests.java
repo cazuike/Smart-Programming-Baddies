@@ -3,12 +3,14 @@ package com.smartprogrammingbaddies;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import com.smartprogrammingbaddies.organization.Organization;
+import java.sql.Date;
 import java.util.HashSet;
 import java.util.Set;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.test.context.ContextConfiguration;
+
 
 /**
  * Unit tests for the Organization class.
@@ -28,8 +30,10 @@ public class OrganizationUnitTests {
   public void setUpOrganizationForTesting() {
     Set<String> schedule = new HashSet<>();
     schedule.add("10-17-2024 10:00 AM");
+    String dateString = "10-17-2024";
+    Date dateAdded = Date.valueOf(dateString);
 
-    testOrganization = new Organization("UpperBestSide", "For Profit", schedule, "10-17-2024");
+    testOrganization = new Organization("UpperBestSide", "For Profit", schedule, dateAdded);
   }
 
   /**

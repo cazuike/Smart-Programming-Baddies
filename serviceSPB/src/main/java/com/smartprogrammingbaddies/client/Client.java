@@ -23,7 +23,7 @@ public class Client {
   private String clientId;
   private Set<String> clientDatabase = new HashSet<>();
   @OneToMany(mappedBy = "client", cascade = CascadeType.ALL, orphanRemoval = true)
-  private Organization organization;
+  private Set<Organization> organization;
 
 
   /**
@@ -62,7 +62,7 @@ public class Client {
    *
    * @return organization the organization to get.
    */
-  public Organization getOrganization() {
+  public Set<Organization> getOrganization() {
     return organization;
   }
 
