@@ -85,19 +85,5 @@ jobs:
           git checkout -b ci-reports-${{ github.run_id }}
           git push origin ci-reports-${{ github.run_id }}
 
-      - name: Create a Pull Request for CI reports
-        uses: peter-evans/create-pull-request@v5
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          branch: ci-reports-${{ github.run_id }}
-          title: "Add CI reports to Reports-And-Docs folder"
-          body: |
-            This PR includes the following CI-generated files:
-            - Checkstyle report (`checkstyle-result.xml`)
-            - PMD report (`pmd.xml`)
-            - Jacoco coverage report (`index.html`)
-
-          base: ${{ github.base_ref }}
-
       - name: Build with Maven
         run: mvn -B clean package --file serviceSPB/pom.xml -DskipTests

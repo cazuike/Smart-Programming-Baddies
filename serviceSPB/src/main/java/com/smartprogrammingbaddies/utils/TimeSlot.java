@@ -1,5 +1,6 @@
 package com.smartprogrammingbaddies.utils;
 
+import com.google.gson.JsonObject;
 import jakarta.persistence.Embeddable;
 import java.time.LocalTime;
 import java.time.format.DateTimeParseException;
@@ -80,6 +81,18 @@ public class TimeSlot {
   @Override
   public String toString() {
     return startTime + " - " + endTime;
+  }
+
+  /**
+   * toJson method for the TimeSlot object.
+   *
+   * @return a JSON representation of the TimeSlot object
+   */
+  public JsonObject toJson() {
+    JsonObject json = new JsonObject();
+    json.addProperty("start", startTime.toString());
+    json.addProperty("end", endTime.toString());
+    return json;
   }
 
   /**

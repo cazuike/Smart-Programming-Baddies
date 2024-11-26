@@ -6,27 +6,70 @@ Please install the following to have this run locally:
   2. JDK 17: This is what was used to implement the service, please make sure you use this JDK version as well: https://www.oracle.com/java/technologies/javase/jdk17-archive-downloads.html
   3. Visual Studio Code: I used Visual Studio Code to implement the test cases and and run all command until deployment inclusive: https://code.visualstudio.com/download
 
+4. Clone the Repository: This can be done from the startup of the VSCode window in the start display where it says clone Git Repository. You will be prompted to sign in into Github. Once signed in, copy and paste this url: https://github.com/cazuike/Smart-Programming-Baddies.git into the search box. Similar results are achieved in IntelliJ.
 
-All the endpoints are listed in our *Controller.java file, you can see all of their descriptions and what they are expected to do.
+**<h3>IN ORDER TO RUN OUR PROGRAM LOCALLY, THE .env FILE IS NEEDED!</h3>**
 
-**<h3>IN ORDER TO RUN OUR PROGRAM, THE .JSON FILE IS NEEDED!</h3>**
-
-The **spbservice-40a86-firebase-adminsdk-s1wtc-bcadcaece9.json** file that is used for compilation and that contains the secret keys needs to be under serviceSPB/src/main/java/com/smartprogrammingbaddies/
-**<h3>PLEASE CONTACT US TO RECIEVE THIS FILE IN ORDER TO COMPILE!</h3>**
+The **.env** file that is used for compilation and that contains the secret keys needs to be under serviceSPB/
+**<h3>PLEASE CONTACT US TO RECIEVE THIS FILE'S CREDENTIALS AND FORMAT IN ORDER TO COMPILE!</h3>**
 bag2158@columbia.edu
 eam2316@columbia.edu
 ca2970@columbia.edu
 jam2509@columbia.edu
 
+5. Start up Local Instance: Navigate to the serviceSPB Directory. Once there, run the following command:
+```
+mvn spring-boot:run
+```
+6. Use Instance: The service can be used via a web browser or Postman with the index route of: http://127.0.0.1:8080/
+
+All the endpoints are listed below, you can see all of their descriptions and what they are expected to do.
+
 ## Running Our Test
+Tests are found under the serviceSPB/src/test directory.
 Once all the above requirements have been met, you can run our test with the following commands:
-To check whether an endpoint is working correctly, please feel free to edit the tests on the RouteControllerTests.java file.
-When satisified run: **mvn test** or **mvn test**. To check for style **mvn checkstyle:check**
 
-All tests on this file are expected to test whether the endpoints succeed or fail. Upon testing you'll find that no test are failing, this is due to code working as expected.
+To run the tests provided in this project, run the following command in the serviceSPB directory:
+```
+mvn test
+```
+Result will be under serviceSPB/target/surefire-reports
 
-Once you run the command you'll see a report with all tests and their status on the command line interface or which ever one you decided to use.
+## Test Client Repository
+A test Food Pantry app was created to do end-to-end testing for this service.
+The repository is located here: https://github.com/bryan-granda/food-pantry-client
 
+### Run Jacoco Code Coverage Report
+To run the Jacoco Code Coverage test, run the following command in the serviceSPB directory:
+```
+mvn jacoco:report
+```
+The results are located here: serviceSPB/target/site/jacoco/index.html. Open this HTML file in your preferred web browser to see the Jacoco report with a nice UI.
+
+### Run style checker
+To run the Maven style checker, run the following command in the serviceSPB directory:
+```
+mvn checkstyle:check
+```
+The result are located here: serviceSPB/target/checkstyle-result.xml
+
+## Most Recent CI Reports
+The most recent CI reports from the most recent merge can be found on the this repository on: serviceSPB/target
+[CI Reports](https://github.com/cazuike/Smart-Programming-Baddies/tree/main/serviceSPB/target)
+
+### PMD commands
+Must have PMD installed.
+Please refer to the PMD website to receive instructions on how to install PMD.
+[link](https://pmd.github.io/)
+
+1. Once installed, Nagivate to the src folder within the serviceSPB directory.
+
+2. Run the following command:
+```
+mvn pmd:check
+```
+
+3. Results are located here: serviceSPB/target/pmd.xml.
 
 # Endpoints 🛜
 
@@ -76,7 +119,7 @@ Response:
 Success (200): Returns a welcome message indicating successful redirection to the homepage.
 
 **2. Register Location**
-Register a new location where donations can be held or stored. 
+Register a new location where donations can be held or stored.
 
 URL: /registerLocation
 Method: PATCH
@@ -89,7 +132,7 @@ Error (404): A message indicating an invalid API key.
 Error (500): A message indicating an internal error occurred during enrollment.
 
 **3. Add Donation**
-Add a donation to an existing storage center. If the location is not an existing storage center, a new reference will be created. 
+Add a donation to an existing storage center. If the location is not an existing storage center, a new reference will be created.
 
 URL: /addDonation
 Method: PATCH
@@ -112,7 +155,7 @@ Method: Get
 Query Parameters:
 apiKey (required): A valid API key provided by the client.
 Response:
-Success (200): A message listing all the existing locations within the database. 
+Success (200): A message listing all the existing locations within the database.
 Error (404): A message indicating an invalid API key.
 Error (500): A message indicating an internal error occurred during enrollment.
 
@@ -144,7 +187,7 @@ Error (404): A message indicating an invalid API key.
 Error (500): A message indicating an internal error occurred during the removal process.
 
 **3. Update Name**
-Update name of an existing volunteer. 
+Update name of an existing volunteer.
 
 URL: /updateName
 Method: PATCH
@@ -157,7 +200,7 @@ Error (404): A message indicating an invalid API key.
 Error (500): A message indicating an internal error occurred during the removal process.
 
 **4. Update Schedule**
-Update schedule of an existing volunteer. 
+Update schedule of an existing volunteer.
 
 URL: /updateSchedule
 Method: PATCH
@@ -170,7 +213,7 @@ Error (404): A message indicating an invalid API key.
 Error (500): A message indicating an internal error occurred during the removal process.
 
 **3. Update Role**
-Update role of an existing volunteer. 
+Update role of an existing volunteer.
 
 URL: /updateRole
 Method: PATCH
@@ -183,7 +226,7 @@ Error (404): A message indicating an invalid API key.
 Error (500): A message indicating an internal error occurred during the removal process.
 
 **5. RetrieveVolunteer**
-Retrieve pertinent information about a volunteer such as their schedule, name, role. 
+Retrieve pertinent information about a volunteer such as their schedule, name, role.
 
 URL: /retrieveVolunteer
 Method: GET
@@ -243,11 +286,175 @@ Response:
 - Error (404): A message indicating an invalid API key.
 - Error (500): A message indicating an internal error occurred during the removal process.
 
+# Storage Center Endpoints
+
+## 1. **Create a Storage Center**
+URL: `/createCenter`
+Method: `POST`
+Query Parameters:
+- `name` (required): A string representing the storage center's name.
+- `description` (required): A string representing the storage center's description.
+
+**Response:**
+- `String` (200): The ID of the storage center if created successfully.
+- `String` (500): An error message if an internal server error occurred.
+- `String` (400): An error message if any parameter is incorrectly formatted.
+
+---
+
+## 2. **Retrieves the Storage Center Information**
+URL:   `/getCenterInfo`
+Method: `GET`
+Query Parameters:
+- `storageCenterId` (required): An integer representing the storage center's ID.
+
+**Response:**
+- `StorageCenter` (200): The details of the storage center.
+- `String` (500): An error message if an internal server error occurred.
+- `String` (404): An error message if the storage center ID was not found.
+
+---
+
+## 3. **Deletes a Storage Center from the database**
+URL:   `/deleteCenter`
+Method: `DELETE`
+Query Parameters:
+- `storageCenterId` (required): An integer representing the storage center's ID.
+
+**Response:**
+- `String` (200): A message confirming the storage center was successfully deleted.
+- `String` (500): An error message if an internal server error occurred.
+- `String` (404): An error message if the storage center ID was not found.
+
+---
+
+## 4. **Updates the Storage Center's name**
+URL:   `/updateCenterName`
+Method: `PATCH`
+Query Parameters:
+- `storageCenterId` (required): An integer representing the storage center's ID.
+- `name` (required): A string representing the new name of the storage center.
+
+**Response:**
+- `String` (200): A message confirming the storage center's name was updated.
+- `String` (500): An error message if an internal server error occurred.
+- `String` (400): An error message if any parameter is incorrectly formatted.
+- `String` (404): An error message if the storage center ID was not found.
+
+---
+
+## 5. **Updates the Storage Center's description**
+URL:   `/updateCenterDescription`
+Method: `PATCH`
+Query Parameters:
+- `storageCenterId` (required): An integer representing the storage center's ID.
+- `description` (required): A string representing the new description of the storage center.
+
+**Response:**
+- `String` (200): A message confirming the storage center's description was updated.
+- `String` (500): An error message if an internal server error occurred.
+- `String` (400): An error message if any parameter is incorrectly formatted.
+- `String` (404): An error message if the storage center ID was not found.
+
+---
+
+## 6. **Updates the Storage Center's operating hours**
+URL:   `/updateCenterHours`
+Method: `PATCH`
+Query Parameters:
+- `storageCenterId` (required): An integer representing the storage center's ID.
+- `day` (required): An integer representing the day of the week (1–7).
+- `open` (required): A string representing the opening time in `HH:MM` format.
+- `close` (required): A string representing the closing time in `HH:MM` format.
+
+**Response:**
+- `String` (200): A message confirming the storage center's operating hours were updated.
+- `String` (500): An error message if an internal server error occurred.
+- `String` (400): An error message if any parameter is incorrectly formatted.
+- `String` (404): An error message if the storage center ID was not found.
+
+---
+
+## 7. **Adds an item to the Storage Center**
+URL:   `/checkInItems`
+Method: `PATCH`
+Query Parameters:
+- `storageCenterId` (required): An integer representing the storage center's ID.
+- `type` (required): A string representing the item type (FOOD, CLOTHES, or TOILETRIES).
+- `name` (required): A string representing the item's name.
+- `quantity` (required): An integer representing the item's quantity (positive value).
+- `expirationDate` (required): A string representing the item's expiration date in `yyyy-MM-dd` format.
+
+**Response:**
+- `String` (200): A message confirming the item was successfully added.
+- `String` (500): An error message if an internal server error occurred.
+- `String` (400): An error message if any parameter is incorrectly formatted.
+- `String` (404): An error message if the storage center ID was not found.
+
+---
+
+## 8. **Removes an item from the Storage Center**
+URL:   `/checkOutItems`
+Method: `PATCH`
+Query Parameters:
+- `storageCenterId` (required): An integer representing the storage center's ID.
+- `type` (required): A string representing the item type (FOOD, CLOTHES, or TOILETRIES).
+- `name` (required): A string representing the item's name.
+- `quantity` (required): An integer representing the item's quantity.
+
+**Response:**
+- `String` (200): A message confirming the item was successfully removed.
+- `String` (500): An error message if an internal server error occurred.
+- `String` (400): An error message if any parameter is incorrectly formatted.
+- `String` (404): An error message if the storage center ID was not found.
+
+---
+
+## 9. **Removes expired items from inventory**
+URL: `/removeExpiredItems`
+Method: `PATCH`
+Query Parameters:
+- `storageCenterId` (required): An integer representing the storage center's ID.
+
+Response:
+- `String` (200): A message confirming the expired items were successfully removed.
+- `String` (500): An error message if an internal server error occurred.
+- `String` (404): An error message if the storage center ID was not found.
+
+---
+
+## 10. **Get the Storage Center's inventory**
+URL: `/listInventory`
+Method: `GET`
+Query Parameters:
+- `storageCenterId` (required): An integer representing the storage center's ID.
+
+Response:
+- `List<Item>` (200): A list of items in the storage center's inventory.
+- `String` (500): An error message if an internal server error occurred.
+- `String` (404): An error message if the storage center ID was not found.
+
+---
+
+## 11. **Get the Storage Center's transactions**
+URL: `/listTransactions`
+Method: `GET`
+Query Parameters:
+- `storageCenterId` (required): An integer representing the storage center's ID.
+
+Response:
+- `List<Transaction>` (200): A list of transactions from the storage center.
+- `String` (500): An error message if an internal server error occurred.
+- `String` (404): An error message if the storage center ID was not found.
+
+
 # Tools Utilized 🔬
-- Firebase DB
+- Spring Data JPA
+- Google Cloud SQL
 - Maven Package Manager
 - GitHub Actions CI
 - Checkstyle
+- PMD Static Bug Analysis
 
 
 
