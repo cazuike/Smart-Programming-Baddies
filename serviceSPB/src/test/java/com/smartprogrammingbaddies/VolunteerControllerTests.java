@@ -4,8 +4,6 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
-import com.smartprogrammingbaddies.auth.ApiKey;
 import com.smartprogrammingbaddies.auth.ApiKeyRepository;
 import com.smartprogrammingbaddies.auth.AuthController;
 import com.smartprogrammingbaddies.volunteer.Volunteer;
@@ -15,7 +13,6 @@ import java.util.HashMap;
 import java.util.Optional;
 import org.json.JSONObject;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<checkstyle version="9.3">
+<file name="/Users/ev/Desktop/School/ASE/Smart-Programming-Baddies/serviceSPB/src/main/java/com/smartprogrammingbaddies/event/EventController.java">
+<error line="206" severity="warning" message="Line is longer than 100 characters (found 107)." source="com.puppycrawl.tools.checkstyle.checks.sizes.LineLengthCheck"/>
+<error line="207" column="5" severity="warning" message="&apos;if rcurly&apos; has incorrect indentation level 4, expected level should be 6." source="com.puppycrawl.tools.checkstyle.checks.indentation.IndentationCheck"/>
+</file>
+<file name="/Users/ev/Desktop/School/ASE/Smart-Programming-Baddies/serviceSPB/src/test/java/com/smartprogrammingbaddies/VolunteerControllerTests.java">
+<error line="7" column="1" severity="warning" message="&apos;com.smartprogrammingbaddies.auth.ApiKeyRepository&apos; should be separated from previous import group by one line." source="com.puppycrawl.tools.checkstyle.checks.imports.CustomImportOrderCheck"/>
+</file>
+<file name="/Users/ev/Desktop/School/ASE/Smart-Programming-Baddies/serviceSPB/src/test/java/com/smartprogrammingbaddies/EventUnitTests.java">
+<error line="129" severity="warning" message="Line is longer than 100 characters (found 111)." source="com.puppycrawl.tools.checkstyle.checks.sizes.LineLengthCheck"/>
+</file>
+</checkstyle>

@@ -30,7 +30,7 @@ public class EventUnitTests {
   @BeforeEach
   public void setupEventForTesting() {
     testStorageCenter = new StorageCenter();
-    String dateStorageCenterAdded = "12-01-2024";
+    String dateStorageCenterAdded = "2024-12-25";
     Date dateAdded = Date.valueOf(dateStorageCenterAdded);
     testOrganizer = new Organization("Charity Org", "Non-Profit", new HashSet<>(), dateAdded);
 
@@ -124,7 +124,7 @@ public class EventUnitTests {
 
   @Test
   public void getOrganizerTest() {
-    String dateStorageCenterAdded = "12-01-2024";
+    String dateStorageCenterAdded = "2024-12-25";
     Date dateAdded = Date.valueOf(dateStorageCenterAdded);
     Organization expectedOrganizer = new Organization("Charity Org", "Non-Profit", new HashSet<>(), dateAdded);
     testEvent.updateOrganizer(expectedOrganizer);
