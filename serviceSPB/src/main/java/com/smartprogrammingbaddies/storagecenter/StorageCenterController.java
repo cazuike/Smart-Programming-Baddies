@@ -1,5 +1,6 @@
 package com.smartprogrammingbaddies.storagecenter;
 
+import com.google.gson.JsonObject;
 import com.smartprogrammingbaddies.item.Item;
 import com.smartprogrammingbaddies.item.ItemId;
 import com.smartprogrammingbaddies.item.ItemRepository;
@@ -11,6 +12,7 @@ import java.time.DateTimeException;
 import java.time.format.DateTimeParseException;
 import java.util.NoSuchElementException;
 import java.util.Optional;
+import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
@@ -41,8 +43,8 @@ public class StorageCenterController {
    * @param name A {@code String} representing the Storage Center's name.
    * @param description A {@code String} representing the Storage Center's description.
    *
-   * @return A {@code ResponseEntity} A message if the Storage Center
-   *     was successfully created and a HTTP 200 response or,
+   * @return A {@code ResponseEntity} The Id of the Storage Center
+   *     if created and a HTTP 200 response or,
    *     HTTP 500 reponse if an error occurred.
    */
   @PostMapping("/createCenter")
@@ -52,9 +54,9 @@ public class StorageCenterController {
     try {
       StorageCenter storageCenter = new StorageCenter(name, description);
       StorageCenter savedStorageCenter = storageCenterRepository.save(storageCenter);
-      String message = "Storage Center with following ID created successfully: ";
-      message += savedStorageCenter.getDatabaseId();
-      return ResponseEntity.ok(message);
+      JsonObject json = new JsonObject();
+      json.addProperty("storageCenterId", savedStorageCenter.getDatabaseId());
+      return ResponseEntity.ok(json.toString());
     } catch (Exception e) {
       return handleException(e);
     }
@@ -65,8 +67,7 @@ public class StorageCenterController {
    *
    * @param storageCenterId A {@code String} representing the storage center's ID.
    *
-   * @return A {@code ResponseEntity} A message if the Storage Center
-   *     was successfully retrieved and a HTTP 200 response or,
+   * @return A {@code ResponseEntity} The info of Storage Center and a HTTP 200 response or,
    *     HTTP 500 reponse if an error occurred or,
    *     HTTP 404 response if the storage center ID was not found.
    */
@@ -75,7 +76,7 @@ public class StorageCenterController {
         @RequestParam("storageCenterId") int storageCenterId) {
     try {
       StorageCenter center = storageCenterRepository.findById(storageCenterId).orElseThrow();
-      return ResponseEntity.ok(center.toString());
+      return ResponseEntity.ok(center.toJson().toString());
 
     } catch (NoSuchElementException e) {
       return handleNotFoundException("Storage Center", storageCenterId);
@@ -118,7 +119,8 @@ public class StorageCenterController {
   * @return A {@code ResponseEntity} A message if the Storage Center's name was
   *     successfully updated and a HTTP 200 response or,
   *     HTTP 500 reponse if an error occurred or,
-  *     HTTP 400 response if the storage center ID or name is incorrectly formatted.
+  *     HTTP 400 response any parameter is incorrectly formatted.
+  *     HTTP 404 response if the storage center ID is not found
   */
   @PatchMapping("/updateCenterName")
   public ResponseEntity<?> updateStorageCenterName(
@@ -145,7 +147,8 @@ public class StorageCenterController {
   * @return A {@code ResponseEntity} A message if the Storage Center's description was
   *     successfully updated and a HTTP 200 response or,
   *     HTTP 500 reponse if an error occurred or,
-  *     HTTP 400 response if the storage center ID or description is incorrectly formatted.
+  *     HTTP 400 response any parameter is incorrectly formatted.
+  *     HTTP 404 response if the storage center ID is not found
   */
   @PatchMapping("/updateCenterDescription")
   public ResponseEntity<?> updateStorageCenterDescription(
@@ -301,10 +304,59 @@ public class StorageCenterController {
   }
 
   /**
+   * List expired items in the storage center.
+   *
+   * @param storageCenterId A {@code String} representing the storage center's ID.
+   * @return A {@code ResponseEntity} The list of expired items if the storage center was
+   *     successfully found and a HTTP 200 response or,
+   *     HTTP 500 reponse if an error occurred or,
+   *     HTTP 404 response if the storage center ID is not found.
+   */
+  @GetMapping("/listExpiredItems")
+  public ResponseEntity<?> listExpiredItems(
+        @RequestParam("storageCenterId") int storageCenterId) {
+    try {
+      StorageCenter storage = storageCenterRepository.findById(storageCenterId).orElseThrow();
+      return ResponseEntity.ok(storage.getExpiredItems());
+
+    } catch (NoSuchElementException e) {
+      return handleNotFoundException("Storage Center", storageCenterId);
+    } catch (Exception e) {
+      return handleException(e);
+    }
+  }
+
+  /**
+   * Removes expired items from inventory.
+   *
+   * @param storageCenterId A {@code String} representing the storage center's ID.
+   * @return A {@code ResponseEntity} A message if the expired items were removed
+   *     successfully and a HTTP 200 response or,
+   *     HTTP 500 reponse if an error occurred or,
+   *     HTTP 404 response if the storage center ID is not found.
+   */
+  @PatchMapping("/removeExpiredItems")
+  public ResponseEntity<?> removeExpiredItems(
+        @RequestParam("storageCenterId") int storageCenterId) {
+    try {
+      StorageCenter center = storageCenterRepository.findById(storageCenterId).orElseThrow();
+      Set<Item> expiredItems = center.getItems();
+      center.removeExpiredItems();
+      storageCenterRepository.save(center);
+      return ResponseEntity.ok(expiredItems);
+
+    } catch (NoSuchElementException e) {
+      return handleNotFoundException("Storage Center", storageCenterId);
+    } catch (Exception e) {
+      return handleException(e);
+    }
+  }
+
+  /**
    * Get the storage center's inventory.
    *
    * @param storageCenterId A {@code String} representing the storage center's ID.
-   * @return A {@code ResponseEntity} A message if the storage center was successfully
+   * @return A {@code ResponseEntity} The list of inventory if the storage center was successfully
    *     found and a HTTP 200 response or,
    *     HTTP 500 reponse if an error occurred or,
    *     404 response if the storage center ID is not found.
@@ -314,7 +366,7 @@ public class StorageCenterController {
         @RequestParam("storageCenterId") int storageCenterId) {
     try {
       StorageCenter storage = storageCenterRepository.findById(storageCenterId).orElseThrow();
-      return ResponseEntity.ok(storage.printItems());
+      return ResponseEntity.ok(storage.getItems());
 
     } catch (NoSuchElementException e) {
       return handleNotFoundException("Storage Center", storageCenterId);
@@ -327,8 +379,8 @@ public class StorageCenterController {
    * Get the storage center's transactions.
    *
    * @param storageCenterId A {@code String} representing the storage center's ID.
-   * @return A {@code ResponseEntity} A message if the storage center was successfully
-   *     found and a HTTP 200 response or,
+   * @return A {@code ResponseEntity} The list of transactions if the storage center was
+   *     successfully found and a HTTP 200 response or,
    *     HTTP 500 reponse if an error occurred or,
    *     404 response if the storage center ID is not found.
    */
@@ -347,20 +399,24 @@ public class StorageCenterController {
   }
 
   private ResponseEntity<?> handleException(Exception e) {
+    JsonObject json = new JsonObject();
+    json.addProperty("error", e.getMessage());
     boolean isBadRequest = e instanceof IllegalArgumentException
         || e instanceof NumberFormatException
         || e instanceof ParseException
         || e instanceof DateTimeParseException
         || e instanceof DateTimeException;
     if (isBadRequest) {
-      return ResponseEntity.badRequest().body(e.toString());
+      json.addProperty("error", e.getMessage());
+      return ResponseEntity.badRequest().body(json.toString());
     }
 
-    return new ResponseEntity<>(e.toString(), HttpStatus.INTERNAL_SERVER_ERROR);
+    return new ResponseEntity<>(json.toString(), HttpStatus.INTERNAL_SERVER_ERROR);
   }
 
   private ResponseEntity<?> handleNotFoundException(String entityName, int entityId) {
-    String message = entityName + " with ID: " + entityId + " was not found";
-    return ResponseEntity.status(HttpStatus.NOT_FOUND).body(message);
+    JsonObject message = new JsonObject();
+    message.addProperty("error", entityName + " with ID: " + entityId + " was not found");
+    return ResponseEntity.status(HttpStatus.NOT_FOUND).body(message.toString());
   }
 }

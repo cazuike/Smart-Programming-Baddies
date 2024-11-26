@@ -1,5 +1,6 @@
 package com.smartprogrammingbaddies.utils;
 
+import com.google.gson.JsonObject;
 import java.time.DateTimeException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -31,5 +32,17 @@ public abstract class DateParser {
   public static String numericDateToString(LocalDate date) throws DateTimeException {
     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
     return formatter.format(date);
+  }
+
+  /**
+   * toJson method is used to convert a Date object to a JSON object.
+   *
+   * @param date the Date object to convert
+   * @return a JSON ojbect that corresponds to the Date object
+   */
+  public static JsonObject toJson(LocalDate date) {
+    JsonObject json = new JsonObject();
+    json.addProperty("date", numericDateToString(date));
+    return json;
   }
 }

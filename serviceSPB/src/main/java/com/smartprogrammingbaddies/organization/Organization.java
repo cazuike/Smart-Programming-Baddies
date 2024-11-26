@@ -36,7 +36,7 @@ public class Organization implements Serializable {
   private Set<String> schedule;
   @ManyToOne
   @JoinColumn(name = "client_id", nullable = false)
-  private Set<Client> client;
+  private Client client;
   @OneToOne
   private StorageCenter storage;
   @OneToMany(mappedBy = "organizer", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -113,7 +113,7 @@ public class Organization implements Serializable {
    *
    * @return the id of the client
    */
-  public Set<Client> getClient() {
+  public Client getClient() {
     return client;
   }
 

@@ -21,10 +21,10 @@ public class Client {
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
   private String id;
-  private final String clientId;
-  private final Set<String> clientDatabase = new HashSet<>();
-  @ManyToOne(name = "organization_id", nullable = false)
-  private Organization organization;
+  private String clientId;
+  private Set<String> clientDatabase = new HashSet<>();
+  @OneToMany(mappedBy = "client", cascade = CascadeType.ALL, orphanRemoval = true)
+  private Set<Organization> organization;
 
   /**
    * Constructs a new client and assigns an ID.
@@ -62,7 +62,7 @@ public class Client {
    *
    * @return organization the organization to get.
    */
-  public Organization getOrganization() {
+  public Set<Organization> getOrganization() {
     return organization;
   }
 
