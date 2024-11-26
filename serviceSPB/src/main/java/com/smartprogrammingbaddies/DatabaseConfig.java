@@ -1,6 +1,5 @@
 package com.smartprogrammingbaddies;
 
-import com.smartprogrammingbaddies.utils.SqlConnection;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import javax.sql.DataSource;
@@ -13,12 +12,6 @@ import org.springframework.context.annotation.Profile;
  */
 @Configuration
 public class DatabaseConfig {
-  @Bean
-  @Profile("default")
-  public DataSource mysqlDataSource() {
-    return SqlConnection.createSqlConnection();
-  }
-
   /**
    * Creates a H2 in-memory database for testing purposes.
    *

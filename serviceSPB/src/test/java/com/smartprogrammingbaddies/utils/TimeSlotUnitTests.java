@@ -115,6 +115,15 @@ public class TimeSlotUnitTests {
   }
 
   /**
+   * Test the toJson method to verify the JSON object is correct.
+   */
+  @Test
+  public void toJsonTest() {
+    String expectedJson = "{\"start\":\"10:00\",\"end\":\"19:00\"}";
+    assertEquals(expectedJson, testTimeSlot.toJson().toString());
+  }
+
+  /**
    * Test the hashCode method to verify the hash code is correct.
    */
   @Test
