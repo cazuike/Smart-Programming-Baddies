@@ -31,8 +31,6 @@ jobs:
           distribution: 'temurin'
           cache: maven
 
-      - name: Checking PWD
-        run: pwd
       - name: Set up MySQL
         run: |
           cd serviceSPB
@@ -51,7 +49,7 @@ jobs:
           key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
           restore-keys: ${{ runner.os }}-maven
 
-      - name: Run Unit Tests
+      - name: Run Tests
         run: |
           cd serviceSPB
           mvn clean test
