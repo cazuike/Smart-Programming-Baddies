@@ -7,6 +7,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import com.smartprogrammingbaddies.item.Item;
 import com.smartprogrammingbaddies.item.ItemId;
 import com.smartprogrammingbaddies.item.ItemId.ItemType;
+import com.smartprogrammingbaddies.logger.Transaction;
 import com.smartprogrammingbaddies.utils.TimeSlot;
 import java.text.ParseException;
 import java.time.DayOfWeek;
@@ -28,6 +29,7 @@ public class StorageCenterUnitTests {
   private Map<DayOfWeek, TimeSlot> testHours;
   private Set<Item> testItems;
   private Item testItem;
+  private Set<Transaction> testTransactions;
 
   /**
    * The StorageCenter set up to be tested.
@@ -46,6 +48,8 @@ public class StorageCenterUnitTests {
     ItemId itemId = new ItemId(ItemType.FOOD, "Canned Beans");
     testItem = new Item(itemId, 10, testCenter, "2022-12-31");
     testItems.add(testItem);
+    testTransactions = new HashSet<>();
+    testCenter.setTransactions(testTransactions);
   }
 
   /**
@@ -258,5 +262,37 @@ public class StorageCenterUnitTests {
     testCenter.removeExpiredItems();
     Set<Item> updatedItems = testCenter.getItems();
     assertEquals(0, updatedItems.size());
+  }
+
+  /**
+   * Tests the setTransactions method to verify the transactions are set correctly.
+   */
+  @Test
+  public void setTransactionsTest() {
+    StorageCenter testCenter2 = new StorageCenter("CUFP", "Food Pantry");
+    Set<Transaction> transactions = new HashSet<>();
+    testCenter2.setTransactions(transactions);
+    assertEquals(transactions, testCenter2.getTransactions());
+  }
+
+  /**
+   * Tests the setTransactions method to verify it throws an IllegalArgumentException on null set.
+   */
+  @Test
+  public void setTransactionsFailTest() {
+    assertThrows(IllegalArgumentException.class, () -> {
+      testCenter.setTransactions(null);
+    });
+  }
+
+  /**
+   * Tests the getTransactions method to verify that transactions are not updated when not null.
+   */
+  @Test
+  public void setTransactionsWhenNotNullTests() {
+    assertThrows(IllegalArgumentException.class, () -> {
+      Set<Transaction> transactions = new HashSet<>();
+      testCenter.setTransactions(transactions);
+    });
   }
 }
