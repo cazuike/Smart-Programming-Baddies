@@ -82,7 +82,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: jacoco-report
-          path: ./serviceSPB/target/jacoco/index.html
+          path: ./serviceSPB/target/site/jacoco/index.html
 
       - name: Build with Maven
         run: mvn -B clean package --file serviceSPB/pom.xml -DskipTests
