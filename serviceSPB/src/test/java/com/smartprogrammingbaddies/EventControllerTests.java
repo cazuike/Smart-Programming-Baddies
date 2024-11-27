@@ -271,7 +271,8 @@ public class EventControllerTests {
     mockEvents.add(new Event("Food Drive", "Description", "2024-10-30",
         new TimeSlot("09:00", "13:30"), "Columbia University", null, null, new HashSet<>()));
 
-    Mockito.when(eventRepository.findByLocation("Columbia University")).thenReturn(mockEvents);
+    Mockito.when(eventRepository.findByLocationContainingIgnoreCase("Columbia University"))
+        .thenReturn(mockEvents);
 
     mockMvc.perform(get("/searchEventsByLocation")
         .param("apiKey", apiKey)
@@ -283,7 +284,8 @@ public class EventControllerTests {
   @Test
   public void searchEventsByLocationFailTest() throws Exception {
     List<Event> mockEvents = new ArrayList<>();
-    Mockito.when(eventRepository.findByLocation("Nonexistent Location")).thenReturn(mockEvents);
+    Mockito.when(eventRepository.findByLocationContainingIgnoreCase("Nonexistent Location"))
+            .thenReturn(mockEvents);
 
     mockMvc.perform(get("/searchEventsByLocation")
         .param("apiKey", apiKey)

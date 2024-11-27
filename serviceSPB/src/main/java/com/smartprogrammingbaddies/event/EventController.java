@@ -12,6 +12,7 @@ import java.util.HashSet;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -21,8 +22,10 @@ import org.springframework.web.bind.annotation.RestController;
 /**
  * This class contains the EventController class.
  */
+//for testing
+@CrossOrigin(origins = "http://localhost:3000")
 @RestController
-public class EventController {
+public class EventController {  
   @Autowired
   EventRepository eventRepository;
 
@@ -67,7 +70,6 @@ public class EventController {
    *         or storage center ID is invalid,
    *         or an HTTP 500 response if an error occurs.
    */
-
   @PostMapping("/createEvent")
   public ResponseEntity<?> createEvent(@RequestParam("apiKey") String apiKey,
       @RequestParam("name") String name,
@@ -203,8 +205,9 @@ public class EventController {
         return new ResponseEntity<>("Invalid API key", HttpStatus.UNAUTHORIZED);
       }
       if (!eventRepository.existsById(Integer.parseInt(eventId))) {
-        return new ResponseEntity<>("Event with ID: " + eventId + " does not exist", HttpStatus.NOT_FOUND);
-    }
+        String message = "Event with ID: " + eventId + " does not exist";
+        return new ResponseEntity<>(message, HttpStatus.NOT_FOUND);
+      }
       eventRepository.deleteById(Integer.parseInt(eventId));
       String message = "Event with ID: " + eventId + " was deleted successfully";
       return new ResponseEntity<>(message, HttpStatus.OK);
@@ -271,8 +274,8 @@ public class EventController {
         return new ResponseEntity<>("Invalid API key", HttpStatus.NOT_FOUND);
       }
 
-      // Fetch events by date
-      var events = eventRepository.findByLocation(location);
+      // Fetch events by location
+      var events = eventRepository.findByLocationContainingIgnoreCase(location);
 
       if (events.isEmpty()) {
         return new ResponseEntity<>("No events found on the specified location: " + location,

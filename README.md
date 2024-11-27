@@ -258,7 +258,132 @@ Response:
 - Error (404): A message indicating an invalid API key.
 - Error (500): A message indicating an internal error occurred during event creation.
 
-**2. Retrieve Event**
+**2. Add Volunteer to Event**  
+Associates a volunteer with an event.
+
+URL: /addVolunteerToEvent  
+Method: POST  
+Query Parameters:
+- apiKey (required): A valid API key for authentication.
+- eventId (required): The ID of the event.
+- volunteerId (required): The ID of the volunteer.
+
+Response:
+- Success (200): A message confirming the volunteer was added to the event.
+- Error (404): A message indicating an invalid API key, event ID, or volunteer ID.
+- Error (500): A message indicating an internal error occurred while adding the volunteer.
+
+
+markdown
+Copy code
+## Event Controller
+
+**1. Create Event**  
+Creates a new event and adds it to the system, associating it with a storage center and optional volunteers.
+
+URL: /createEvent  
+Method: POST  
+Query Parameters:
+- apiKey (required): A valid API key for authentication.
+- name (required): The name of the event.
+- description (required): A description of the event.
+- date (required): The date of the event (YYYY-MM-DD format).
+- startTime (required): The event's start time (HH:mm format).
+- endTime (required): The event's end time (HH:mm format).
+- location (required): The event location.
+- storageCenterId (required): The ID of the associated storage center.
+- organizationId (optional): The ID of the associated organization (currently unused).
+
+Response:
+- Success (200): A message with the event ID on successful creation.
+- Error (404): A message indicating an invalid API key or storage center ID.
+- Error (500): A message indicating an internal error occurred during event creation.
+
+**2. Add Volunteer to Event**  
+Associates a volunteer with an event.
+
+URL: /addVolunteerToEvent  
+Method: POST  
+Query Parameters:
+- apiKey (required): A valid API key for authentication.
+- eventId (required): The ID of the event.
+- volunteerId (required): The ID of the volunteer.
+
+Response:
+- Success (200): A message confirming the volunteer was added to the event.
+- Error (404): A message indicating an invalid API key, event ID, or volunteer ID.
+- Error (500): A message indicating an internal error occurred while adding the volunteer.
+
+**3. List All Events**  
+Fetches a list of all events in the system.
+
+URL: /listEvents  
+Method: GET  
+Query Parameters:
+- apiKey (required): A valid API key for authentication.
+
+Response:
+- Success (200): A list of all events.
+- Error (404): A message indicating an invalid API key.
+- Error (500): A message indicating an internal error occurred while fetching the events.
+
+**4. Retrieve Event**  
+Fetches the details of a specific event.
+
+URL: /retrieveEvent  
+Method: GET  
+Query Parameters:
+- apiKey (required): A valid API key for authentication.
+- eventId (required): The ID of the event to retrieve.
+
+Response:
+- Success (200): Event details.
+- Error (404): A message indicating an invalid API key or event ID.
+- Error (500): A message indicating an internal error occurred while fetching the event.
+
+**5. Remove Event**  
+Deletes an event from the system.
+
+URL: /removeEvent  
+Method: DELETE  
+Query Parameters:
+- apiKey (required): A valid API key for authentication.
+- eventId (required): The ID of the event to delete.
+
+Response:
+- Success (200): A confirmation message on successful deletion.
+- Error (404): A message indicating an invalid API key or event ID.
+- Error (500): A message indicating an internal error occurred during deletion.
+
+**6. Search Events by Date**  
+Fetches a list of events on a specified date.
+
+URL: /searchEventsByDate  
+Method: GET  
+Query Parameters:
+- apiKey (required): A valid API key for authentication.
+- date (required): The date to search for events (YYYY-MM-DD format).
+
+Response:
+- Success (200): A list of events on the specified date.
+- Error (404): A message indicating an invalid API key or no events found.
+- Error (500): A message indicating an internal error occurred while searching for events.
+
+**7. Search Events by Location**  
+Fetches a list of events at a specified location.
+
+URL: /searchEventsByLocation  
+Method: GET  
+Query Parameters:
+- apiKey (required): A valid API key for authentication.
+- location (required): The location to search for events.
+
+Response:
+- Success (200): A list of events at the specified location.
+- Error (404): A message indicating an invalid API key or no events found.
+- Error (500): A message indicating an internal error occurred while searching for events.
+
+**8. Retrieve Event**
 Retrieves information of a specified event given by the event ID and the associated API key.
 
 URL: /retrieveEvent
@@ -271,20 +396,6 @@ Response:
 - Success (200): A message containing the event information.
 - Error (404): A message indicating an invalid API key.
 - Error (500): A message indicating an internal error occurred during event retrieval.
-
-**3. Remove Event**
-Removes an event from database based on the provided event ID and the associated API key.
-
-URL: /removeEvent
-Method: DELETE
-Query Parameters:
-- apiKey (required): A valid API key provided by the client.
-- eventId (required): The unique ID of the event to be removed.
-
-Response:
-- Success (200): A message indicating the event was successfully removed.
-- Error (404): A message indicating an invalid API key.
-- Error (500): A message indicating an internal error occurred during the removal process.
 
 # Storage Center Endpoints
 

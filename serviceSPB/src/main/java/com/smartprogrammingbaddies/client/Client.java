@@ -1,11 +1,6 @@
 package com.smartprogrammingbaddies.client;
 
-import java.util.HashSet;
-import java.util.Set;
-import java.util.UUID;
-
 import com.smartprogrammingbaddies.organization.Organization;
-
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -13,6 +8,10 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.UUID;
+
 
 /**
  * The client class represents a client, their client ID, and methods
@@ -68,12 +67,6 @@ public class Client {
   public Set<Organization> getOrganization() {
     return organization;
   }
-
-  /**
-   * Gets the organization that the client is associated with.
-
-   * @return the organization that the client is associated with.
-   */
 
   /**
    * Verifies the existence of the client.
