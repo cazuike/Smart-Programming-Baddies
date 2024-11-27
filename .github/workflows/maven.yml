@@ -31,6 +31,8 @@ jobs:
           distribution: 'temurin'
           cache: maven
 
+      - name: Checking PWD
+        run: pwd
       - name: Set up MySQL
         run: |
           cd serviceSPB
@@ -49,7 +51,7 @@ jobs:
           key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
           restore-keys: ${{ runner.os }}-maven
 
-      - name: Run Tests
+      - name: Run Unit Tests
         run: |
           cd serviceSPB
           mvn clean test
@@ -64,7 +66,25 @@ jobs:
           cd serviceSPB
           mvn jacoco:report
 
-    
+      - name: Commit and push CI reports
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+
+          cp serviceSPB/target/checkstyle-result.xml /Reports-And-Docs/
+          cp serviceSPB/target/pmd.xml /Reports-And-Docs/
+          cp serviceSPB/target/site/jacoco/index.html /Reports-And-Docs/
+
+          git add -f /Reports-And-Docs/checkstyle-result.xml
+          git add -f /Reports-And-Docs/pmd.xml
+          git add -f /Reports-And-Docs/index.html
+          git commit -m "Add CI reports to Reports-And-Docs from run ${{ github.run_id }}" || echo "No changes to commit"
+
+          git checkout -b ci-reports-${{ github.run_id }}
+          git push origin ci-reports-${{ github.run_id }}
+
       - name: Create a Pull Request for CI reports
         uses: peter-evans/create-pull-request@v5
         with:
@@ -78,6 +98,6 @@ jobs:
             - Jacoco coverage report (`index.html`)
 
           base: ${{ github.base_ref }}
-          
+
       - name: Build with Maven
         run: mvn -B clean package --file serviceSPB/pom.xml -DskipTests
