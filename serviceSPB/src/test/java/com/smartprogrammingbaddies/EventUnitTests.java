@@ -126,7 +126,8 @@ public class EventUnitTests {
   public void getOrganizerTest() {
     String dateStorageCenterAdded = "2024-12-25";
     Date dateAdded = Date.valueOf(dateStorageCenterAdded);
-    Organization expectedOrganizer = new Organization("Charity Org", "Non-Profit", new HashSet<>(), dateAdded);
+    Organization expectedOrganizer =
+        new Organization("Charity Org", "Non-Profit", new HashSet<>(), dateAdded);
     testEvent.updateOrganizer(expectedOrganizer);
     assertEquals(expectedOrganizer, testEvent.getOrganizer());
   }

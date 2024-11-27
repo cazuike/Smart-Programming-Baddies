@@ -220,6 +220,23 @@ public class StorageCenter implements Serializable {
     return transactions;
   }
 
+  /**
+   * Sets the transactions that have occurred in the storage center.
+   *
+   * @param transactions the transactions that have occurred in the storage center
+   */
+  public void setTransactions(Set<Transaction> transactions) {
+    if (transactions == null) {
+      throw new IllegalArgumentException("Transactions must not be null.");
+    }
+
+    if (this.transactions != null) {
+      throw new IllegalArgumentException("Transactions have already been set.");
+    }
+
+    this.transactions = transactions;
+  }
+
 
   /**
    * Returns a string representation of the storage center, including its name,
