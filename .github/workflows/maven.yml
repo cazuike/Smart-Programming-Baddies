@@ -49,6 +49,12 @@ jobs:
           key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
           restore-keys: ${{ runner.os }}-maven
 
+      
+      - name: Checkout to Pull Request Branch
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.head_ref }}
+
       - name: Run Tests
         run: |
           cd serviceSPB
@@ -63,11 +69,6 @@ jobs:
         run: |
           cd serviceSPB
           mvn jacoco:report
-
-      - name: Checkout to Pull Request Branch
-        uses: actions/checkout@v4
-        with:
-          ref: ${{ github.head_ref }}
 
       - name: Commit and push CI reports
         env:
