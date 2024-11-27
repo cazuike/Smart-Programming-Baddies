@@ -71,7 +71,7 @@ jobs:
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
 
-          git checkout ${{ github.head_ref }}
+          git checkout ${{ github.ref }}
 
           cp serviceSPB/target/checkstyle-result.xml Reports-And-Docs/
           cp serviceSPB/target/pmd.xml Reports-And-Docs/
@@ -82,7 +82,7 @@ jobs:
           git add -f Reports-And-Docs/index.html
 
           git commit -m "Adding CI reports to CI-reports from run ${{ github.run_id }}" || echo "No changes to commit"
-          git push origin HEAD:${{ github.head_ref }}
+          git push origin HEAD:${{ github.ref }}
           
       - name: Build with Maven
         run: mvn -B clean package --file serviceSPB/pom.xml -DskipTests
