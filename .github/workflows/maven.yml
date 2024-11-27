@@ -66,38 +66,23 @@ jobs:
           cd serviceSPB
           mvn jacoco:report
 
-      - name: Commit and push CI reports
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          git config --global user.name "github-actions[bot]"
-          git config --global user.email "github-actions[bot]@users.noreply.github.com"
-
-          cp serviceSPB/target/checkstyle-result.xml Reports-And-Docs/
-          cp serviceSPB/target/pmd.xml Reports-And-Docs/
-          cp serviceSPB/target/site/jacoco/index.html Reports-And-Docs/
-
-          git add -f Reports-And-Docs/checkstyle-result.xml
-          git add -f Reports-And-Docs/pmd.xml
-          git add -f Reports-And-Docs/index.html
-          git commit -m "Add CI reports to Reports-And-Docs from run ${{ github.run_id }}" || echo "No changes to commit"
-
-          git checkout -b ci-reports-${{ github.run_id }}
-          git push origin ci-reports-${{ github.run_id }}
-
-      - name: Create a Pull Request for CI reports
-        uses: peter-evans/create-pull-request@v5
+      - name: Upload Checkstyle report
+        uses: actions/upload-artifact@v3
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          branch: ci-reports-${{ github.run_id }}
-          title: "Add CI reports to Reports-And-Docs folder"
-          body: |
-            This PR includes the following CI-generated files:
-            - Checkstyle report (`checkstyle-result.xml`)
-            - PMD report (`pmd.xml`)
-            - Jacoco coverage report (`index.html`)
+          name: checkstyle-report
+          path: ./serviceSPB/target/checkstyle-result.xml
 
-          base: ${{ github.base_ref }}
+      - name: Upload PMD report
+        uses: actions/upload-artifact@v3
+        with:
+          name: pmd-report
+          path: ./serviceSPB/target/pmd.xml
+
+      - name: Upload Jacoco coverage report
+        uses: actions/upload-artifact@v3
+        with:
+          name: jacoco-report
+          path: ./serviceSPB/target/jacoco/index.html
 
       - name: Build with Maven
         run: mvn -B clean package --file serviceSPB/pom.xml -DskipTests
