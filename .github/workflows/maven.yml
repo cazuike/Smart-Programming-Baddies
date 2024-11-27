@@ -67,19 +67,19 @@ jobs:
           mvn jacoco:report
 
       - name: Upload Checkstyle report
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: checkstyle-report
           path: ./serviceSPB/target/checkstyle-result.xml
 
       - name: Upload PMD report
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: pmd-report
           path: ./serviceSPB/target/pmd.xml
 
       - name: Upload Jacoco coverage report
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: jacoco-report
           path: ./serviceSPB/target/site/jacoco/index.html
