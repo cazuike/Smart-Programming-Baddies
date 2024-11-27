@@ -82,7 +82,7 @@ jobs:
           git add -f Reports-And-Docs/index.html
 
           git commit -m "Adding CI reports to CI-reports from run ${{ github.run_id }}" || echo "No changes to commit"
-          git push https://${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }} HEAD:${{ github.head_ref }}
+          git push origin HEAD:${{ github.head_ref }}
           
       - name: Build with Maven
         run: mvn -B clean package --file serviceSPB/pom.xml -DskipTests
