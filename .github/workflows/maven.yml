@@ -49,12 +49,6 @@ jobs:
           key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
           restore-keys: ${{ runner.os }}-maven
 
-      
-      - name: Checkout to Pull Request Branch
-        uses: actions/checkout@v4
-        with:
-          ref: ${{ github.head_ref }}
-
       - name: Run Tests
         run: |
           cd serviceSPB
@@ -70,34 +64,20 @@ jobs:
           cd serviceSPB
           mvn jacoco:report
 
-      - name: Commit and push CI reports
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          git config --global user.name "github-actions[bot]"
-          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+    
+      - name: Create a Pull Request for CI reports
+        uses: peter-evans/create-pull-request@v5
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          branch: ci-reports-${{ github.run_id }}
+          title: "Add CI reports to Reports-And-Docs folder"
+          body: |
+            This PR includes the following CI-generated files:
+            - Checkstyle report (`checkstyle-result.xml`)
+            - PMD report (`pmd.xml`)
+            - Jacoco coverage report (`index.html`)
 
-          cp serviceSPB/target/checkstyle-result.xml Reports-And-Docs/
-          cp serviceSPB/target/pmd.xml Reports-And-Docs/
-          cp serviceSPB/target/site/jacoco/index.html Reports-And-Docs/
-
-          echo "github.head_ref: ${{ github.head_ref }}"
-          echo "github.ref: ${{ github.ref }}"
-          echo "github.event.pull_request.head.ref: ${{ github.event.pull_request.head.ref }}"
-
-          git fetch origin ${{ github.head_ref }}:refs/remotes/origin/${{ github.head_ref }}
-
-          echo "github.head_ref: ${{ github.head_ref }}"
-          echo "github.ref: ${{ github.ref }}"
-          echo "github.event.pull_request.head.ref: ${{ github.event.pull_request.head.ref }}"
-          git checkout ${{ github.head_ref }}
-          
-          git add -f Reports-And-Docs/checkstyle-result.xml
-          git add -f Reports-And-Docs/pmd.xml
-          git add -f Reports-And-Docs/index.html
-          git commit -m "Add CI reports to Reports-And-Docs from run ${{ github.run_id }}" || echo "No changes to commit"
-
-          git push origin HEAD:${{ github.head_ref }}
+          base: ${{ github.base_ref }}
           
       - name: Build with Maven
         run: mvn -B clean package --file serviceSPB/pom.xml -DskipTests
