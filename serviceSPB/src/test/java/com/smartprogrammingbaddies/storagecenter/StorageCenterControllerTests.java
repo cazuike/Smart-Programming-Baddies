@@ -564,6 +564,100 @@ public class StorageCenterControllerTests {
   }
 
   /**
+   * Test the listExpiredItems function.
+   */
+  @Test
+  public void testListExpiredItems() throws Exception {
+    ResultActions result = mockMvc.perform(get("/listExpiredItems")
+            .param("storageCenterId", "1"));
+    result.andExpect(status().isOk());
+  }
+
+  /**
+   * Test the listExpiredItems function with an invalid id.
+   */
+  @Test
+  public void testListExpiredItemsInvalidId() throws Exception {
+    ResultActions result = mockMvc.perform(get("/listExpiredItems")
+            .param("storageCenterId", "2"));
+    result.andExpect(status().isNotFound());
+  }
+
+  /**
+   * Test the removeExpiredItems function.
+   */
+  @Test
+  public void testRemoveExpiredItems() throws Exception {
+    ResultActions result = mockMvc.perform(patch("/removeExpiredItems")
+            .param("storageCenterId", "1"));
+    result.andExpect(status().isOk());
+  }
+
+  /**
+   * Test the removeExpiredItems function with an invalid id.
+   */
+  @Test
+  public void testRemoveExpiredItemsInvalidId() throws Exception {
+    ResultActions result = mockMvc.perform(patch("/removeExpiredItems")
+            .param("storageCenterId", "2"));
+    result.andExpect(status().isNotFound());
+  }
+
+  /**
+   * Tests the listTransactions method.
+   */
+  @Test
+  public void testListTransactions() throws Exception {
+    ResultActions result = mockMvc.perform(get("/listTransactions")
+            .param("storageCenterId", "1"));
+    result.andExpect(status().isOk());
+  }
+
+  /**
+   * Test the listTransactions function with an invalid id.
+   */
+  @Test
+  public void testListTransactionsInvalidId() throws Exception {
+    ResultActions result = mockMvc.perform(get("/listTransactions")
+            .param("storageCenterId", "2"));
+    result.andExpect(status().isNotFound());
+  }
+
+  /**
+   * Test the listTransactions function with internal server error.
+   */
+  @Test
+  public void testListTransactionsServerFail() throws Exception {
+    when(storageCenterRepository.findById(1)).thenThrow(new RuntimeException());
+    ResultActions result = mockMvc.perform(get("/listTransactions")
+              .param("storageCenterId", "1"));
+    result.andExpect(status().isInternalServerError());
+  }
+
+  /**
+   * Test the listExpiredItems function with internal server error.
+   */
+  @Test
+  public void testListExpiredItemsServerFail() throws Exception {
+    when(storageCenterRepository.findById(1)).thenThrow(new RuntimeException());
+    ResultActions result = mockMvc.perform(get("/listExpiredItems")
+              .param("storageCenterId", "1"));
+    result.andExpect(status().isInternalServerError());
+  }
+
+  /**
+   * Test the removeExpiredItems function with internal server error.
+   */
+  @Test
+  public void testRemoveExpiredItemsServerFail() throws Exception {
+    when(storageCenterRepository.findById(1)).thenThrow(new RuntimeException());
+    ResultActions result = mockMvc.perform(patch("/removeExpiredItems")
+              .param("storageCenterId", "1"));
+    result.andExpect(status().isInternalServerError());
+  }
+
+
+  /**
    * Test the createCenter function with internal server error.
    */
   @Test
@@ -674,4 +768,6 @@ public class StorageCenterControllerTests {
               .param("storageCenterId", "1"));
     result.andExpect(status().isInternalServerError());
   }
+
+
 }

@@ -238,4 +238,25 @@ public class StorageCenterUnitTests {
     testCenter.updateDayHours(fridayTimeSlot, 5);
     assertEquals(expected, testCenter.toString());
   }
+
+  /**
+   * Tests the getExpiredItems method to verify the expired items are returned correctly.
+   */
+  @Test
+  public void getExpiredItemsTest() {
+    testCenter.setItems(testItems);
+    Set<Item> expiredItems = testCenter.getExpiredItems();
+    assertEquals(testItems, expiredItems);
+  }
+
+  /**
+   * Tests the removeExpiredItems method to verify the expired items are removed.
+   */
+  @Test
+  public void removeExpiredItemsTest() {
+    testCenter.setItems(testItems);
+    testCenter.removeExpiredItems();
+    Set<Item> updatedItems = testCenter.getItems();
+    assertEquals(0, updatedItems.size());
+  }
 }

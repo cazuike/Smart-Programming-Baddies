@@ -9,6 +9,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import java.time.LocalDate;
 import java.time.LocalTime;
 
 /**
@@ -22,6 +23,8 @@ public class Transaction {
   private int id;
   @Column(nullable = false)
   private LocalTime timestamp;
+  @Column(nullable = false)
+  private LocalDate date;
   @ManyToOne
   @JoinColumn(name = "storage_center_id", nullable = false)
   private StorageCenter storageCenter;
@@ -64,6 +67,7 @@ public class Transaction {
     this.quantity = quantity;
     this.action = action;
     this.timestamp = LocalTime.now();
+    this.date = LocalDate.now();
   }
 
   /**
@@ -89,6 +93,15 @@ public class Transaction {
    */
   public LocalTime getTimestamp() {
     return timestamp;
+  }
+
+  /**
+   * Gets the date of the transaction.
+   *
+   * @return the date of the transaction
+   */
+  public LocalDate getDate() {
+    return date;
   }
 
   /**

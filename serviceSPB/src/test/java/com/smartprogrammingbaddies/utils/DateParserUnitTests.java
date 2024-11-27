@@ -69,4 +69,14 @@ public class DateParserUnitTests {
       DateParser.numericDateToString(null);
     });
   }
+
+  /**
+   * Tests the toJson method.
+   */
+  @Test
+  public void toJsonTest() {
+    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+    LocalDate date = LocalDate.parse("2024-01-01", formatter);
+    assertEquals("{\"date\":\"2024-01-01\"}", DateParser.toJson(date).toString());
+  }
 }

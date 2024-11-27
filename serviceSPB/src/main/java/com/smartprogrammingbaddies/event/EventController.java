@@ -202,12 +202,10 @@ public class EventController {
       if (auth.verifyApiKey(apiKey).getStatusCode() != HttpStatus.OK) {
         return new ResponseEntity<>("Invalid API key", HttpStatus.UNAUTHORIZED);
       }
+      if (!eventRepository.existsById(Integer.parseInt(eventId))) {
+        return new ResponseEntity<>("Event with ID: " + eventId + " does not exist", HttpStatus.NOT_FOUND);
+    }
       eventRepository.deleteById(Integer.parseInt(eventId));
-      boolean deleted = !eventRepository.existsById(Integer.parseInt(eventId));
-      if (!deleted) {
-        String message = "Event with ID: " + eventId + " was not deleted";
-        return new ResponseEntity<>(message, HttpStatus.NOT_FOUND);
-      }
       String message = "Event with ID: " + eventId + " was deleted successfully";
       return new ResponseEntity<>(message, HttpStatus.OK);
     } catch (NumberFormatException e) {

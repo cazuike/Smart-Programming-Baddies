@@ -29,7 +29,6 @@ public class Client {
   @JoinColumn(name = "organization_id")
   private Set<Organization> organization;
 
-
   /**
    * Constructs a new client and assigns an ID.
    */
