@@ -75,7 +75,9 @@ jobs:
           cp serviceSPB/target/pmd.xml Reports-And-Docs/
           cp serviceSPB/target/site/jacoco/index.html Reports-And-Docs/
 
-          git add -f .
+          git add -f Reports-And-Docs/checkstyle-result.xml
+          git add -f Reports-And-Docs/pmd.xml
+          git add -f Reports-And-Docs/index.html
 
           git commit -m "Add CI reports to CI-reports from run ${{ github.run_id }}" || echo "No changes to commit"
 
