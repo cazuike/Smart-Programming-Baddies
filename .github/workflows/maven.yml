@@ -57,21 +57,27 @@ jobs:
       - name: Run Static Bug Finder (PMD)
         run: |
           cd serviceSPB
-          mvn pmd:check
+          mvn clean verify pmd:check
 
       - name: Run Branch Coverage (JaCoCo)
         run: |
           cd serviceSPB
           mvn jacoco:report
 
-      - name: Create Pull Request
-        uses: peter-evans/create-pull-request@v4
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          base: main
-          head: ci-reports-${{ github.run_id }}
-          title: "Add CI reports from run ${{ github.run_id }}"
-          body: "CI reports for run ${{ github.run_id }}"
+      - name: Commit and push CI reports
+        env:
+          GITHUB_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+
+          cp serviceSPB/target/checkstyle-result.xml Reports-And-Docs/
+          cp serviceSPB/target/pmd.xml Reports-And-Docs/
+          cp serviceSPB/target/site/jacoco/index.html Reports-And-Docs/
+
+          git add -f .
+
+          git commit -m "Add CI reports to CI-reports from run ${{ github.run_id }}" || echo "No changes to commit"
 
       - name: Build with Maven
         run: mvn -B clean package --file serviceSPB/pom.xml -DskipTests
