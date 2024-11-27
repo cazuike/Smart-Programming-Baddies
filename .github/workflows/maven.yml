@@ -64,6 +64,11 @@ jobs:
           cd serviceSPB
           mvn jacoco:report
 
+      - name: Checkout to Pull Request Branch
+        uses: actions/checkout@v4
+         with:
+          ref: ${{ github.head_ref }}
+
       - name: Commit and push CI reports
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
