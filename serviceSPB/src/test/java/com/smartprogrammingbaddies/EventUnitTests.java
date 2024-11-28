@@ -2,12 +2,12 @@ package com.smartprogrammingbaddies;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import com.smartprogrammingbaddies.client.Client;
 import com.smartprogrammingbaddies.event.Event;
 import com.smartprogrammingbaddies.organization.Organization;
 import com.smartprogrammingbaddies.storagecenter.StorageCenter;
 import com.smartprogrammingbaddies.utils.TimeSlot;
 import com.smartprogrammingbaddies.volunteer.Volunteer;
-import java.sql.Date;
 import java.time.LocalTime;
 import java.util.HashSet;
 import java.util.Set;
@@ -21,6 +21,7 @@ public class EventUnitTests {
 
   public static Event testEvent;
   public static StorageCenter testStorageCenter;
+  public static Client testClient;
   public static Organization testOrganizer;
   public static Set<Volunteer> testVolunteers;
 
@@ -30,9 +31,8 @@ public class EventUnitTests {
   @BeforeEach
   public void setupEventForTesting() {
     testStorageCenter = new StorageCenter();
-    String dateStorageCenterAdded = "2024-12-25";
-    Date dateAdded = Date.valueOf(dateStorageCenterAdded);
-    testOrganizer = new Organization("Charity Org", "Non-Profit", new HashSet<>(), dateAdded);
+    testClient = new Client("test");
+    testOrganizer = new Organization("Charity Org", "Non-Profit", testClient);
 
     Volunteer volunteer1 = new Volunteer("John Doe", "Helper", "2024-12-01", null);
     Volunteer volunteer2 = new Volunteer("Jane Smith", "Cook", "2024-12-01", null);
@@ -124,10 +124,9 @@ public class EventUnitTests {
 
   @Test
   public void getOrganizerTest() {
-    String dateStorageCenterAdded = "2024-12-25";
-    Date dateAdded = Date.valueOf(dateStorageCenterAdded);
     Organization expectedOrganizer =
-        new Organization("Charity Org", "Non-Profit", new HashSet<>(), dateAdded);
+        new Organization("Charity Org", "Non-Profit", testClient);
+
     testEvent.updateOrganizer(expectedOrganizer);
     assertEquals(expectedOrganizer, testEvent.getOrganizer());
   }
