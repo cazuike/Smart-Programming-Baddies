@@ -2,61 +2,80 @@ package com.smartprogrammingbaddies.client;
 
 import com.smartprogrammingbaddies.organization.Organization;
 import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.OneToMany;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.UUID;
-
+import jakarta.persistence.OneToOne;
 
 /**
- * The client class represents a client, their client ID, and methods
- * to verify theior existence in the system.
+ * The client class represents a client, their client API Key,
+ * and their organization associated with them.
  */
 @Entity
 public class Client {
   @Id
-  @GeneratedValue(strategy = GenerationType.AUTO)
-  private String id;
-  private final String clientId;
-  private final Set<String> clientDatabase = new HashSet<>();
-  @OneToMany(cascade = CascadeType.ALL)
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private int id;
+  @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
+  @JoinColumn(name = "api_key")
+  @Column(unique = true, nullable = false)
+  private String apiKey;
+  @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
   @JoinColumn(name = "organization_id")
-  private Set<Organization> organization;
+  private Organization organization;
+
+  /**
+   * Empty constructor for JPA.
+   */
+  protected Client() {
+    // Default constructor for JPA
+  }
 
   /**
    * Constructs a new client and assigns an ID.
    */
-  public Client() {
-    this.clientId = UUID.randomUUID().toString();
+  public Client(String apiKey) {
+    this.apiKey = apiKey;
+    this.organization = null;
   }
 
   /**
-   * Returns the client's ID.
-
-   * @return the client's ID.
-   */
-  public String getClientId() {
-    return clientId;
-  }
-
-  /**
-   * Adds client to client database.
+   * Get ID.
    *
-   * @param clientId the client's ID.
+   * @return id the id to get.
    */
-  public String addClient(String clientId) {
-    if (!clientDatabase.contains(clientId)) {
-      clientDatabase.add(clientId);
-      return "Client successfuly added!";
-    } else {
-      return "Client already exists";
-    }
+  public int getId() {
+    return id;
+  }
 
+  /**
+   * Set ID.
+   *
+   * @param id the id to set.
+   */
+  public void setId(int id) {
+    this.id = id;
+  }
+
+  /**
+   * Get API Key.
+   *
+   * @return apiKey the API key to get.
+   */
+  public String getApiKey() {
+    return apiKey;
+  }
+
+  /**
+   * Set API Key.
+   *
+   * @param apiKey the API key to set.
+   */
+  public void setApiKey(String apiKey) {
+    this.apiKey = apiKey;
   }
 
   /**
@@ -64,20 +83,16 @@ public class Client {
    *
    * @return organization the organization to get.
    */
-  public Set<Organization> getOrganization() {
+  public Organization getOrganization() {
     return organization;
   }
 
   /**
-   * Verifies the existence of the client.
-
-   * @param clientId the client's ID number.
+   * Set Organization.
+   *
+   * @param organization the organization to set.
    */
-  public String verifyClient(String clientId) {
-    if (!clientDatabase.contains(clientId)) {
-      return "Client Does Not Exist";
-    } else {
-      return "Client exists!";
-    }
+  public void setOrganization(Organization organization) {
+    this.organization = organization;
   }
 }
