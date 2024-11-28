@@ -35,6 +35,22 @@ mvn test
 ```
 Result will be under serviceSPB/target/surefire-reports
 
+## Running Postman Test for External Database Integration Testing
+
+This project includes a set of Postman tests for API endpoints, which simulates the service interaction with the realtime database which is Google Cloud MySQL.
+
+JSON files with be located under serviceSPB/src/test/postmantests
+
+### Requirements
+
+1. - [Postman](https://www.postman.com/downloads/) Postman App is needed to import the JSON files and test it locally
+
+2. - Download the JSON file to be imported
+
+3. - Import JSON file into Postman
+
+4. - Run the endpoints provided for testing
+
 ## Test Client Repository
 A test Food Pantry app was created to do end-to-end testing for this service.
 The repository is located here:
