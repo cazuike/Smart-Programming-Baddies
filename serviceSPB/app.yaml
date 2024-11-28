@@ -1,3 +1,5 @@
 entrypoint: java -jar ./target/serviceSPB-1.0-SNAPSHOT.jar
 runtime: java17
 instance_class: F1
+env_variables:
+    SPRING_PROFILES_ACTIVE: production
