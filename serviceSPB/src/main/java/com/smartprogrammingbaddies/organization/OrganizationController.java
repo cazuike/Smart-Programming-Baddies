@@ -137,7 +137,8 @@ public class OrganizationController {
 
   /**
    * Deletes an organization.
-
+   *
+   * @param apiKey the API key of the client.
    * @param orgId  the id of the organization.
    * @return A {@code ResponseEntity} A message if the Organization was successfully deleted
    *     and a HTTP 200 response or, HTTP 500 reponse if an error occurred.
