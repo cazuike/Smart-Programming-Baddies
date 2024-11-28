@@ -2,7 +2,6 @@ package com.smartprogrammingbaddies.client;
 
 import com.smartprogrammingbaddies.organization.Organization;
 import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -19,9 +18,6 @@ public class Client {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private int id;
-  @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
-  @JoinColumn(name = "api_key")
-  @Column(unique = true, nullable = false)
   private String apiKey;
   @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
   @JoinColumn(name = "organization_id")

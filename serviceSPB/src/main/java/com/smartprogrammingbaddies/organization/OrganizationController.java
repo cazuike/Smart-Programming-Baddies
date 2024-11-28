@@ -236,8 +236,8 @@ public class OrganizationController {
    * @return A {@code ResponseEntity} A message if the events were successfully listed
    *     and a HTTP 200 response or, HTTP 500 reponse if an error occurred.
    */
-  @GetMapping("/listEvents")
-  public ResponseEntity<?> listEvents(
+  @GetMapping("/listOrganizationEvents")
+  public ResponseEntity<?> listOrganizationEvents(
           @RequestParam("apiKey") String apiKey,
           @RequestParam("orgId") int orgId) {
     try {

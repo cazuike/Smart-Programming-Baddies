@@ -374,32 +374,32 @@ public class OrganizationControllerTests {
   }
 
   /**
-    * Tests the listEvents method.
+    * Tests the listOrganizationEvents method.
     */
   @Test
-  public void listEventsTest() throws Exception {
-    ResultActions result = mockMvc.perform(get("/listEvents")
+  public void listOrganizationEventsTest() throws Exception {
+    ResultActions result = mockMvc.perform(get("/listOrganizationEvents")
           .param("orgId", "0")
           .param("apiKey", "test"));
     result.andExpect(status().isOk());
   }
 
   /**
-    * Tests the listEvents method with invalid inputs.
+    * Tests the listOrganizationEvents method with invalid inputs.
     */
   @Test
-  public void listEventsInvalidTest() throws Exception {
-    ResultActions result = mockMvc.perform(get("/listEvents")
+  public void listOrganizationEventsInvalidTest() throws Exception {
+    ResultActions result = mockMvc.perform(get("/listOrganizationEvents")
           .param("orgId", "1")
           .param("apiKey", "test"));
     result.andExpect(status().isBadRequest());
 
-    result = mockMvc.perform(get("/listEvents")
+    result = mockMvc.perform(get("/listOrganizationEvents")
           .param("orgId", "0")
           .param("apiKey", " "));
     result.andExpect(status().isBadRequest());
 
-    result = mockMvc.perform(get("/listEvents")
+    result = mockMvc.perform(get("/listOrganizationEvents")
           .param("orgId", "0")
           .param("apiKey", "invalid"));
     result.andExpect(status().isBadRequest());
@@ -555,12 +555,12 @@ public class OrganizationControllerTests {
   }
 
   /**
-    * Tests the listEvents method with internal server error.
+    * Tests the listOrganizationEvents method with internal server error.
     */
   @Test
-  public void listEventsInternalServerErrorTest() throws Exception {
+  public void listOrganizationEventsInternalServerErrorTest() throws Exception {
     when(organizationRepository.findById(0)).thenThrow(new RuntimeException());
-    ResultActions result = mockMvc.perform(get("/listEvents")
+    ResultActions result = mockMvc.perform(get("/listOrganizationEvents")
           .param("orgId", "0")
           .param("apiKey", "test"));
     result.andExpect(status().isInternalServerError());

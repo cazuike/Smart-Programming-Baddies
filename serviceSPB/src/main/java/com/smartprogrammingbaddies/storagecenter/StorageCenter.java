@@ -38,7 +38,7 @@ public class StorageCenter {
   private String description;
   @Column(nullable = false)
   private String name;
-  @OneToOne(mappedBy = "storageCenter", cascade = CascadeType.ALL, orphanRemoval = true)
+  @OneToOne(mappedBy = "storage", cascade = CascadeType.ALL, orphanRemoval = true)
   private Organization organization;
   @ElementCollection
   @CollectionTable(name = "operation_hours", joinColumns = @JoinColumn(name = "storage_center_id"))
