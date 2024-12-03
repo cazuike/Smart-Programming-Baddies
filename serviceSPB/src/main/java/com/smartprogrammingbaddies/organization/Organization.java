@@ -26,16 +26,18 @@ import java.util.Set;
 @Entity
 public class Organization implements Serializable {
   @Id
-  @GeneratedValue(strategy = GenerationType.AUTO)
-  @Column(name = "organization_id")
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
   private int id;
   private String orgName;
   private String orgType;
   @Temporal(TemporalType.DATE)
   private Date dateAdded;
   private Set<String> schedule;
+  @Column(nullable = false)
+  private boolean notificationSubscribed = false;
+
   @ManyToOne
-  @JoinColumn(name = "client_id", nullable = false)
+  @JoinColumn(name = "client_id")
   private Client client;
   @OneToOne
   private StorageCenter storage;
