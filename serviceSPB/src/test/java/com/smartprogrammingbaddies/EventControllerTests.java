@@ -7,10 +7,12 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.smartprogrammingbaddies.auth.ApiKeyRepository;
 import com.smartprogrammingbaddies.auth.AuthController;
+import com.smartprogrammingbaddies.client.Client;
 import com.smartprogrammingbaddies.event.Event;
 import com.smartprogrammingbaddies.event.EventController;
 import com.smartprogrammingbaddies.event.EventRepository;
 import com.smartprogrammingbaddies.organization.Organization;
+import com.smartprogrammingbaddies.organization.OrganizationRepository;
 import com.smartprogrammingbaddies.storagecenter.StorageCenter;
 import com.smartprogrammingbaddies.storagecenter.StorageCenterRepository;
 import com.smartprogrammingbaddies.utils.TimeSlot;
@@ -30,14 +32,13 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MvcResult;
 
 /**
  * Unit tests for the Event Controller.
  */
 @WebMvcTest(EventController.class)
 public class EventControllerTests {
-  private static final String prefix = "Event was created successfully with ID: ";
+
   @Autowired
   private MockMvc mockMvc;
 
@@ -47,7 +48,8 @@ public class EventControllerTests {
 
   @MockBean
   private AuthController auth;
-
+  @MockBean
+  private OrganizationRepository organizationRepository;
   @MockBean
   private ApiKeyRepository apiKeyRepository;
   @MockBean
@@ -75,8 +77,9 @@ public class EventControllerTests {
     StorageCenter mockStorage = new StorageCenter("Mock Storage", "A mock storage for testing");
     Set<String> mockSchedule = new HashSet<>();
     mockSchedule.add("10-17-2024 10:00 AM");
-    Organization mockOrg = new Organization("Mock Org", "Test",
-        mockSchedule, null);
+    Client mockClient = new Client("mockApiKey");
+    Organization mockOrg = new Organization(
+        "Mock Organization", "A mock organization for testing", mockClient);
 
     Event mockEvent = new Event("Food Drive", "A food drive for the local community",
         "07-11-2021", new TimeSlot("09:00", "13:30"), "Columbia University",
@@ -97,7 +100,7 @@ public class EventControllerTests {
   @Test
   public void createEventTest() throws Exception {
     Mockito.when(storageCenterRepository.findById(0)).thenReturn(Optional.of(new StorageCenter()));
-    MvcResult result = mockMvc.perform(post("/createEvent")
+    mockMvc.perform(post("/createEvent")
         .param("apiKey", apiKey)
         .param("name", "Food Drive")
         .param("description", "A food drive for the local community")
@@ -148,7 +151,7 @@ public class EventControllerTests {
   @Test
   public void createAndRetrieveEventTest() throws Exception {
     Mockito.when(storageCenterRepository.findById(0)).thenReturn(Optional.of(new StorageCenter()));
-    MvcResult result = mockMvc.perform(post("/createEvent")
+    mockMvc.perform(post("/createEvent")
         .param("apiKey", apiKey)
         .param("name", "Food Drive")
         .param("description", "A food drive for the local community")
@@ -271,7 +274,8 @@ public class EventControllerTests {
     mockEvents.add(new Event("Food Drive", "Description", "2024-10-30",
         new TimeSlot("09:00", "13:30"), "Columbia University", null, null, new HashSet<>()));
 
-    Mockito.when(eventRepository.findByLocationContainingIgnoreCase("Columbia University")).thenReturn(mockEvents);
+    Mockito.when(eventRepository.findByLocationContainingIgnoreCase("Columbia University"))
+        .thenReturn(mockEvents);
 
     mockMvc.perform(get("/searchEventsByLocation")
         .param("apiKey", apiKey)
@@ -283,7 +287,8 @@ public class EventControllerTests {
   @Test
   public void searchEventsByLocationFailTest() throws Exception {
     List<Event> mockEvents = new ArrayList<>();
-    Mockito.when(eventRepository.findByLocationContainingIgnoreCase("Nonexistent Location")).thenReturn(mockEvents);
+    Mockito.when(eventRepository.findByLocationContainingIgnoreCase("Nonexistent Location"))
+            .thenReturn(mockEvents);
 
     mockMvc.perform(get("/searchEventsByLocation")
         .param("apiKey", apiKey)

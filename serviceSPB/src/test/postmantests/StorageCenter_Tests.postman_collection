@@ -1,0 +1,517 @@
+{
+	"info": {
+		"_postman_id": "ffbd0f38-2d80-4f48-b996-f00272408a78",
+		"name": "StorageCenter Tests",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "38155078",
+		"_collection_link": "https://ase999.postman.co/workspace/ASE-Workspace~31d62359-3b02-45f8-aa8e-78ff68b7be1f/collection/38155078-ffbd0f38-2d80-4f48-b996-f00272408a78?action=share&source=collection_link&creator=38155078"
+	},
+	"item": [
+		{
+			"name": "Create Storage Center",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "http://127.0.0.1:8080/createCenter?name=Columbia University&description=Food Pantry",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8080",
+					"path": [
+						"createCenter"
+					],
+					"query": [
+						{
+							"key": "name",
+							"value": "Columbia University"
+						},
+						{
+							"key": "description",
+							"value": "Food Pantry"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update Name",
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"url": {
+					"raw": "http://127.0.0.1:8080/updateCenterName?storageCenterId=3&name=Columbia University Barnard",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8080",
+					"path": [
+						"updateCenterName"
+					],
+					"query": [
+						{
+							"key": "storageCenterId",
+							"value": "3"
+						},
+						{
+							"key": "name",
+							"value": "Columbia University Barnard"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Check in Items",
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"url": {
+					"raw": "http://127.0.0.1:8080/checkInItems?storageCenterId=3&name=Sourdough Bread&type=FOOD&quantity=10&expirationDate=2022-12-31",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8080",
+					"path": [
+						"checkInItems"
+					],
+					"query": [
+						{
+							"key": "storageCenterId",
+							"value": "3"
+						},
+						{
+							"key": "name",
+							"value": "Sourdough Bread"
+						},
+						{
+							"key": "type",
+							"value": "FOOD"
+						},
+						{
+							"key": "type",
+							"value": "CLOTHES",
+							"disabled": true
+						},
+						{
+							"key": "type",
+							"value": "TOILETRIES",
+							"disabled": true
+						},
+						{
+							"key": "quantity",
+							"value": "10"
+						},
+						{
+							"key": "expirationDate",
+							"value": "2022-12-31"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Check In Items With Invalid Quantity",
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"url": {
+					"raw": "http://127.0.0.1:8080/checkInItems?storageCenterId=3&name=Butter&type=FOOD&quantity=-10&expirationDate=2030-12-31",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8080",
+					"path": [
+						"checkInItems"
+					],
+					"query": [
+						{
+							"key": "storageCenterId",
+							"value": "3"
+						},
+						{
+							"key": "name",
+							"value": "Butter"
+						},
+						{
+							"key": "type",
+							"value": "FOOD"
+						},
+						{
+							"key": "type",
+							"value": "CLOTHES",
+							"disabled": true
+						},
+						{
+							"key": "type",
+							"value": "TOILETRIES",
+							"disabled": true
+						},
+						{
+							"key": "quantity",
+							"value": "-10"
+						},
+						{
+							"key": "expirationDate",
+							"value": "2030-12-31"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Remove Expired Items",
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"url": {
+					"raw": "http://127.0.0.1:8080/removeExpiredItems?storageCenterId=3",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8080",
+					"path": [
+						"removeExpiredItems"
+					],
+					"query": [
+						{
+							"key": "storageCenterId",
+							"value": "3"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Check out Items",
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"url": {
+					"raw": "http://127.0.0.1:8080/checkOutItems?storageCenterId=3&name=Bread&type=FOOD&quantity=2&expirationDate=2024-12-31",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8080",
+					"path": [
+						"checkOutItems"
+					],
+					"query": [
+						{
+							"key": "storageCenterId",
+							"value": "3"
+						},
+						{
+							"key": "name",
+							"value": "Bread"
+						},
+						{
+							"key": "type",
+							"value": "FOOD"
+						},
+						{
+							"key": "quantity",
+							"value": "2"
+						},
+						{
+							"key": "expirationDate",
+							"value": "2024-12-31"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Check out Items with invalid quantity",
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"url": {
+					"raw": "http://127.0.0.1:8080/checkOutItems?storageCenterId=3&name=Butter&type=FOOD&quantity=-1",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8080",
+					"path": [
+						"checkOutItems"
+					],
+					"query": [
+						{
+							"key": "storageCenterId",
+							"value": "3"
+						},
+						{
+							"key": "name",
+							"value": "Butter"
+						},
+						{
+							"key": "type",
+							"value": "FOOD"
+						},
+						{
+							"key": "quantity",
+							"value": "-1"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update Description",
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"url": {
+					"raw": "http://127.0.0.1:8080/updateCenterDescription?storageCenterId=3&description=Clothes Drive",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8080",
+					"path": [
+						"updateCenterDescription"
+					],
+					"query": [
+						{
+							"key": "storageCenterId",
+							"value": "3"
+						},
+						{
+							"key": "description",
+							"value": "Clothes Drive"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update Hours",
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"url": {
+					"raw": "http://127.0.0.1:8080/updateCenterHours?storageCenterId=3&day=1&open=09:00&close=17:00",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8080",
+					"path": [
+						"updateCenterHours"
+					],
+					"query": [
+						{
+							"key": "storageCenterId",
+							"value": "3"
+						},
+						{
+							"key": "day",
+							"value": "1"
+						},
+						{
+							"key": "open",
+							"value": "09:00"
+						},
+						{
+							"key": "close",
+							"value": "17:00"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Transactions",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://127.0.0.1:8080/getCenter?storageCenterId=2",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8080",
+					"path": [
+						"getCenter"
+					],
+					"query": [
+						{
+							"key": "storageCenterId",
+							"value": "2"
+						},
+						{
+							"key": "name",
+							"value": "Columbia University",
+							"disabled": true
+						},
+						{
+							"key": "description",
+							"value": "Food Pantry",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Center Info",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://127.0.0.1:8080/getCenterInfo?storageCenterId=3",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8080",
+					"path": [
+						"getCenterInfo"
+					],
+					"query": [
+						{
+							"key": "storageCenterId",
+							"value": "3"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "List Inventory",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://127.0.0.1:8080/listInventory?storageCenterId=3",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8080",
+					"path": [
+						"listInventory"
+					],
+					"query": [
+						{
+							"key": "storageCenterId",
+							"value": "3"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "List Expired Items",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://127.0.0.1:8080/listExpiredItems?storageCenterId=3",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8080",
+					"path": [
+						"listExpiredItems"
+					],
+					"query": [
+						{
+							"key": "storageCenterId",
+							"value": "3"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete Center",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://127.0.0.1:8080/deleteCenter?storageCenterId=2",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8080",
+					"path": [
+						"deleteCenter"
+					],
+					"query": [
+						{
+							"key": "storageCenterId",
+							"value": "2"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

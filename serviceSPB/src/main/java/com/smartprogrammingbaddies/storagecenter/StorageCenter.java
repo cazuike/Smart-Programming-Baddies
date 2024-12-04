@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.gson.JsonObject;
 import com.smartprogrammingbaddies.item.Item;
 import com.smartprogrammingbaddies.logger.Transaction;
+import com.smartprogrammingbaddies.organization.Organization;
 import com.smartprogrammingbaddies.utils.TimeSlot;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.CollectionTable;
@@ -16,7 +17,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.MapKeyColumn;
 import jakarta.persistence.OneToMany;
-import java.io.Serializable;
+import jakarta.persistence.OneToOne;
 import java.time.DayOfWeek;
 import java.util.EnumMap;
 import java.util.HashSet;
@@ -29,7 +30,7 @@ import java.util.Set;
  * remove, and list items in the storage.
  */
 @Entity
-public class StorageCenter implements Serializable {
+public class StorageCenter {
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
   @Column(name = "storage_center_id")
@@ -38,6 +39,8 @@ public class StorageCenter implements Serializable {
   private String description;
   @Column(nullable = false)
   private String name;
+  @OneToOne(mappedBy = "storage", cascade = CascadeType.ALL, orphanRemoval = true)
+  private Organization organization;
   @ElementCollection
   @CollectionTable(name = "operation_hours", joinColumns = @JoinColumn(name = "storage_center_id"))
   @MapKeyColumn(name = "day_of_week")
@@ -84,6 +87,15 @@ public class StorageCenter implements Serializable {
    */
   public int getDatabaseId() {
     return id;
+  }
+
+  /**
+   * Sets the database ID of the storage center.
+   *
+   * @param id the new database ID of the storage center
+   */
+  public void setDatabaseId(int id) {
+    this.id = id;
   }
 
   /**
@@ -134,6 +146,24 @@ public class StorageCenter implements Serializable {
    */
   public String getDescription() {
     return description;
+  }
+
+  /**
+   * gets the organization associated with the storage center.
+   *
+   * @return the organization associated with the storage center
+   */
+  public Organization getOrganization() {
+    return organization;
+  }
+
+  /**
+   * gets the organization associated with the storage center.
+   *
+   * @param organization the organization to associate this storage center with
+   */
+  public void setOrganization(Organization organization) {
+    this.organization = organization;
   }
 
   /**

@@ -35,9 +35,37 @@ mvn test
 ```
 Result will be under serviceSPB/target/surefire-reports
 
+## Running Postman Test for External Database Integration Testing
+
+This project includes a set of Postman tests for API endpoints, which simulates the service interaction with the realtime database which is Google Cloud MySQL.
+
+JSON files with be located under serviceSPB/src/test/postmantests
+
+### Requirements
+
+1. - [Postman](https://www.postman.com/downloads/) Postman App is needed to import the JSON files and test it locally
+
+2. - Download the JSON file to be imported
+
+3. - Import JSON file into Postman
+
+4. - Run the endpoints provided for testing
+
 ## Test Client Repository
 A test Food Pantry app was created to do end-to-end testing for this service.
-The repository is located here: https://github.com/bryan-granda/food-pantry-client
+The repository is located here:
+[Link](https://github.com/bryan-granda/food-pantry-client)
+
+## Jira Board Link
+Below is our team's project JIRA board:
+[Link](https://donation-service.atlassian.net/jira/software/projects/SCRUM/boards/1)
+
+## Tasks Not Completed:
+We could not complete the Volunteer and Donations Logging that we proposed in our proposal
+
+## Our GCloud Instance:
+Our Deployed app can be found here:
+[Link](https://team-project-439523.ue.r.appspot.com/)
 
 ### Run Jacoco Code Coverage Report
 To run the Jacoco Code Coverage test, run the following command in the serviceSPB directory:
@@ -54,8 +82,9 @@ mvn checkstyle:check
 The result are located here: serviceSPB/target/checkstyle-result.xml
 
 ## Most Recent CI Reports
-The most recent CI reports from the most recent merge can be found on the this repository on: serviceSPB/target
-[CI Reports](https://github.com/cazuike/Smart-Programming-Baddies/tree/main/serviceSPB/target)
+The CI reports can be found under:
+[Link](https://github.com/cazuike/Smart-Programming-Baddies/actions)
+Click on any of the workflow runs and the files will be located under Artifacts for 90 days since ran.
 
 ### PMD commands
 Must have PMD installed.
@@ -117,47 +146,6 @@ URL: /, /index, /home
 Method: GET
 Response:
 Success (200): Returns a welcome message indicating successful redirection to the homepage.
-
-**2. Register Location**
-Register a new location where donations can be held or stored.
-
-URL: /registerLocation
-Method: PATCH
-Query Parameters:
-apiKey (required): A valid API key provided by the client.
-location (required): The location being added.
-Response:
-Success (200): A message indicating successful registration of a new location as storage.
-Error (404): A message indicating an invalid API key.
-Error (500): A message indicating an internal error occurred during enrollment.
-
-**3. Add Donation**
-Add a donation to an existing storage center. If the location is not an existing storage center, a new reference will be created.
-
-URL: /addDonation
-Method: PATCH
-Query Parameters:
-apiKey (required): A valid API key provided by the client.
-location (required): The location being added.
-donationName (required): The name of donation.
-donationType (required): The type of donation.
-donator (required): donator.
-Response:
-Success (200): A message indicating successful addition of new donation to a storage location.
-Error (404): A message indicating an invalid API key.
-Error (500): A message indicating an internal error occurred during enrollment.
-
-**4. List Locations**
-Lists all existing locations in the system, able to receive donations.
-
-URL: /listLocations
-Method: Get
-Query Parameters:
-apiKey (required): A valid API key provided by the client.
-Response:
-Success (200): A message listing all the existing locations within the database.
-Error (404): A message indicating an invalid API key.
-Error (500): A message indicating an internal error occurred during enrollment.
 
 ## Volunteer Controller
 **1. Enroll Volunteer**
@@ -258,11 +246,11 @@ Response:
 - Error (404): A message indicating an invalid API key.
 - Error (500): A message indicating an internal error occurred during event creation.
 
-**2. Add Volunteer to Event**  
+**2. Add Volunteer to Event**
 Associates a volunteer with an event.
 
-URL: /addVolunteerToEvent  
-Method: POST  
+URL: /addVolunteerToEvent
+Method: POST
 Query Parameters:
 - apiKey (required): A valid API key for authentication.
 - eventId (required): The ID of the event.
@@ -278,11 +266,11 @@ markdown
 Copy code
 ## Event Controller
 
-**1. Create Event**  
+**1. Create Event**
 Creates a new event and adds it to the system, associating it with a storage center and optional volunteers.
 
-URL: /createEvent  
-Method: POST  
+URL: /createEvent
+Method: POST
 Query Parameters:
 - apiKey (required): A valid API key for authentication.
 - name (required): The name of the event.
@@ -299,11 +287,11 @@ Response:
 - Error (404): A message indicating an invalid API key or storage center ID.
 - Error (500): A message indicating an internal error occurred during event creation.
 
-**2. Add Volunteer to Event**  
+**2. Add Volunteer to Event**
 Associates a volunteer with an event.
 
-URL: /addVolunteerToEvent  
-Method: POST  
+URL: /addVolunteerToEvent
+Method: POST
 Query Parameters:
 - apiKey (required): A valid API key for authentication.
 - eventId (required): The ID of the event.
@@ -314,11 +302,11 @@ Response:
 - Error (404): A message indicating an invalid API key, event ID, or volunteer ID.
 - Error (500): A message indicating an internal error occurred while adding the volunteer.
 
-**3. List All Events**  
+**3. List All Events**
 Fetches a list of all events in the system.
 
-URL: /listEvents  
-Method: GET  
+URL: /listEvents
+Method: GET
 Query Parameters:
 - apiKey (required): A valid API key for authentication.
 
@@ -327,11 +315,11 @@ Response:
 - Error (404): A message indicating an invalid API key.
 - Error (500): A message indicating an internal error occurred while fetching the events.
 
-**4. Retrieve Event**  
+**4. Retrieve Event**
 Fetches the details of a specific event.
 
-URL: /retrieveEvent  
-Method: GET  
+URL: /retrieveEvent
+Method: GET
 Query Parameters:
 - apiKey (required): A valid API key for authentication.
 - eventId (required): The ID of the event to retrieve.
@@ -341,11 +329,11 @@ Response:
 - Error (404): A message indicating an invalid API key or event ID.
 - Error (500): A message indicating an internal error occurred while fetching the event.
 
-**5. Remove Event**  
+**5. Remove Event**
 Deletes an event from the system.
 
-URL: /removeEvent  
-Method: DELETE  
+URL: /removeEvent
+Method: DELETE
 Query Parameters:
 - apiKey (required): A valid API key for authentication.
 - eventId (required): The ID of the event to delete.
@@ -355,11 +343,11 @@ Response:
 - Error (404): A message indicating an invalid API key or event ID.
 - Error (500): A message indicating an internal error occurred during deletion.
 
-**6. Search Events by Date**  
+**6. Search Events by Date**
 Fetches a list of events on a specified date.
 
-URL: /searchEventsByDate  
-Method: GET  
+URL: /searchEventsByDate
+Method: GET
 Query Parameters:
 - apiKey (required): A valid API key for authentication.
 - date (required): The date to search for events (YYYY-MM-DD format).
@@ -369,11 +357,11 @@ Response:
 - Error (404): A message indicating an invalid API key or no events found.
 - Error (500): A message indicating an internal error occurred while searching for events.
 
-**7. Search Events by Location**  
+**7. Search Events by Location**
 Fetches a list of events at a specified location.
 
-URL: /searchEventsByLocation  
-Method: GET  
+URL: /searchEventsByLocation
+Method: GET
 Query Parameters:
 - apiKey (required): A valid API key for authentication.
 - location (required): The location to search for events.
@@ -406,7 +394,7 @@ Query Parameters:
 - `name` (required): A string representing the storage center's name.
 - `description` (required): A string representing the storage center's description.
 
-**Response:**
+Response:
 - `String` (200): The ID of the storage center if created successfully.
 - `String` (500): An error message if an internal server error occurred.
 - `String` (400): An error message if any parameter is incorrectly formatted.
@@ -419,7 +407,7 @@ Method: `GET`
 Query Parameters:
 - `storageCenterId` (required): An integer representing the storage center's ID.
 
-**Response:**
+Response:
 - `StorageCenter` (200): The details of the storage center.
 - `String` (500): An error message if an internal server error occurred.
 - `String` (404): An error message if the storage center ID was not found.
@@ -432,7 +420,7 @@ Method: `DELETE`
 Query Parameters:
 - `storageCenterId` (required): An integer representing the storage center's ID.
 
-**Response:**
+Response:
 - `String` (200): A message confirming the storage center was successfully deleted.
 - `String` (500): An error message if an internal server error occurred.
 - `String` (404): An error message if the storage center ID was not found.
@@ -446,7 +434,7 @@ Query Parameters:
 - `storageCenterId` (required): An integer representing the storage center's ID.
 - `name` (required): A string representing the new name of the storage center.
 
-**Response:**
+Response:
 - `String` (200): A message confirming the storage center's name was updated.
 - `String` (500): An error message if an internal server error occurred.
 - `String` (400): An error message if any parameter is incorrectly formatted.
@@ -461,7 +449,7 @@ Query Parameters:
 - `storageCenterId` (required): An integer representing the storage center's ID.
 - `description` (required): A string representing the new description of the storage center.
 
-**Response:**
+Response:
 - `String` (200): A message confirming the storage center's description was updated.
 - `String` (500): An error message if an internal server error occurred.
 - `String` (400): An error message if any parameter is incorrectly formatted.
@@ -478,7 +466,7 @@ Query Parameters:
 - `open` (required): A string representing the opening time in `HH:MM` format.
 - `close` (required): A string representing the closing time in `HH:MM` format.
 
-**Response:**
+Response:
 - `String` (200): A message confirming the storage center's operating hours were updated.
 - `String` (500): An error message if an internal server error occurred.
 - `String` (400): An error message if any parameter is incorrectly formatted.
@@ -496,7 +484,7 @@ Query Parameters:
 - `quantity` (required): An integer representing the item's quantity (positive value).
 - `expirationDate` (required): A string representing the item's expiration date in `yyyy-MM-dd` format.
 
-**Response:**
+Response:
 - `String` (200): A message confirming the item was successfully added.
 - `String` (500): An error message if an internal server error occurred.
 - `String` (400): An error message if any parameter is incorrectly formatted.
@@ -513,7 +501,7 @@ Query Parameters:
 - `name` (required): A string representing the item's name.
 - `quantity` (required): An integer representing the item's quantity.
 
-**Response:**
+Response:
 - `String` (200): A message confirming the item was successfully removed.
 - `String` (500): An error message if an internal server error occurred.
 - `String` (400): An error message if any parameter is incorrectly formatted.
@@ -557,6 +545,139 @@ Response:
 - `List<Transaction>` (200): A list of transactions from the storage center.
 - `String` (500): An error message if an internal server error occurred.
 - `String` (404): An error message if the storage center ID was not found.
+
+# Client Endpoint
+
+## 1. **Register A Client**
+URL: `/registerClient`
+Method: `POST`
+Response:
+- `API Key` (200): With the new API Key.
+- `API Key` (500): If the API key could not be generated.
+
+# Organization Endpoints
+
+## 1. **Retrieve Organization Information**
+URL: `/getOrganization`
+Method: `GET`
+Query Parameters:
+- `apiKey` (required): A string representing the client's API key.
+- `orgId` (required): An integer representing the organization's ID.
+
+Response:
+- `Organization` (200): The organization's details if found successfully.
+- `String` (500): An error message if an internal server error occurred.
+- `String` (400): An error message if the organization was not found.
+
+---
+
+## 2. **Create Organization**
+URL: `/createOrganization`
+Method: `GET`
+Query Parameters:
+- `orgName` (required): the name of the Organization.
+- `orgType` (required): the type of the Organization.
+- `orgId` (required): An integer representing the organization's ID.
+
+Response:
+- `Organization` (200): The organization's details if found successfully.
+- `String` (500): An error message if an internal server error occurred.
+- `String` (403): If the API key is invalid.
+
+---
+
+## 3. **Change Organization Subscription Status**
+URL: `/changeSubscriptionStatus`
+Method: `PATCH`
+Query Parameters:
+- `apiKey` (required): A string representing the client's API key.
+- `orgId` (required): An integer representing the organization's ID.
+
+Response:
+- `String` (200): A success message if the subscription status was updated.
+- `String` (500): An error message if an internal server error occurred.
+
+---
+
+## 4. **Delete Organization**
+URL: `/deleteOrganization`
+Method: `DELETE`
+Query Parameters:
+- `apiKey` (required): A string representing the client's API key.
+- `orgId` (required): An integer representing the organization's ID.
+
+Response:
+- `String` (200): A success message if the organization was deleted.
+- `String` (500): An error message if an internal server error occurred.
+
+---
+
+## 5. **Register an Event to an Organization**
+URL: `/registerEvent`
+Method: `POST`
+Query Parameters:
+- `apiKey` (required): A string representing the client's API key.
+- `orgId` (required): An integer representing the organization's ID.
+- `eventId` (required): An integer representing the event's ID.
+
+Response:
+- `String` (200): A success message if the event was registered.
+- `String` (500): An error message if an internal server error occurred.
+
+---
+
+## 6. **Unregister an Event from an Organization**
+URL: `/unregisterEvent`
+Method: `DELETE`
+Query Parameters:
+- `apiKey` (required): A string representing the client's API key.
+- `orgId` (required): An integer representing the organization's ID.
+- `eventId` (required): An integer representing the event's ID.
+
+Response:
+- `String` (200): A success message if the event was unregistered.
+- `String` (500): An error message if an internal server error occurred.
+
+---
+
+## 7. **List All Events Registered to an Organization**
+URL: `/listOrganizationEvents`
+Method: `GET`
+Query Parameters:
+- `apiKey` (required): A string representing the client's API key.
+- `orgId` (required): An integer representing the organization's ID.
+
+Response:
+- `List<Event>` (200): A list of events registered to the organization.
+- `String` (500): An error message if an internal server error occurred.
+
+---
+
+## 8. **Link a Storage Center to an Organization**
+URL: `/linkStorageCenter`
+Method: `POST`
+Query Parameters:
+- `apiKey` (required): A string representing the client's API key.
+- `orgId` (required): An integer representing the organization's ID.
+- `storageId` (required): An integer representing the storage center's ID.
+
+Response:
+- `String` (200): A success message if the storage center was linked.
+- `String` (500): An error message if an internal server error occurred.
+
+---
+
+## 9. **Get the Storage Center Linked to an Organization**
+URL: `/getStorageCenter`
+Method: `GET`
+Query Parameters:
+- `apiKey` (required): A string representing the client's API key.
+- `orgId` (required): An integer representing the organization's ID.
+
+Response:
+- `StorageCenter` (200): The details of the linked storage center.
+- `String` (500): An error message if an internal server error occurred.
+
 
 
 # Tools Utilized 🔬
