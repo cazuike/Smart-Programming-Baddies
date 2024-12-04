@@ -414,6 +414,22 @@ public class StorageCenterController {
     return new ResponseEntity<>(json.toString(), HttpStatus.INTERNAL_SERVER_ERROR);
   }
 
+  /**
+   * Lists all storage centers in the database.
+   *
+   * @return A {@code ResponseEntity} The list of all storage centers and a HTTP 200 response or,
+   *     HTTP 500 response if an error occurred.
+   */
+  @GetMapping("/listAllCenters")
+  public ResponseEntity<?> listAllStorageCenters() {
+    try {
+      Iterable<StorageCenter> storageCenters = storageCenterRepository.findAll();
+      return ResponseEntity.ok(storageCenters);
+    } catch (Exception e) {
+      return handleException(e);
+    }
+  }
+
   private ResponseEntity<?> handleNotFoundException(String entityName, int entityId) {
     JsonObject message = new JsonObject();
     message.addProperty("error", entityName + " with ID: " + entityId + " was not found");

@@ -5,18 +5,9 @@ import com.smartprogrammingbaddies.organization.Organization;
 import com.smartprogrammingbaddies.storagecenter.StorageCenter;
 import com.smartprogrammingbaddies.utils.TimeSlot;
 import com.smartprogrammingbaddies.volunteer.Volunteer;
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.MapKey;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.OneToOne;
-import jakarta.persistence.Temporal;
-import jakarta.persistence.TemporalType;
+import jakarta.persistence.*;
+
+import java.util.HashSet;
 import java.util.Set;
 
 /**
@@ -41,9 +32,13 @@ public class Event {
   private StorageCenter storage;
   @ManyToOne
   private Organization organizer;
-  @OneToMany
-  @MapKey(name = "volunteer_id")
-  private Set<Volunteer> volunteers;
+  @ManyToMany(cascade = CascadeType.ALL)
+  @JoinTable(
+          name = "Event_volunteers",
+          joinColumns = @JoinColumn(name = "event_id"),
+          inverseJoinColumns = @JoinColumn(name = "volunteer_id")
+  )
+  private Set<Volunteer> volunteers = new HashSet<>();
   @OneToMany(mappedBy = "event", cascade = CascadeType.ALL, orphanRemoval = true)
   private Set<Donations> donations;
 
@@ -296,7 +291,7 @@ public class Event {
               .forEach(volunteer -> eventDetails.append("- ")
                       .append(volunteer.getName())
                       .append(" - ")
-                      .append(volunteer.getDatabaseId())
+                      .append(volunteer.getVolunteerId())
                       .append("\n"));
     } else {
       eventDetails.append("No volunteers have signed up yet.\n");

@@ -1,12 +1,11 @@
 package com.smartprogrammingbaddies.volunteer;
 
-import jakarta.persistence.ElementCollection;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import com.smartprogrammingbaddies.event.Event;
+import jakarta.persistence.*;
 import java.io.Serializable;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * The Volunteer class represents a volunteer, including their name, role,
@@ -14,16 +13,24 @@ import java.util.Map;
  */
 @Entity
 public class Volunteer implements Serializable {
+
   @Id
-  @GeneratedValue(strategy = GenerationType.AUTO)
-  private int id;
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @Column(name = "volunteerId")
+  private int volunteerId;
 
   private String name;
   private String role;
   private String dateSignUp;
 
   @ElementCollection
+  @CollectionTable(name = "Volunteer_schedule", joinColumns = @JoinColumn(name = "volunteerId"))
+  @MapKeyColumn(name = "schedule_day")
+  @Column(name = "schedule_time")
   private Map<String, String> schedule;
+
+  @ManyToMany(mappedBy = "volunteers")
+  private Set<Event> events = new HashSet<>();
 
   /**
    * Default constructor required for JPA and ObjectMapper.
@@ -47,8 +54,13 @@ public class Volunteer implements Serializable {
     this.schedule = schedule;
   }
 
-  public int getDatabaseId() {
-    return id;
+  // Corrected Getter and Setter Methods
+  public int getVolunteerId() {
+    return volunteerId;
+  }
+
+  public void setVolunteerId(int volunteerId) {
+    this.volunteerId = volunteerId;
   }
 
   public String getName() {

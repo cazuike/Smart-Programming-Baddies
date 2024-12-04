@@ -47,7 +47,7 @@ public class VolunteerController {
       Volunteer volunteer = new Volunteer(name, role, dateSignUp, schedule);
 
       Volunteer savedVolunteer = volunteerRepository.save(volunteer);
-      String message = "Volunteer enrolled with ID: " + savedVolunteer.getDatabaseId();
+      String message = "Volunteer enrolled with ID: " + savedVolunteer.getVolunteerId();
       return ResponseEntity.ok(message);
     } catch (Exception e) {
       return handleException(e);

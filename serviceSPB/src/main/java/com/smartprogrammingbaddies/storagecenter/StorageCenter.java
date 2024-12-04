@@ -1,5 +1,6 @@
 package com.smartprogrammingbaddies.storagecenter;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.gson.JsonObject;
 import com.smartprogrammingbaddies.item.Item;
 import com.smartprogrammingbaddies.logger.Transaction;
@@ -267,6 +268,10 @@ public class StorageCenter {
     this.transactions = transactions;
   }
 
+  @JsonProperty("id")
+  public int getId() {
+    return id;
+  }
 
   /**
    * Returns a string representation of the storage center, including its name,
